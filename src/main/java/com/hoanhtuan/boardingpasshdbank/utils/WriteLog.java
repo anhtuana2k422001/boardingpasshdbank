@@ -7,7 +7,7 @@ public class WriteLog {
     private static final Logger LOG = LoggerFactory.getLogger(WriteLog.class);
 
     private WriteLog() {
-        throw new IllegalStateException("Utility class");
+        throw new IllegalStateException("WriteLog class");
     }
 
     public static void write(String message) {

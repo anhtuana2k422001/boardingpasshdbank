@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class InfoTicketVietJet {
+public class CustomerTicketInformation {
     private String fullName;
     private String birthDate;
     private String flightTime;
