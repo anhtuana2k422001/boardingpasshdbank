@@ -1,7 +1,12 @@
 package com.hoanhtuan.boardingpasshdbank.service.impl;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.hoanhtuan.boardingpasshdbank.common.ApiUrls;
+import com.hoanhtuan.boardingpasshdbank.common.Constant;
+import com.hoanhtuan.boardingpasshdbank.exception.AuthenticationException;
+import com.hoanhtuan.boardingpasshdbank.exception.ForbiddenException;
+import com.hoanhtuan.boardingpasshdbank.exception.VietJetApiException;
 import com.hoanhtuan.boardingpasshdbank.model.CustomerTicketInformation;
 import com.hoanhtuan.boardingpasshdbank.model.UserAuth;
 import com.hoanhtuan.boardingpasshdbank.model.response.ResponseToken;
@@ -24,7 +29,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
+import java.util.ArrayList;
 
 @Service
 public class TicketVietJetServiceImpl implements TicketVietJetService {
@@ -61,31 +66,35 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
             httpGet.addHeader("Authorization", token);
             httpGet.addHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE);
             httpGet.addHeader("Accept", MediaType.APPLICATION_JSON_VALUE);
+            httpGet.addHeader("requestId", "123");
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
                 String responseStr = EntityUtils.toString(response.getEntity());
                 if (response.getStatusLine().getStatusCode() == HttpStatus.OK.value()) {
-                    TicKet ticKet =  gson.fromJson(responseStr, TicKet.class);
-                    List<Passenger> lstPassenger = ticKet.getPassengers();
-                    List<Charge> lstCharge = ticKet.getCharges();
-                    List<Journey> lstJourney = ticKet.getJourneys();
+                    TicKet ticKet = gson.fromJson(responseStr, TicKet.class);
+                    ArrayList<Passenger> lstPassenger = ticKet.getPassengers();
+                    ArrayList<Charge> lstCharge = ticKet.getCharges();
+                    ArrayList<Journey> lstJourney = ticKet.getJourneys();
                     customerTicketInformation.setFullName(lstPassenger.get(0).getLastName() + " " +
                             lstPassenger.get(0).getFirstName());
                     customerTicketInformation.setBirthDate(lstPassenger.get(0).getBirthDate());
                     customerTicketInformation.setFlightTime(String.valueOf(lstJourney.get(0).getFlightSegments()
                             .get(0).getScheduledDepartureLocalDatetime()));
                     Double totalAmount = lstCharge.stream()
-                            .filter(c->c.getChargeCode().equals("FA"))
-                            .mapToDouble(c->c.getCurrencyAmounts().get(0).getTotalAmount())
+                            .filter(c -> c.getChargeCode().equals("FA"))
+                            .mapToDouble(c -> c.getCurrencyAmounts().get(0).getTotalAmount())
                             .sum();
                     customerTicketInformation.setTotalAmount(totalAmount);
-
-                    return  customerTicketInformation;
-                } else {
-                    throw new IOException("Failed to get passenger information from Viet-jet: " + response.getStatusLine().getReasonPhrase());
+                    return customerTicketInformation;
+                }else{
+                    throw new ForbiddenException(Constant.FORBIDDEN_EXCEPTION);
                 }
+            }catch(IOException e){
+                throw new VietJetApiException(Constant.VIET_JET_ERROR);
+            } catch (JsonSyntaxException e) {
+                throw new VietJetApiException(Constant.JSON_ERROR);
             }
-        } else {
-            throw new IOException("Failed to authenticate user: " + authenticationResponse.getStatusLine().getReasonPhrase());
+        }else{
+            throw new AuthenticationException(Constant.AUTHORIZING_EXCEPTION);
         }
     }
 
