@@ -1,14 +1,13 @@
 package com.hoanhtuan.boardingpasshdbank.utils;
 
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.UUID;
 
 public class Utils {
-    private Utils() {
-        throw new IllegalStateException("Utils class");
-    }
+    private Utils() {}
 
     public static String getResponseTime(){
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

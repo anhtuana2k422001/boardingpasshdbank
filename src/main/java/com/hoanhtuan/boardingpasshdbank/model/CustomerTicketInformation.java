@@ -1,14 +1,12 @@
 package com.hoanhtuan.boardingpasshdbank.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class CustomerTicketInformation {
     private String fullName;
     private String birthDate;

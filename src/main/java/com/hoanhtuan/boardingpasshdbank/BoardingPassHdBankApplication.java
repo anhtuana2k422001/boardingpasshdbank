@@ -9,7 +9,7 @@ public class BoardingPassHdBankApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BoardingPassHdBankApplication.class, args);
-		WriteLog.write("Run App Successful");
+		WriteLog.infoLog("Run App Successful");
 	}
 
 }

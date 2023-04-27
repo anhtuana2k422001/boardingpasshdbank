@@ -15,6 +15,7 @@ import com.hoanhtuan.boardingpasshdbank.model.vietjet.Journey;
 import com.hoanhtuan.boardingpasshdbank.model.vietjet.Passenger;
 import com.hoanhtuan.boardingpasshdbank.model.vietjet.TicKet;
 import com.hoanhtuan.boardingpasshdbank.service.TicketVietJetService;
+import com.hoanhtuan.boardingpasshdbank.utils.WriteLog;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -33,12 +34,14 @@ import java.util.ArrayList;
 
 @Service
 public class TicketVietJetServiceImpl implements TicketVietJetService {
+    private static final String CLASS_NAME  = TicketVietJetServiceImpl.class.getName();
     private final CloseableHttpClient httpClient = HttpClients.createDefault();
     String authenticationUrl = ApiUrls.AUTHENTICATION_URL;
     String passengerVietJetUrl = ApiUrls.PASSENGER_VIET_JET_URL;
 
     @Override
     public CustomerTicketInformation checkPassengerVietJet(String fullName, String flightCode, String reservationCode, String seats) throws IOException {
+        final String METHOD_NAME = "checkPassengerVietJet";
         String airlineCode = flightCode.substring(0,2);
         String flightNumber = flightCode.substring(2);
         String seatRow = seats.substring(0,seats.length()-1);
@@ -50,7 +53,7 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
             String responseBody = EntityUtils.toString(authenticationResponse.getEntity());
             Gson gson = new Gson();
             ResponseToken responseToken =  gson.fromJson(responseBody, ResponseToken.class);
-            String token = "Bearer:" + responseToken.getToken();
+            String token = "Bearer " + responseToken.getToken();
             // Use Token to get Response
             HttpGet httpGet;
             if(fullName != null){
@@ -86,14 +89,18 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
                     customerTicketInformation.setTotalAmount(totalAmount);
                     return customerTicketInformation;
                 }else{
+                    WriteLog.errorLog(CLASS_NAME, METHOD_NAME, Constant.FORBIDDEN_EXCEPTION);
                     throw new ForbiddenException(Constant.FORBIDDEN_EXCEPTION);
                 }
             }catch(IOException e){
+                WriteLog.errorLog(CLASS_NAME, METHOD_NAME, Constant.VIET_JET_ERROR);
                 throw new VietJetApiException(Constant.VIET_JET_ERROR);
             } catch (JsonSyntaxException e) {
+                WriteLog.errorLog(CLASS_NAME, METHOD_NAME, Constant.JSON_ERROR);
                 throw new VietJetApiException(Constant.JSON_ERROR);
             }
         }else{
+            WriteLog.errorLog(CLASS_NAME, METHOD_NAME, Constant.AUTHORIZING_EXCEPTION);
             throw new AuthenticationException(Constant.AUTHORIZING_EXCEPTION);
         }
     }
