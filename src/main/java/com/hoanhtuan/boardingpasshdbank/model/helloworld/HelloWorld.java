@@ -1,4 +1,4 @@
-package com.hoanhtuan.boardingpasshdbank.model.response;
+package com.hoanhtuan.boardingpasshdbank.model.helloworld;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseToken {
-    private String token;
-    private String expiration;
+public class HelloWorld {
+    private Integer id;
+    private String content;
 }

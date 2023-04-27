@@ -41,34 +41,41 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
 
     @Override
     public CustomerTicketInformation checkPassengerVietJet(String fullName, String flightCode, String reservationCode, String seats) throws IOException {
+<<<<<<< HEAD
         final String METHOD_NAME = "checkPassengerVietJet";
         String airlineCode = flightCode.substring(0,2);
+=======
+        String airlineCode = flightCode.substring(0, 2);
+>>>>>>> thanhcongdev
         String flightNumber = flightCode.substring(2);
-        String seatRow = seats.substring(0,seats.length()-1);
-        String seatCols = seats.substring(seats.length()-1);
+        String seatRow = seats.substring(0, seats.length() - 1);
+        String seatCols = seats.substring(seats.length() - 1);
 
         CustomerTicketInformation customerTicketInformation = new CustomerTicketInformation();
         CloseableHttpResponse authenticationResponse = getResponseTokenResponseEntity();
         if (authenticationResponse.getStatusLine().getStatusCode() == HttpStatus.OK.value()) {
             String responseBody = EntityUtils.toString(authenticationResponse.getEntity());
             Gson gson = new Gson();
+<<<<<<< HEAD
             ResponseToken responseToken =  gson.fromJson(responseBody, ResponseToken.class);
+=======
+            ResponseToken responseToken = gson.fromJson(responseBody, ResponseToken.class);
+>>>>>>> thanhcongdev
             String token = "Bearer " + responseToken.getToken();
             // Use Token to get Response
             HttpGet httpGet;
-            if(fullName != null){
+            if (fullName != null) {
                 String[] names = fullName.split("/");
                 String passengerLastName = names[0];
                 String passengerFirstName = names[1];
                 String encodedFirstName = URLEncoder.encode(passengerFirstName, StandardCharsets.UTF_8);
-                httpGet = new HttpGet(passengerVietJetUrl + "?reservationLocator=" + reservationCode + "&passengerLastName=" + passengerLastName + "&passengerFirstName=" + encodedFirstName + "&airlineCode=" + airlineCode +"&flightNumber="+ flightNumber+"&seatRow="+seatRow+"&seatCols="+seatCols);
+                httpGet = new HttpGet(passengerVietJetUrl + "?reservationLocator=" + reservationCode + "&passengerLastName=" + passengerLastName + "&passengerFirstName=" + encodedFirstName + "&airlineCode=" + airlineCode + "&flightNumber=" + flightNumber + "&seatRow=" + seatRow + "&seatCols=" + seatCols);
+            } else {
+                httpGet = new HttpGet(passengerVietJetUrl + "?reservationLocator=" + reservationCode + "&airlineCode=" + airlineCode + "&flightNumber=" + flightNumber + "&seatRow=" + seatRow + "&seatCols=" + seatCols);
             }
-            else{
-                httpGet = new HttpGet(passengerVietJetUrl + "?reservationLocator=" + reservationCode +"&airlineCode=" + airlineCode +"&flightNumber="+ flightNumber+"&seatRow="+seatRow+"&seatCols="+seatCols);
-            }
-            httpGet.addHeader("Authorization", token);
-            httpGet.addHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE);
-            httpGet.addHeader("Accept", MediaType.APPLICATION_JSON_VALUE);
+            httpGet.setHeader("Authorization", token);
+            httpGet.setHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+            httpGet.setHeader("Accept", MediaType.APPLICATION_JSON_VALUE);
             httpGet.addHeader("requestId", "123");
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
                 String responseStr = EntityUtils.toString(response.getEntity());
@@ -88,6 +95,7 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
                             .sum();
                     customerTicketInformation.setTotalAmount(totalAmount);
                     return customerTicketInformation;
+<<<<<<< HEAD
                 }else{
                     WriteLog.errorLog(CLASS_NAME, METHOD_NAME, Constant.FORBIDDEN_EXCEPTION);
                     throw new ForbiddenException(Constant.FORBIDDEN_EXCEPTION);
@@ -101,6 +109,18 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
             }
         }else{
             WriteLog.errorLog(CLASS_NAME, METHOD_NAME, Constant.AUTHORIZING_EXCEPTION);
+=======
+                } else {
+                    throw new ForbiddenException(Constant.FORBIDDEN_EXCEPTION);
+                }
+            } catch (IOException e) {
+                throw new VietJetApiException(Constant.VIET_JET_ERROR);
+            } catch (JsonSyntaxException e) {
+
+                throw new VietJetApiException(Constant.JSON_ERROR);
+            }
+        } else {
+>>>>>>> thanhcongdev
             throw new AuthenticationException(Constant.AUTHORIZING_EXCEPTION);
         }
     }
