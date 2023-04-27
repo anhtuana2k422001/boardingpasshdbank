@@ -14,8 +14,6 @@ public class HelloWorldService {
     private HelloWorldRepository helloWorldRepository;
 
     public void create(HelloWorld helloWorld) {
-        HelloWorld createHelloWorld = new HelloWorld();
-        helloWorld.setContent(helloWorld.getContent());
         helloWorldRepository.create(helloWorld);
     }
 
@@ -28,10 +26,10 @@ public class HelloWorldService {
     }
 
     public void update(HelloWorld helloWorld,int id) {
-        HelloWorld updateHelloWorld = new HelloWorld();
-        helloWorld.setId(id);
-        helloWorld.setContent(helloWorld.getContent());
-        helloWorldRepository.update(helloWorld);
+        HelloWorld updateHello = new HelloWorld();
+        updateHello.setId(id);
+        updateHello.setContent(helloWorld.getContent());
+        helloWorldRepository.update(updateHello);
     }
 
     public void delete(int id) {

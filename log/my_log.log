@@ -1,0 +1,4 @@
+2023-04-27 14:26:54,931 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 176957 (/home/thanhcong/Desktop/boardingpasshdbank/target/classes started by thanhcong in /home/thanhcong/Desktop/boardingpasshdbank)
+2023-04-27 14:26:54,940 INFO [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2023-04-27 14:26:56,509 INFO [restartedMain] Started BoardingPassHdBankApplication in 2.179 seconds (process running for 2.828)
+2023-04-27 14:26:56,512 INFO [restartedMain] Run App Successful
