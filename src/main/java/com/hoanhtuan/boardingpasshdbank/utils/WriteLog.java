@@ -3,7 +3,6 @@ package com.hoanhtuan.boardingpasshdbank.utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-<<<<<<< HEAD
 public class WriteLog {
     private static final Logger LOGGER = LoggerFactory.getLogger(WriteLog.class);
 
@@ -11,13 +10,6 @@ public class WriteLog {
 
     public static void infoLog(String message){
         LOGGER.info(message);
-=======
-public class WriteLog<T> {
-
-    private static final Logger LOG = LoggerFactory.getLogger(WriteLog.class);
-
-    private WriteLog() {
->>>>>>> thanhcongdev
     }
 
     public static void infoLog(String className, String methodName, Object data) {

@@ -7,13 +7,7 @@ import java.util.Calendar;
 import java.util.UUID;
 
 public class Utils {
-<<<<<<< HEAD
     private Utils() {}
-=======
-    private Utils() {
-
-    }
->>>>>>> thanhcongdev
 
     public static String getResponseTime(){
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

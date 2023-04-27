@@ -41,12 +41,8 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
 
     @Override
     public CustomerTicketInformation checkPassengerVietJet(String fullName, String flightCode, String reservationCode, String seats) throws IOException {
-<<<<<<< HEAD
         final String METHOD_NAME = "checkPassengerVietJet";
         String airlineCode = flightCode.substring(0,2);
-=======
-        String airlineCode = flightCode.substring(0, 2);
->>>>>>> thanhcongdev
         String flightNumber = flightCode.substring(2);
         String seatRow = seats.substring(0, seats.length() - 1);
         String seatCols = seats.substring(seats.length() - 1);
@@ -56,11 +52,7 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
         if (authenticationResponse.getStatusLine().getStatusCode() == HttpStatus.OK.value()) {
             String responseBody = EntityUtils.toString(authenticationResponse.getEntity());
             Gson gson = new Gson();
-<<<<<<< HEAD
             ResponseToken responseToken =  gson.fromJson(responseBody, ResponseToken.class);
-=======
-            ResponseToken responseToken = gson.fromJson(responseBody, ResponseToken.class);
->>>>>>> thanhcongdev
             String token = "Bearer " + responseToken.getToken();
             // Use Token to get Response
             HttpGet httpGet;
@@ -95,7 +87,6 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
                             .sum();
                     customerTicketInformation.setTotalAmount(totalAmount);
                     return customerTicketInformation;
-<<<<<<< HEAD
                 }else{
                     WriteLog.errorLog(CLASS_NAME, METHOD_NAME, Constant.FORBIDDEN_EXCEPTION);
                     throw new ForbiddenException(Constant.FORBIDDEN_EXCEPTION);
@@ -109,18 +100,6 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
             }
         }else{
             WriteLog.errorLog(CLASS_NAME, METHOD_NAME, Constant.AUTHORIZING_EXCEPTION);
-=======
-                } else {
-                    throw new ForbiddenException(Constant.FORBIDDEN_EXCEPTION);
-                }
-            } catch (IOException e) {
-                throw new VietJetApiException(Constant.VIET_JET_ERROR);
-            } catch (JsonSyntaxException e) {
-
-                throw new VietJetApiException(Constant.JSON_ERROR);
-            }
-        } else {
->>>>>>> thanhcongdev
             throw new AuthenticationException(Constant.AUTHORIZING_EXCEPTION);
         }
     }
