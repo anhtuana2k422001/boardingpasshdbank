@@ -2,7 +2,6 @@ package com.hoanhtuan.boardingpasshdbank.common;
 
 public final class Constant {
     private Constant() {
-        throw new IllegalStateException("Constant class");
     }
     public static final int OK = 200;
     public static final int CREATED = 201;

@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RestController
-@RequestMapping(path="api")
+@RequestMapping("api")
 public class PassengerController {
     @Autowired
     TicketVietJetServiceImpl ticketVietJetService;
 
     // Case 1:self enter information with 3 param input
     // Case 2:scan with 5 param input
-    @GetMapping(value = "/passenger")
+    @GetMapping("/passengerVietjet")
     public ResponseEntity<ResponseStatus> checkInformationTicket(@RequestParam(required = false) String fullName,
                                                                  @RequestParam String flightCode,
                                                                  @RequestParam String reservationCode,

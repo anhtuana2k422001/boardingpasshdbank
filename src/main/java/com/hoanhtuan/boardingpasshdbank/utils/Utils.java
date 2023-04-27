@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public class Utils {
     private Utils() {
-        throw new IllegalStateException("Utils class");
+
     }
 
     public static String getResponseTime(){

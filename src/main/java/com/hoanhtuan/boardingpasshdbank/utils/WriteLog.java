@@ -3,11 +3,11 @@ package com.hoanhtuan.boardingpasshdbank.utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class WriteLog {
+public class WriteLog<T> {
+
     private static final Logger LOG = LoggerFactory.getLogger(WriteLog.class);
 
     private WriteLog() {
-        throw new IllegalStateException("WriteLog class");
     }
 
     public static void write(String message) {
