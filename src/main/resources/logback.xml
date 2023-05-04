@@ -33,8 +33,7 @@
     <root level="info">
         <appender-ref ref="Console" />
     </root>
-
-    <logger name="com.hoanhtuan.boardingpasshdbank" level="info" additivity="false">
+    <logger name="vn.com.hdbank.boardingpasshdbank" level="info" additivity="false">
         <appender-ref ref="RollingFile" />
         <appender-ref ref="Console" />
     </logger>
