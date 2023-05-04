@@ -30,7 +30,7 @@
         </rollingPolicy>
     </appender>
 
-    <logger name="com.hoanhtuan.boardingpasshdbank" level="info">
+    <logger name="vn.com.hdbank.boardingpasshdbank" level="info">
         <appender-ref ref="RollingFile" />
         <appender-ref ref="Console" />
     </logger>
