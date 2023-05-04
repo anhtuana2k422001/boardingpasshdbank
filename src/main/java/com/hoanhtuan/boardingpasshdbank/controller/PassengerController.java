@@ -1,7 +1,9 @@
 package com.hoanhtuan.boardingpasshdbank.controller;
 
 import com.hoanhtuan.boardingpasshdbank.common.Constant;
+import com.hoanhtuan.boardingpasshdbank.common.ResultCode;
 import com.hoanhtuan.boardingpasshdbank.model.CustomerTicketInformation;
+import com.hoanhtuan.boardingpasshdbank.model.request.PassengerRequest;
 import com.hoanhtuan.boardingpasshdbank.model.response.ResponseStatus;
 import com.hoanhtuan.boardingpasshdbank.service.impl.TicketVietJetServiceImpl;
 import com.hoanhtuan.boardingpasshdbank.utils.WriteLog;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
+import static com.hoanhtuan.boardingpasshdbank.common.ResultCode.RESULT_CODE_SUCCESS;
+
 @RestController
 @RequestMapping(path = "api/v1")
 public class PassengerController {
@@ -19,20 +23,19 @@ public class PassengerController {
     @Autowired
     TicketVietJetServiceImpl ticketVietJetService;
 
-
-    // Case 1:self enter information with 3 param input
-    // Case 2:scan with 5 param input
-    @GetMapping("/passenger-vietjet")
-    public ResponseEntity<ResponseStatus> checkInformationTicket(@RequestParam(required = false) String fullName,
-                                                                 @RequestParam String flightCode,
-                                                                 @RequestParam String reservationCode,
-                                                                 @RequestParam String seats) throws IOException {
+    // Case 1:self enter information with 3 input
+    // Case 2:scan with 5 input
+    @PostMapping("/passenger-vietjet")
+    public ResponseEntity<ResponseStatus> checkInformationTicket(@RequestBody  PassengerRequest  request) throws IOException {
         String methodName = "checkInformationTicket";
-        CustomerTicketInformation customerTicketInformation = ticketVietJetService.checkPassengerVietJet(fullName, flightCode, reservationCode, seats);
+        CustomerTicketInformation customerTicketInformation = ticketVietJetService.checkPassengerVietJet(
+                request.getFullName(), request.getFlightCode(),
+                request.getReservationCode(), request.getSeats()
+        );
         ResponseStatus response = ResponseStatus.builder()
                 .data(customerTicketInformation)
-                .responseMessage("Valid Ticket Information")
-                .responseCode(Constant.OK)
+                .responseMessage(RESULT_CODE_SUCCESS.getStatusMessage())
+                .responseCode(RESULT_CODE_SUCCESS.getStatusCode())
                 .build();
         // Logging here
         WriteLog.infoLog(CLASS_NAME, methodName, customerTicketInformation);

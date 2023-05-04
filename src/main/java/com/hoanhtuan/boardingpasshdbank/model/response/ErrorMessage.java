@@ -11,7 +11,7 @@ import lombok.*;
 public class ErrorMessage {
     @Builder.Default
     private String responseId = Utils.getRandomUUID();
-    private int responseCode;
+    private String responseCode;
     @Builder.Default
     private String responseTime = Utils.getResponseTime();
     private String responseMessage;

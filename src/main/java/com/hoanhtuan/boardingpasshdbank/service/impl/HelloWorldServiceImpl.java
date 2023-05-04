@@ -2,7 +2,6 @@ package com.hoanhtuan.boardingpasshdbank.service.impl;
 
 import com.hoanhtuan.boardingpasshdbank.exception.NotFoundException;
 import com.hoanhtuan.boardingpasshdbank.model.helloworld.HelloWorld;
-//import com.hoanhtuan.boardingpasshdbank.repository.HelloWorldRepository;
 import com.hoanhtuan.boardingpasshdbank.repository.HelloWorldRepository;
 import com.hoanhtuan.boardingpasshdbank.service.HelloWorldService;
 import com.hoanhtuan.boardingpasshdbank.utils.WriteLog;

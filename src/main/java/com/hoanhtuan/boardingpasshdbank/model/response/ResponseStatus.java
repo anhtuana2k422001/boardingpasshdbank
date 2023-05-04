@@ -11,7 +11,7 @@ import lombok.*;
 public class ResponseStatus {
     @Builder.Default
     private String responseId = Utils.getRandomUUID();
-    private int responseCode;
+    private String responseCode;
     private String responseMessage;
     @Builder.Default
     private String responseTime = Utils.getResponseTime();
