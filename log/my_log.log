@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 2023-05-04 09:51:32,061 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 8120 (D:\Workspace\java-web\boarding-pass-hdbank\target\classes started by ASUS in D:\Workspace\java-web\boarding-pass-hdbank)
 2023-05-04 09:51:32,114 INFO [restartedMain] No active profile set, falling back to 1 default profile: "default"
 2023-05-04 09:56:31,823 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 11292 (D:\Workspace\java-web\boarding-pass-hdbank\target\classes started by ASUS in D:\Workspace\java-web\boarding-pass-hdbank)
@@ -41,3 +42,9 @@
 2023-05-04 10:44:11,043 INFO [http-nio-8080-exec-8] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [updateHelloWorld]: com.hoanhtuan.boardingpasshdbank.model.response.ResponseStatus@60d7f70d
 2023-05-04 10:44:17,711 INFO [http-nio-8080-exec-10] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [getAllHelloWorld]: com.hoanhtuan.boardingpasshdbank.model.response.ResponseStatus@744bccc2
 2023-05-04 10:45:27,320 INFO [http-nio-8080-exec-2] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [checkInformationTicket]: CustomerTicketInformation(fullName=NGUYEN DAC BINH MINH, birthDate=1991-11-14, flightTime=Tue Jul 21 05:49:04 ICT 2015, totalAmount=55000.0)
+=======
+2023-04-27 14:26:54,931 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 176957 (/home/thanhcong/Desktop/boardingpasshdbank/target/classes started by thanhcong in /home/thanhcong/Desktop/boardingpasshdbank)
+2023-04-27 14:26:54,940 INFO [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2023-04-27 14:26:56,509 INFO [restartedMain] Started BoardingPassHdBankApplication in 2.179 seconds (process running for 2.828)
+2023-04-27 14:26:56,512 INFO [restartedMain] Run App Successful
+>>>>>>> fd48a2dce0864f2cecdb7ec82c1b7c379206e981
