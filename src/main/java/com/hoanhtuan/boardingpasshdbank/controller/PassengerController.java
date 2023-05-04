@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("api")
+@RequestMapping(path = "api/v1")
 public class PassengerController {
-    // Get class Name
     private static final String CLASS_NAME  = PassengerController.class.getName();
     @Autowired
     TicketVietJetServiceImpl ticketVietJetService;
@@ -23,12 +22,12 @@ public class PassengerController {
 
     // Case 1:self enter information with 3 param input
     // Case 2:scan with 5 param input
-    @GetMapping("/passengerVietjet")
+    @GetMapping("/passenger-vietjet")
     public ResponseEntity<ResponseStatus> checkInformationTicket(@RequestParam(required = false) String fullName,
                                                                  @RequestParam String flightCode,
                                                                  @RequestParam String reservationCode,
                                                                  @RequestParam String seats) throws IOException {
-        final String METHOD_NAME = "checkInformationTicket";
+        String methodName = "checkInformationTicket";
         CustomerTicketInformation customerTicketInformation = ticketVietJetService.checkPassengerVietJet(fullName, flightCode, reservationCode, seats);
         ResponseStatus response = ResponseStatus.builder()
                 .data(customerTicketInformation)
@@ -36,7 +35,7 @@ public class PassengerController {
                 .responseCode(Constant.OK)
                 .build();
         // Logging here
-        WriteLog.infoLog(CLASS_NAME, METHOD_NAME, customerTicketInformation);
+        WriteLog.infoLog(CLASS_NAME, methodName, customerTicketInformation);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

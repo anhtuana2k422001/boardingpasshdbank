@@ -1,0 +1,43 @@
+2023-05-04 09:51:32,061 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 8120 (D:\Workspace\java-web\boarding-pass-hdbank\target\classes started by ASUS in D:\Workspace\java-web\boarding-pass-hdbank)
+2023-05-04 09:51:32,114 INFO [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2023-05-04 09:56:31,823 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 11292 (D:\Workspace\java-web\boarding-pass-hdbank\target\classes started by ASUS in D:\Workspace\java-web\boarding-pass-hdbank)
+2023-05-04 09:56:31,853 INFO [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2023-05-04 09:56:56,320 INFO [restartedMain] Started BoardingPassHdBankApplication in 26.99 seconds (process running for 31.938)
+2023-05-04 09:56:56,395 INFO [restartedMain] Run App Successful
+2023-05-04 09:58:12,387 ERROR [http-nio-8080-exec-3] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [exception] [Failed to obtain JDBC Connection]
+2023-05-04 09:59:39,692 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 14600 (D:\Workspace\java-web\boarding-pass-hdbank\target\classes started by ASUS in D:\Workspace\java-web\boarding-pass-hdbank)
+2023-05-04 09:59:39,719 INFO [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2023-05-04 09:59:57,442 INFO [restartedMain] Started BoardingPassHdBankApplication in 20.733 seconds (process running for 27.571)
+2023-05-04 09:59:57,571 INFO [restartedMain] Run App Successful
+2023-05-04 10:07:36,992 INFO [http-nio-8080-exec-2] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [getAllHelloWorld]: com.hoanhtuan.boardingpasshdbank.model.response.ResponseStatus@24cdeab3
+2023-05-04 10:13:07,009 ERROR [http-nio-8080-exec-5] [com.hoanhtuan.boardingpasshdbank.service.impl.TicketVietJetServiceImpl] [findById] [Incorrect result size: expected 1, actual 0]
+2023-05-04 10:13:07,027 ERROR [http-nio-8080-exec-5] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [handleNotFoundException] [No HellWorld found for update with id: 1]
+2023-05-04 10:33:45,589 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 4036 (D:\Workspace\java-web\boarding-pass-hdbank\target\classes started by ASUS in D:\Workspace\java-web\boarding-pass-hdbank)
+2023-05-04 10:33:45,602 INFO [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2023-05-04 10:34:02,181 INFO [restartedMain] Started BoardingPassHdBankApplication in 19.074 seconds (process running for 24.096)
+2023-05-04 10:34:02,198 INFO [restartedMain] Run App Successful
+2023-05-04 10:35:22,046 ERROR [http-nio-8080-exec-2] [com.hoanhtuan.boardingpasshdbank.service.impl.TicketVietJetServiceImpl] [findById] [Incorrect result size: expected 1, actual 0]
+2023-05-04 10:35:22,061 ERROR [http-nio-8080-exec-2] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [handleNotFoundException] [No HellWorld found for update with id: 1]
+2023-05-04 10:35:28,331 INFO [http-nio-8080-exec-3] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [getAllHelloWorld]: com.hoanhtuan.boardingpasshdbank.model.response.ResponseStatus@4ab4d996
+2023-05-04 10:37:33,668 INFO [http-nio-8080-exec-6] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [createHelloWorld]: com.hoanhtuan.boardingpasshdbank.model.response.ResponseStatus@36921a68
+2023-05-04 10:38:04,923 INFO [http-nio-8080-exec-7] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [getHelloWorld]: com.hoanhtuan.boardingpasshdbank.model.helloworld.HelloWorld@4cd3dfa4
+2023-05-04 10:38:11,323 INFO [http-nio-8080-exec-8] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [getAllHelloWorld]: com.hoanhtuan.boardingpasshdbank.model.response.ResponseStatus@42365b18
+2023-05-04 10:40:00,730 ERROR [http-nio-8080-exec-1] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [exception] [Request method 'POST' is not supported]
+2023-05-04 10:40:20,322 INFO [http-nio-8080-exec-2] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [deleteHelloWorld]: com.hoanhtuan.boardingpasshdbank.model.response.ResponseStatus@402c0f36
+2023-05-04 10:40:26,578 INFO [http-nio-8080-exec-4] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [deleteHelloWorld]: com.hoanhtuan.boardingpasshdbank.model.response.ResponseStatus@1beabe9f
+2023-05-04 10:41:11,398 INFO [http-nio-8080-exec-5] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [deleteHelloWorld]: com.hoanhtuan.boardingpasshdbank.model.response.ResponseStatus@56fcbaba
+2023-05-04 10:41:21,336 INFO [http-nio-8080-exec-6] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [deleteHelloWorld]: com.hoanhtuan.boardingpasshdbank.model.response.ResponseStatus@1e6c6622
+2023-05-04 10:41:34,481 INFO [http-nio-8080-exec-7] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [getAllHelloWorld]: com.hoanhtuan.boardingpasshdbank.model.response.ResponseStatus@4214284e
+2023-05-04 10:43:08,928 ERROR [http-nio-8080-exec-9] [com.hoanhtuan.boardingpasshdbank.service.impl.TicketVietJetServiceImpl] [findById] [Incorrect result size: expected 1, actual 0]
+2023-05-04 10:43:08,931 ERROR [http-nio-8080-exec-9] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [handleNotFoundException] [No HellWorld found for update with id: 1]
+2023-05-04 10:43:18,394 ERROR [http-nio-8080-exec-1] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [exception] [Incorrect result size: expected 1, actual 0]
+2023-05-04 10:43:26,516 INFO [http-nio-8080-exec-2] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [createHelloWorld]: com.hoanhtuan.boardingpasshdbank.model.response.ResponseStatus@79b0c435
+2023-05-04 10:43:34,731 ERROR [http-nio-8080-exec-4] [com.hoanhtuan.boardingpasshdbank.service.impl.TicketVietJetServiceImpl] [findById] [Incorrect result size: expected 1, actual 0]
+2023-05-04 10:43:34,733 ERROR [http-nio-8080-exec-4] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [handleNotFoundException] [No HellWorld found for update with id: 1]
+2023-05-04 10:43:39,948 ERROR [http-nio-8080-exec-5] [com.hoanhtuan.boardingpasshdbank.service.impl.TicketVietJetServiceImpl] [findById] [Incorrect result size: expected 1, actual 0]
+2023-05-04 10:43:39,949 ERROR [http-nio-8080-exec-5] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [handleNotFoundException] [No HellWorld found for update with id: 1]
+2023-05-04 10:43:48,663 INFO [http-nio-8080-exec-6] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [getAllHelloWorld]: com.hoanhtuan.boardingpasshdbank.model.response.ResponseStatus@5c49d911
+2023-05-04 10:43:57,775 INFO [http-nio-8080-exec-7] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [getHelloWorld]: com.hoanhtuan.boardingpasshdbank.model.helloworld.HelloWorld@462bb4d4
+2023-05-04 10:44:11,043 INFO [http-nio-8080-exec-8] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [updateHelloWorld]: com.hoanhtuan.boardingpasshdbank.model.response.ResponseStatus@60d7f70d
+2023-05-04 10:44:17,711 INFO [http-nio-8080-exec-10] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [getAllHelloWorld]: com.hoanhtuan.boardingpasshdbank.model.response.ResponseStatus@744bccc2
+2023-05-04 10:45:27,320 INFO [http-nio-8080-exec-2] [com.hoanhtuan.boardingpasshdbank.controller.PassengerController] [checkInformationTicket]: CustomerTicketInformation(fullName=NGUYEN DAC BINH MINH, birthDate=1991-11-14, flightTime=Tue Jul 21 05:49:04 ICT 2015, totalAmount=55000.0)

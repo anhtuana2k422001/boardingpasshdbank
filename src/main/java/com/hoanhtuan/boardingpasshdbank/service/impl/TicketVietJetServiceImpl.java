@@ -41,7 +41,7 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
 
     @Override
     public CustomerTicketInformation checkPassengerVietJet(String fullName, String flightCode, String reservationCode, String seats) throws IOException {
-        final String METHOD_NAME = "checkPassengerVietJet";
+        String methodName = "checkPassengerVietJet";
         String airlineCode = flightCode.substring(0,2);
         String flightNumber = flightCode.substring(2);
         String seatRow = seats.substring(0, seats.length() - 1);
@@ -88,18 +88,18 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
                     customerTicketInformation.setTotalAmount(totalAmount);
                     return customerTicketInformation;
                 }else{
-                    WriteLog.errorLog(CLASS_NAME, METHOD_NAME, Constant.FORBIDDEN_EXCEPTION);
+                    WriteLog.errorLog(CLASS_NAME, methodName, Constant.FORBIDDEN_EXCEPTION);
                     throw new ForbiddenException(Constant.FORBIDDEN_EXCEPTION);
                 }
             }catch(IOException e){
-                WriteLog.errorLog(CLASS_NAME, METHOD_NAME, Constant.VIET_JET_ERROR);
+                WriteLog.errorLog(CLASS_NAME, methodName, Constant.VIET_JET_ERROR);
                 throw new VietJetApiException(Constant.VIET_JET_ERROR);
             } catch (JsonSyntaxException e) {
-                WriteLog.errorLog(CLASS_NAME, METHOD_NAME, Constant.JSON_ERROR);
+                WriteLog.errorLog(CLASS_NAME, methodName, Constant.JSON_ERROR);
                 throw new VietJetApiException(Constant.JSON_ERROR);
             }
         }else{
-            WriteLog.errorLog(CLASS_NAME, METHOD_NAME, Constant.AUTHORIZING_EXCEPTION);
+            WriteLog.errorLog(CLASS_NAME, methodName, Constant.AUTHORIZING_EXCEPTION);
             throw new AuthenticationException(Constant.AUTHORIZING_EXCEPTION);
         }
     }
