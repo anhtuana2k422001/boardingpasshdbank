@@ -1,6 +1,7 @@
 package vn.com.hdbank.boardingpasshdbank.utils;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -9,6 +10,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
+import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 
 import java.io.IOException;
 
@@ -35,6 +38,10 @@ public class ApiHttpClient {
         request.setEntity(new StringEntity(jsonBody));
 
         try (CloseableHttpResponse response = httpClient.execute(request)) {
+            if(response.getStatusLine().getStatusCode() == HttpStatus.SC_FORBIDDEN){
+                throw new CustomException(ApiResponseStatus.FORBIDDEN);
+            }
+
             HttpEntity entity = response.getEntity();
             if (entity != null) {
                 return EntityUtils.toString(entity);

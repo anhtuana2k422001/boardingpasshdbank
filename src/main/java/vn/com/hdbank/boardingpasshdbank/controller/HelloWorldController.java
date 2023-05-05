@@ -21,7 +21,8 @@ public class HelloWorldController {
 
         ResponseInfo response = ResponseInfo.builder()
                 .data(helloWorld)
-                .apiResponseStatus(ApiResponseStatus.SUCCESS)
+                .statusCode(ApiResponseStatus.SUCCESS.getStatusCode())
+                .statusMessage(ApiResponseStatus.SUCCESS.getStatusMessage())
                 .build();
         // logging here
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -33,7 +34,8 @@ public class HelloWorldController {
 
         ResponseInfo response = ResponseInfo.builder()
                 .data(helloWorlds)
-                .apiResponseStatus(ApiResponseStatus.SUCCESS)
+                .statusCode(ApiResponseStatus.SUCCESS.getStatusCode())
+                .statusMessage(ApiResponseStatus.SUCCESS.getStatusMessage())
                 .build();
         // logging here
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -46,7 +48,8 @@ public class HelloWorldController {
 
         ResponseInfo response = ResponseInfo.builder()
                 .data(helloWorld)
-                .apiResponseStatus(ApiResponseStatus.SUCCESS)
+                .statusCode(ApiResponseStatus.SUCCESS.getStatusCode())
+                .statusMessage(ApiResponseStatus.SUCCESS.getStatusMessage())
                 .build();
         // logging here
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -59,7 +62,8 @@ public class HelloWorldController {
 
         ResponseInfo response = ResponseInfo.builder()
                 .data(helloWorld)
-                .apiResponseStatus(ApiResponseStatus.CREATED)
+                .statusCode(ApiResponseStatus.CREATED.getStatusCode())
+                .statusMessage(ApiResponseStatus.CREATED.getStatusMessage())
                 .build();
         // logging here
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -72,7 +76,8 @@ public class HelloWorldController {
 
         ResponseInfo response = ResponseInfo.builder()
                 .data(id)
-                .apiResponseStatus(ApiResponseStatus.DELETED)
+                .statusCode(ApiResponseStatus.DELETED.getStatusCode())
+                .statusMessage(ApiResponseStatus.DELETED.getStatusMessage())
                 .build();
         // logging here
         return new ResponseEntity<>(response, HttpStatus.OK);
