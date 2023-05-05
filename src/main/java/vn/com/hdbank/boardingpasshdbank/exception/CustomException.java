@@ -7,9 +7,18 @@ import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 @Getter
 @Setter
 public class CustomException extends RuntimeException{
-    ApiResponseStatus apiResponseStatus;
+
+    private final ApiResponseStatus apiResponseStatus;
     public CustomException(ApiResponseStatus apiResponseStatus) {
         super(apiResponseStatus.getStatusMessage());
         this.apiResponseStatus = apiResponseStatus;
+    }
+
+    public int getStatusCode() {
+        return apiResponseStatus.getStatusCode();
+    }
+
+    public String getStatusMessage() {
+        return apiResponseStatus.getStatusMessage();
     }
 }

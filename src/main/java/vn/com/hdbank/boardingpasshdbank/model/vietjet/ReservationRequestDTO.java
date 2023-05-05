@@ -22,12 +22,20 @@ public class ReservationRequestDTO {
     }
 
     public String getFlightNumber() {
+<<<<<<< HEAD
         return  StringUtils.substring(flightCode, 2);
+=======
+        return StringUtils.substring(flightCode, 2);
+>>>>>>> refs/remotes/origin/main
     }
 
     public String getSeatRow() {
         return StringUtils.substring(seats, 0, StringUtils.length(seats) - 1);
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> refs/remotes/origin/main
     public String getSeatCols() {
         return StringUtils.substring(seats, StringUtils.length(seats) - 1);
     }
