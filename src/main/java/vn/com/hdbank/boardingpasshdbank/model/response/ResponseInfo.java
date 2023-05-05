@@ -1,7 +1,6 @@
 package vn.com.hdbank.boardingpasshdbank.model.response;
 
 import lombok.*;
-import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 
 @Getter
 @Setter
@@ -9,6 +8,7 @@ import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 @AllArgsConstructor
 @Builder
 public class ResponseInfo {
-    private ApiResponseStatus apiResponseStatus;
+    private int statusCode;
+    private String statusMessage;
     private Object data;
 }

@@ -16,24 +16,22 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/api")
 public class PassengerController {
     // Get class Name
-    private static final String CLASS_NAME  = PassengerController.class.getName();
+    private static final String CLASS_NAME = PassengerController.class.getName();
     @Autowired
     TicketVietJetServiceImpl ticketVietJetService;
 
     @PostMapping("/passengerVietjet")
     public ResponseEntity<ResponseInfo> checkInformationTicket(@RequestBody ReservationRequestDTO reservationRequestDTO) {
         final String METHOD_NAME = "checkInformationTicket";
-        try {
-            CustomerTicketInformation customerTicketInformation = ticketVietJetService.checkPassengerVietJet(reservationRequestDTO);
-            ResponseInfo response = ResponseInfo.builder()
-                    .data(customerTicketInformation)
-                    .apiResponseStatus(ApiResponseStatus.SUCCESS)
-                    .build();
-            // Logging here
-            WriteLog.infoLog(CLASS_NAME, METHOD_NAME, customerTicketInformation);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e){
-            throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
-        }
+        CustomerTicketInformation customerTicketInformation = ticketVietJetService.checkPassengerVietJet(reservationRequestDTO);
+        ResponseInfo response = ResponseInfo.builder()
+                .data(customerTicketInformation)
+                .statusCode(ApiResponseStatus.SUCCESS.getStatusCode())
+                .statusMessage(ApiResponseStatus.SUCCESS.getStatusMessage())
+                .build();
+        // Logging here
+        WriteLog.infoLog(CLASS_NAME, METHOD_NAME, customerTicketInformation);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
     }
 }

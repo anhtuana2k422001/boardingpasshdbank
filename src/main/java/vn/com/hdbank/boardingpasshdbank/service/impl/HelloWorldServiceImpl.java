@@ -6,11 +6,12 @@ import vn.com.hdbank.boardingpasshdbank.model.helloworld.HelloWorld;
 import vn.com.hdbank.boardingpasshdbank.repository.HelloWorldRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vn.com.hdbank.boardingpasshdbank.service.BaseService;
 
 import java.util.List;
 
 @Service
-public class HelloWorldServiceImpl {
+public class HelloWorldServiceImpl extends BaseService {
 
     @Autowired
     private HelloWorldRepository helloWorldRepository;
