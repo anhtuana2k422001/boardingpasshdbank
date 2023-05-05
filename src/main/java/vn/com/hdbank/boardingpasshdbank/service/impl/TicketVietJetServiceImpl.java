@@ -24,6 +24,7 @@ import java.util.List;
 
 @Service
 <<<<<<< HEAD
+<<<<<<< HEAD
 public class TicketVietJetServiceImpl {
 
     private final ApiHttpClient apiHttpClient = ApiHttpClient.getInstance();
@@ -31,6 +32,9 @@ public class TicketVietJetServiceImpl {
 =======
 public class TicketVietJetServiceImpl extends BaseService {
 >>>>>>> refs/remotes/origin/main
+=======
+public class TicketVietJetServiceImpl extends BaseService {
+>>>>>>> 9ed5d6d5149dacac5de8270e105f83f17bd7ddd2
     @Value("${auth.username}")
     private String authUsername;
     @Value("${auth.password}")
@@ -39,9 +43,13 @@ public class TicketVietJetServiceImpl extends BaseService {
 
     public CustomerTicketInformation checkPassengerVietJet(ReservationRequestDTO reservationRequestDTO) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         CustomerTicketInformation customerTicketInformation = null;
 >>>>>>> refs/remotes/origin/main
+=======
+        CustomerTicketInformation customerTicketInformation = null;
+>>>>>>> 9ed5d6d5149dacac5de8270e105f83f17bd7ddd2
         try {
             //get JWT
             String jwtResponse = apiHttpClient.getToken(ApiUrls.AUTHENTICATION_URL, authUsername, authPass);
@@ -58,6 +66,7 @@ public class TicketVietJetServiceImpl extends BaseService {
                 String ticketResponse = apiHttpClient.executeGetRequest(passengerVietjetUri.toString(), jwt);
                 System.out.println(ticketResponse);
                 if (ticketResponse != null) {
+<<<<<<< HEAD
 <<<<<<< HEAD
                     TicKet ticKet = jsonUtils.fromJsonString(ticketResponse, TicKet.class);
                     ArrayList<Passenger> lstPassenger = ticKet.getPassengers();
@@ -78,6 +87,9 @@ public class TicketVietJetServiceImpl extends BaseService {
 =======
                     customerTicketInformation = mapTicketResponseToCustomerTicketInformation(ticketResponse);
 >>>>>>> refs/remotes/origin/main
+=======
+                    customerTicketInformation = mapTicketResponseToCustomerTicketInformation(ticketResponse);
+>>>>>>> 9ed5d6d5149dacac5de8270e105f83f17bd7ddd2
                 } else {
                     throw new CustomException(ApiResponseStatus.BAD_REQUEST);
                 }
