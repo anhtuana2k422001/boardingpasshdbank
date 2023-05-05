@@ -22,8 +22,8 @@ import java.util.ArrayList;
 @Service
 public class TicketVietJetServiceImpl {
 
-    private ApiHttpClient apiHttpClient = ApiHttpClient.getInstance();
-    private JsonUtils jsonUtils = JsonUtils.getInstance();
+    private final ApiHttpClient apiHttpClient = ApiHttpClient.getInstance();
+    private final JsonUtils jsonUtils = JsonUtils.getInstance();
     @Value("${auth.username}")
     private String authUsername;
     @Value("${auth.password}")
@@ -31,13 +31,10 @@ public class TicketVietJetServiceImpl {
 
 
     public CustomerTicketInformation checkPassengerVietJet(ReservationRequestDTO reservationRequestDTO) {
-
         try {
-
             //get JWT
             String jwtResponse = apiHttpClient.getToken(ApiUrls.AUTHENTICATION_URL, authUsername, authPass);
             System.out.println(jwtResponse);
-
             if (jwtResponse != null) {
                 URI passengerVietjetUri = new URIBuilder(ApiUrls.PASSENGER_VIET_JET_URL)
                         .addParameter("reservationLocator", reservationRequestDTO.getReservationCode())
@@ -50,7 +47,6 @@ public class TicketVietJetServiceImpl {
 
                 if (ticketResponse != null) {
                     TicKet ticKet = jsonUtils.fromJsonString(ticketResponse, TicKet.class);
-
                     ArrayList<Passenger> lstPassenger = ticKet.getPassengers();
                     ArrayList<Charge> lstCharge = ticKet.getCharges();
                     ArrayList<Journey> lstJourney = ticKet.getJourneys();

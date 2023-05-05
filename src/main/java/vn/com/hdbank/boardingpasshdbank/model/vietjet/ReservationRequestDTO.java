@@ -16,26 +16,20 @@ public class ReservationRequestDTO {
     private String reservationCode;
     private String seats;
 
-
     //add more getter setter
-    private String getAirlineCode() {
-        String airlineCode = StringUtils.substring(flightCode, 0, 2);
-        return airlineCode;
+    public String getAirlineCode() {
+        return StringUtils.substring(flightCode, 0, 2);
     }
 
-    private String getFlightNumber() {
-
-        String flightNumber = StringUtils.substring(flightCode, 2);
-        return flightNumber;
+    public String getFlightNumber() {
+        return  StringUtils.substring(flightCode, 2);
     }
 
-    private String getSeatRow() {
-        String seatRow = StringUtils.substring(seats, 0, StringUtils.length(seats) - 1);
-        return seatRow;
+    public String getSeatRow() {
+        return StringUtils.substring(seats, 0, StringUtils.length(seats) - 1);
     }
-    private String getSeatCols() {
-        String seatCols = StringUtils.substring(seats, StringUtils.length(seats) - 1);
-        return seatCols;
+    public String getSeatCols() {
+        return StringUtils.substring(seats, StringUtils.length(seats) - 1);
     }
 
 
