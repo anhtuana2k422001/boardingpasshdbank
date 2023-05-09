@@ -1,3 +1,4 @@
+
 2023-05-09 11:09:47,470 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 334397 (/home/thanhcong/Desktop/boardingpasshdbank/target/classes started by thanhcong in /home/thanhcong/Desktop/boardingpasshdbank)
 2023-05-09 11:09:47,479 INFO [restartedMain] No active profile set, falling back to 1 default profile: "default"
 2023-05-09 11:09:49,207 INFO [restartedMain] Started BoardingPassHdBankApplication in 2.179 seconds (process running for 2.948)
@@ -95,3 +96,96 @@
 2023-05-09 11:36:53,052 INFO [restartedMain] Run App Successful
 2023-05-09 11:37:09,340 ERROR [http-nio-8080-exec-1] [PassengerRepositoryImpl] [create] [PreparedStatementCallback; bad SQL grammar [INSERT INTO PassengerInformation (full_name, birth_date, customer_type, flight_code, reservation_code, seats, totalamountticket) VALUES (?, ?, ?, ?, ?, ?, ?)]]
 2023-05-09 11:37:09,343 INFO [http-nio-8080-exec-1] [PassengerController] [checkInformationTicket]: PassengerVietjetInformationDTO(fullName=NGUYEN DAC BINH MINH, birthDate=1991-11-14, flightTime=2023-04-03T16:45:00, totalAmount=4059000.0)
+
+2023-05-05 10:15:30,783 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 14224 (D:\Workspace\java-web\boarding-pass-hdbank\target\classes started by ASUS in D:\Workspace\java-web\boarding-pass-hdbank)
+2023-05-05 10:15:30,853 INFO [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2023-05-05 10:15:52,226 INFO [restartedMain] Started BoardingPassHdBankApplication in 24.101 seconds (process running for 30.201)
+2023-05-05 10:15:52,299 INFO [restartedMain] Run App Successful
+2023-05-05 10:16:21,870 ERROR [http-nio-8080-exec-3] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 10:18:34,300 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 14884 (D:\Workspace\java-web\boarding-pass-hdbank\target\classes started by ASUS in D:\Workspace\java-web\boarding-pass-hdbank)
+2023-05-05 10:18:34,313 INFO [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2023-05-05 10:18:56,155 INFO [restartedMain] Started BoardingPassHdBankApplication in 24.307 seconds (process running for 29.0)
+2023-05-05 10:18:56,177 INFO [restartedMain] Run App Successful
+2023-05-05 10:19:18,645 INFO [http-nio-8080-exec-2] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [checkInformationTicket]: CustomerTicketInformation(fullName=NGUYEN DAC BINH MINH, birthDate=1991-11-14, flightTime=2015-07-20T15:49:04-07:00, totalAmount=55000.0)
+2023-05-05 13:28:10,046 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 6752 (D:\Workspace\java-web\boarding-pass-hdbank\target\classes started by ASUS in D:\Workspace\java-web\boarding-pass-hdbank)
+2023-05-05 13:28:10,061 INFO [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2023-05-05 13:28:29,023 INFO [restartedMain] Started BoardingPassHdBankApplication in 21.399 seconds (process running for 26.547)
+2023-05-05 13:28:29,046 INFO [restartedMain] Run App Successful
+2023-05-05 13:28:43,741 INFO [http-nio-8080-exec-2] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [checkInformationTicket]: CustomerTicketInformation(fullName=NGUYEN DAC BINH MINH, birthDate=1991-11-14, flightTime=2015-07-20T15:49:04-07:00, totalAmount=55000.0)
+
+2023-05-05 09:05:45,327 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 12871 (/home/thanhcong/Desktop/boardingpasshdbank/target/classes started by thanhcong in /home/thanhcong/Desktop/boardingpasshdbank)
+2023-05-05 09:05:45,333 INFO [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2023-05-05 09:05:46,926 INFO [restartedMain] Started BoardingPassHdBankApplication in 1.958 seconds (process running for 2.777)
+2023-05-05 09:05:46,929 INFO [restartedMain] Run App Successful
+2023-05-05 09:06:10,929 INFO [http-nio-8080-exec-1] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [checkInformationTicket]: CustomerTicketInformation(fullName=NGUYEN DAC BINH MINH, birthDate=1991-11-14, flightTime=2023-04-03T16:45:00, totalAmount=4059000.0)
+2023-05-05 09:37:33,852 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 24651 (/home/thanhcong/Desktop/boardingpasshdbank/target/classes started by thanhcong in /home/thanhcong/Desktop/boardingpasshdbank)
+2023-05-05 09:37:33,855 INFO [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2023-05-05 09:37:35,456 INFO [restartedMain] Started BoardingPassHdBankApplication in 2.177 seconds (process running for 3.238)
+2023-05-05 09:37:35,459 INFO [restartedMain] Run App Successful
+2023-05-05 09:37:42,130 ERROR [http-nio-8080-exec-1] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 09:37:44,110 ERROR [http-nio-8080-exec-4] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 09:37:45,292 ERROR [http-nio-8080-exec-6] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 09:37:46,499 ERROR [http-nio-8080-exec-8] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 09:38:05,157 ERROR [http-nio-8080-exec-10] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 09:38:26,308 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 25139 (/home/thanhcong/Desktop/boardingpasshdbank/target/classes started by thanhcong in /home/thanhcong/Desktop/boardingpasshdbank)
+2023-05-05 09:38:26,311 INFO [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2023-05-05 09:38:28,094 INFO [restartedMain] Started BoardingPassHdBankApplication in 2.408 seconds (process running for 3.506)
+2023-05-05 09:38:28,097 INFO [restartedMain] Run App Successful
+2023-05-05 09:38:31,465 ERROR [http-nio-8080-exec-1] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 09:38:33,009 ERROR [http-nio-8080-exec-4] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 09:40:10,118 ERROR [http-nio-8080-exec-6] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 09:41:09,861 ERROR [http-nio-8080-exec-8] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 09:41:11,459 ERROR [http-nio-8080-exec-10] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 09:48:46,881 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 30015 (/home/thanhcong/Desktop/boardingpasshdbank/target/classes started by thanhcong in /home/thanhcong/Desktop/boardingpasshdbank)
+2023-05-05 09:48:46,885 INFO [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2023-05-05 09:48:48,513 INFO [restartedMain] Started BoardingPassHdBankApplication in 2.165 seconds (process running for 3.22)
+2023-05-05 09:48:48,515 INFO [restartedMain] Run App Successful
+2023-05-05 09:48:52,171 ERROR [http-nio-8080-exec-1] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 09:48:54,684 ERROR [http-nio-8080-exec-4] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 09:49:03,638 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 30239 (/home/thanhcong/Desktop/boardingpasshdbank/target/classes started by thanhcong in /home/thanhcong/Desktop/boardingpasshdbank)
+2023-05-05 09:49:03,643 INFO [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2023-05-05 09:49:05,450 INFO [restartedMain] Started BoardingPassHdBankApplication in 2.367 seconds (process running for 3.449)
+2023-05-05 09:49:05,453 INFO [restartedMain] Run App Successful
+2023-05-05 09:49:10,975 ERROR [http-nio-8080-exec-2] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 09:49:13,292 ERROR [http-nio-8080-exec-4] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 09:55:29,836 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 33300 (/home/thanhcong/Desktop/boardingpasshdbank/target/classes started by thanhcong in /home/thanhcong/Desktop/boardingpasshdbank)
+2023-05-05 09:55:29,838 INFO [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2023-05-05 09:55:31,713 INFO [restartedMain] Started BoardingPassHdBankApplication in 2.281 seconds (process running for 3.089)
+2023-05-05 09:55:31,716 INFO [restartedMain] Run App Successful
+2023-05-05 09:55:46,440 ERROR [http-nio-8080-exec-2] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 09:55:48,579 ERROR [http-nio-8080-exec-4] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 09:55:49,696 ERROR [http-nio-8080-exec-6] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 09:56:25,269 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 33833 (/home/thanhcong/Desktop/boardingpasshdbank/target/classes started by thanhcong in /home/thanhcong/Desktop/boardingpasshdbank)
+2023-05-05 09:56:25,271 INFO [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2023-05-05 09:56:26,961 INFO [restartedMain] Started BoardingPassHdBankApplication in 2.116 seconds (process running for 3.001)
+2023-05-05 09:56:26,964 INFO [restartedMain] Run App Successful
+2023-05-05 09:56:31,599 ERROR [http-nio-8080-exec-2] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 09:56:33,827 ERROR [http-nio-8080-exec-4] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 09:56:35,323 ERROR [http-nio-8080-exec-6] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 10:06:40,862 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 38544 (/home/thanhcong/Desktop/boardingpasshdbank/target/classes started by thanhcong in /home/thanhcong/Desktop/boardingpasshdbank)
+2023-05-05 10:06:40,864 INFO [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2023-05-05 10:06:42,670 INFO [restartedMain] Started BoardingPassHdBankApplication in 2.392 seconds (process running for 3.488)
+2023-05-05 10:06:42,674 INFO [restartedMain] Run App Successful
+2023-05-05 10:06:46,683 ERROR [http-nio-8080-exec-2] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 10:06:48,713 ERROR [http-nio-8080-exec-4] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 10:06:50,443 ERROR [http-nio-8080-exec-6] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Internal Server Error]
+2023-05-05 10:08:00,512 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 39243 (/home/thanhcong/Desktop/boardingpasshdbank/target/classes started by thanhcong in /home/thanhcong/Desktop/boardingpasshdbank)
+2023-05-05 10:08:00,514 INFO [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2023-05-05 10:08:02,273 INFO [restartedMain] Started BoardingPassHdBankApplication in 2.223 seconds (process running for 3.296)
+2023-05-05 10:08:02,275 INFO [restartedMain] Run App Successful
+2023-05-05 10:08:07,121 ERROR [http-nio-8080-exec-2] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Forbidden]
+2023-05-05 10:08:11,504 ERROR [http-nio-8080-exec-4] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Forbidden]
+2023-05-05 10:15:52,394 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 42907 (/home/thanhcong/Desktop/boardingpasshdbank/target/classes started by thanhcong in /home/thanhcong/Desktop/boardingpasshdbank)
+2023-05-05 10:15:52,396 INFO [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2023-05-05 10:15:54,412 INFO [restartedMain] Started BoardingPassHdBankApplication in 2.388 seconds (process running for 3.595)
+2023-05-05 10:15:54,417 INFO [restartedMain] Run App Successful
+2023-05-05 10:15:56,000 ERROR [http-nio-8080-exec-2] [vn.com.hdbank.boardingpasshdbank.controller.PassengerController] [handleVietJetApiException] [Forbidden]
+2023-05-05 10:28:42,866 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 48777 (/home/thanhcong/Desktop/boardingpasshdbank/target/classes started by thanhcong in /home/thanhcong/Desktop/boardingpasshdbank)
+2023-05-05 10:28:42,867 INFO [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2023-05-05 10:28:44,545 INFO [restartedMain] Started BoardingPassHdBankApplication in 2.229 seconds (process running for 3.274)
+2023-05-05 10:28:44,548 INFO [restartedMain] Run App Successful
+2023-05-05 10:37:09,862 INFO [restartedMain] Starting BoardingPassHdBankApplication using Java 20 with PID 52790 (/home/thanhcong/Desktop/boardingpasshdbank/target/classes started by thanhcong in /home/thanhcong/Desktop/boardingpasshdbank)
+2023-05-05 10:37:09,865 INFO [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2023-05-05 10:37:11,744 INFO [restartedMain] Started BoardingPassHdBankApplication in 2.294 seconds (process running for 3.091)
+2023-05-05 10:37:11,747 INFO [restartedMain] Run App Successful
+
