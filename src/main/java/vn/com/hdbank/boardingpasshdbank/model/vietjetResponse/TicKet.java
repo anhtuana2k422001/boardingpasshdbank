@@ -10,10 +10,7 @@ import java.util.ArrayList;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TicKet {
-    private String locator;
     private ArrayList<Passenger> passengers;
     private ArrayList<Journey> journeys;
     private ArrayList<Charge> charges;
-    private ArrayList<SeatSelection> seatSelections;
-    private ArrayList<PassengerLegDetail> passengerLegDetails;
 }

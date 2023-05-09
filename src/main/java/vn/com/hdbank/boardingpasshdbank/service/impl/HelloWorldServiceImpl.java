@@ -28,14 +28,14 @@ public class HelloWorldServiceImpl extends BaseService {
         return helloWorldRepository.findAll();
     }
 
-    public void update(HelloWorld helloWorld,int id) {
+    public void update(HelloWorld helloWorld, int id) {
         HelloWorld updateHello = helloWorldRepository.findById(id);
 
-        if(updateHello!=null){
+        if (updateHello != null) {
             updateHello.setId(id);
             updateHello.setContent(helloWorld.getContent());
             helloWorldRepository.update(updateHello);
-        }else{
+        } else {
             throw new CustomException(ApiResponseStatus.NOT_FOUND);
         }
 
