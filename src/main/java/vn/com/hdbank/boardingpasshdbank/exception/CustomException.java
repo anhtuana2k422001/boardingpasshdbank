@@ -14,7 +14,7 @@ public class CustomException extends RuntimeException{
         this.apiResponseStatus = apiResponseStatus;
     }
 
-    public int getStatusCode() {
+    public String getStatusCode() {
         return apiResponseStatus.getStatusCode();
     }
 

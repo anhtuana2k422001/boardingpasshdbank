@@ -1,9 +1,8 @@
 package vn.com.hdbank.boardingpasshdbank.service;
 
-import vn.com.hdbank.boardingpasshdbank.utils.ApiHttpClient;
-import vn.com.hdbank.boardingpasshdbank.utils.JsonUtils;
-
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 public class BaseService {
-    protected ApiHttpClient apiHttpClient = ApiHttpClient.getInstance();
-    protected JsonUtils jsonUtils = JsonUtils.getInstance();
+    @Autowired
+    protected ModelMapper modelMapper;
 }

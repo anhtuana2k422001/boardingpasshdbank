@@ -13,77 +13,79 @@ import org.apache.http.util.EntityUtils;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 
-import java.io.IOException;
-
 public class ApiHttpClient {
-    private static ApiHttpClient instance;
-    private final CloseableHttpClient httpClient;
+
+    private static final String CLASS_NAME = ApiHttpClient.class.getSimpleName();
+
+    private static final CloseableHttpClient httpClient = HttpClients.createDefault();
 
     private ApiHttpClient() {
-        this.httpClient = HttpClients.createDefault();
     }
 
-    public static synchronized ApiHttpClient getInstance() {
-        if (instance == null) {
-            instance = new ApiHttpClient();
-        }
-        return instance;
-    }
 
-    public String getToken(String url, String username, String password) throws IOException {
-        HttpPost request = new HttpPost(url);
-        request.setHeader("Content-Type", "application/json");
+    public static String getToken(String url, String username, String password) {
+        try {
+            HttpPost request = new HttpPost(url);
+            request.setHeader("Content-Type", "application/json");
 
-        String jsonBody = String.format("{\"username\":\"%s\",\"password\":\"%s\"}", username, password);
-        request.setEntity(new StringEntity(jsonBody));
+            String jsonBody = String.format("{\"username\":\"%s\",\"password\":\"%s\"}", username, password);
+            request.setEntity(new StringEntity(jsonBody));
 
-        try (CloseableHttpResponse response = httpClient.execute(request)) {
-            if(response.getStatusLine().getStatusCode() == HttpStatus.SC_FORBIDDEN){
-                throw new CustomException(ApiResponseStatus.FORBIDDEN);
+            CloseableHttpResponse response = httpClient.execute(request);
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_FORBIDDEN) {
+                WriteLog.errorLog(CLASS_NAME, "getToken", "Forbidden");
+                throw new CustomException(ApiResponseStatus.EXTERNAL_API_ERROR);
             }
-
             HttpEntity entity = response.getEntity();
             if (entity != null) {
                 return EntityUtils.toString(entity);
             }
+        } catch (Exception ex) {
+            throw new CustomException(ApiResponseStatus.EXTERNAL_API_ERROR);
         }
 
         return null;
     }
 
-    public String executeGetRequest(String url, String jwt) throws IOException {
-        HttpUriRequest request = new HttpGet(url);
-        request.setHeader("Authorization", "Bearer " + jwt);
+    public static String executeGetRequest(String url, String jwt) {
+        try {
+            HttpUriRequest request = new HttpGet(url);
+            request.setHeader("Authorization", "Bearer " + jwt);
 
-        try (CloseableHttpResponse response = httpClient.execute(request)) {
-            HttpEntity entity = response.getEntity();
-            if (entity != null) {
-                return EntityUtils.toString(entity);
+            try (CloseableHttpResponse response = httpClient.execute(request)) {
+                HttpEntity entity = response.getEntity();
+                if (entity != null) {
+                    return EntityUtils.toString(entity);
+                }
             }
+        } catch (Exception ex) {
+            throw new CustomException(ApiResponseStatus.EXTERNAL_API_ERROR);
         }
+
 
         return null;
     }
 
-    public String executePostRequest(String url, String jwt, String requestBody) throws IOException {
-        HttpPost request = new HttpPost(url);
-        request.setHeader("Content-Type", "application/json");
-        request.setHeader("Authorization", "Bearer " + jwt);
+    public static String executePostRequest(String url, String jwt, String requestBody) {
+        try {
+            HttpPost request = new HttpPost(url);
+            request.setHeader("Content-Type", "application/json");
+            request.setHeader("Authorization", "Bearer " + jwt);
 
-        StringEntity entity = new StringEntity(requestBody);
-        request.setEntity(entity);
+            StringEntity entity = new StringEntity(requestBody);
+            request.setEntity(entity);
 
-        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            CloseableHttpResponse response = httpClient.execute(request);
             HttpEntity responseEntity = response.getEntity();
             if (responseEntity != null) {
                 return EntityUtils.toString(responseEntity);
             }
+        } catch (Exception ex) {
+            throw new CustomException(ApiResponseStatus.EXTERNAL_API_ERROR);
         }
+
 
         return null;
     }
 
-    public void close() throws IOException {
-        httpClient.close();
-    }
 }

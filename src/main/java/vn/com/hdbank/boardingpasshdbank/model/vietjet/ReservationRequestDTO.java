@@ -16,7 +16,6 @@ public class ReservationRequestDTO {
     private String reservationCode;
     private String seats;
 
-
     //add more getter setter
     public String getAirlineCode() {
         return StringUtils.substring(flightCode, 0, 2);

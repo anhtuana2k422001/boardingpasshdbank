@@ -1,4 +1,5 @@
 package vn.com.hdbank.boardingpasshdbank.controller;
+
 import org.springframework.web.bind.annotation.*;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.model.helloworld.HelloWorld;
@@ -7,6 +8,7 @@ import vn.com.hdbank.boardingpasshdbank.service.impl.HelloWorldServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import java.util.List;
 
 @RestController
@@ -16,71 +18,64 @@ public class HelloWorldController {
     private HelloWorldServiceImpl helloWorldService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseInfo> getAllHelloWorld(@PathVariable int id) {
-        HelloWorld helloWorld = helloWorldService.findById(id);
-
-        ResponseInfo response = ResponseInfo.builder()
-                .data(helloWorld)
-                .statusCode(ApiResponseStatus.SUCCESS.getStatusCode())
-                .statusMessage(ApiResponseStatus.SUCCESS.getStatusMessage())
+    public ResponseEntity<ResponseInfo<HelloWorld>> getAllHelloWorld(@PathVariable int id) {
+        ResponseInfo<HelloWorld> response = ResponseInfo.<HelloWorld>builder()
+                .data(helloWorldService.findById(id))
+                .code(ApiResponseStatus.SUCCESS.getStatusCode())
+                .message(ApiResponseStatus.SUCCESS.getStatusMessage())
                 .build();
         // logging here
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("")
-    public ResponseEntity<ResponseInfo> getHelloWorld() {
-        List<HelloWorld> helloWorlds = helloWorldService.findAll();
-
-        ResponseInfo response = ResponseInfo.builder()
-                .data(helloWorlds)
-                .statusCode(ApiResponseStatus.SUCCESS.getStatusCode())
-                .statusMessage(ApiResponseStatus.SUCCESS.getStatusMessage())
+    public ResponseEntity<ResponseInfo<List<HelloWorld>>> getHelloWorld() {
+        ResponseInfo<List<HelloWorld>> response = ResponseInfo.<List<HelloWorld>>builder()
+                .data(helloWorldService.findAll())
+                .code(ApiResponseStatus.SUCCESS.getStatusCode())
+                .message(ApiResponseStatus.SUCCESS.getStatusMessage())
                 .build();
         // logging here
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("")
-    public ResponseEntity<ResponseInfo> createHelloWorld(@RequestBody HelloWorld helloWorld) {
+    public ResponseEntity<ResponseInfo<HelloWorld>> createHelloWorld(@RequestBody HelloWorld helloWorld) {
         helloWorldService.create(helloWorld);
 
-
-        ResponseInfo response = ResponseInfo.builder()
+        ResponseInfo<HelloWorld> response = ResponseInfo.<HelloWorld>builder()
                 .data(helloWorld)
-                .statusCode(ApiResponseStatus.SUCCESS.getStatusCode())
-                .statusMessage(ApiResponseStatus.SUCCESS.getStatusMessage())
+                .code(ApiResponseStatus.SUCCESS.getStatusCode())
+                .message(ApiResponseStatus.SUCCESS.getStatusMessage())
                 .build();
         // logging here
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseInfo> createHelloWorld(@RequestBody HelloWorld helloWorld, @PathVariable int id) {
-        helloWorldService.update(helloWorld,id);
+    public ResponseEntity<ResponseInfo<HelloWorld>> updateHelloWorld(@RequestBody HelloWorld helloWorld, @PathVariable int id) {
+        helloWorldService.update(helloWorld, id);
 
-
-        ResponseInfo response = ResponseInfo.builder()
+        ResponseInfo<HelloWorld> response = ResponseInfo.<HelloWorld>builder()
                 .data(helloWorld)
-                .statusCode(ApiResponseStatus.CREATED.getStatusCode())
-                .statusMessage(ApiResponseStatus.CREATED.getStatusMessage())
+                .code(ApiResponseStatus.SUCCESS.getStatusCode())
+                .message(ApiResponseStatus.SUCCESS.getStatusMessage())
                 .build();
         // logging here
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseInfo> deleteHelloWorld(@PathVariable int id) {
+    public ResponseEntity<ResponseInfo<Integer>> deleteHelloWorld(@PathVariable int id) {
         helloWorldService.delete(id);
 
-
-        ResponseInfo response = ResponseInfo.builder()
+        ResponseInfo<Integer> response = ResponseInfo.<Integer>builder()
                 .data(id)
-                .statusCode(ApiResponseStatus.DELETED.getStatusCode())
-                .statusMessage(ApiResponseStatus.DELETED.getStatusMessage())
+                .code(ApiResponseStatus.SUCCESS.getStatusCode())
+                .message(ApiResponseStatus.SUCCESS.getStatusMessage())
                 .build();
         // logging here
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
 }
+

@@ -1,30 +1,26 @@
 package vn.com.hdbank.boardingpasshdbank.utils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 
 public class JsonUtils {
-    private static JsonUtils instance;
-    private final ObjectMapper objectMapper;
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     private JsonUtils() {
-        this.objectMapper = new ObjectMapper();
     }
 
-    public static synchronized JsonUtils getInstance() {
-        if (instance == null) {
-            instance = new JsonUtils();
+    public static String toJsonString(Object object) {
+        try {
+            return objectMapper.writeValueAsString(object);
+        } catch (Exception e){
+            //log
+            return StringUtils.EMPTY;
         }
-        return instance;
     }
 
-    public String toJsonString(Object object) throws JsonProcessingException {
-        return objectMapper.writeValueAsString(object);
-    }
-
-    public <T> T fromJsonString(String jsonString, Class<T> valueType) throws IOException {
+    public static  <T> T fromJsonString(String jsonString, Class<T> valueType) throws IOException {
         return objectMapper.readValue(jsonString, valueType);
     }
 }

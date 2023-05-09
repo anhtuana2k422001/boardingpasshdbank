@@ -22,8 +22,8 @@ public class GlobalExceptionHandler {
         final String METHOD_NAME = "handleVietJetApiException";
         WriteLog.errorLog(CLASS_NAME, METHOD_NAME, ex.getMessage());
         ResponseInfo response = ResponseInfo.builder()
-                .statusCode(ex.getStatusCode())
-                .statusMessage(ex.getStatusMessage())
+                .code(ex.getStatusCode())
+                .message(ex.getStatusMessage())
                 .build();
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -36,8 +36,8 @@ public class GlobalExceptionHandler {
         final String METHOD_NAME = "exception";
         WriteLog.errorLog(CLASS_NAME, METHOD_NAME, ex.getMessage());
         ResponseInfo response = ResponseInfo.builder()
-                .statusCode(ApiResponseStatus.INTERNAL_SERVER_ERROR.getStatusCode())
-                .statusMessage(ApiResponseStatus.INTERNAL_SERVER_ERROR.getStatusMessage())
+                .code(ApiResponseStatus.INTERNAL_SERVER_ERROR.getStatusCode())
+                .message(ApiResponseStatus.INTERNAL_SERVER_ERROR.getStatusMessage())
                 .build();
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }

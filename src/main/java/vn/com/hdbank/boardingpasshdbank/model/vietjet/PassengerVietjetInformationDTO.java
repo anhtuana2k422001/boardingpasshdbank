@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class CustomerTicketInformation {
+public class PassengerVietjetInformationDTO {
     private String fullName;
     private String birthDate;
     private String flightTime;
