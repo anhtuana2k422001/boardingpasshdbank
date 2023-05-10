@@ -1,4 +1,4 @@
-package vn.com.hdbank.boardingpasshdbank.model.vietjetResponse;
+package vn.com.hdbank.boardingpasshdbank.model.vietjet.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
@@ -9,8 +9,6 @@ import java.util.ArrayList;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Journey {
-    private String key;
-    private Departure departure;
-    private ArrayList<FlightSegment> flightSegments;
+public class CurrencyAmount {
+    private double totalAmount;
 }

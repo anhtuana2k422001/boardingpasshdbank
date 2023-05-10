@@ -1,4 +1,4 @@
-package vn.com.hdbank.boardingpasshdbank.model.response;
+package vn.com.hdbank.boardingpasshdbank.model.vietjet.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

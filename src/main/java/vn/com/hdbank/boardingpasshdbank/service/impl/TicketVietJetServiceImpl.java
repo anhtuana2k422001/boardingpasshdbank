@@ -7,14 +7,14 @@ import org.springframework.beans.factory.annotation.Value;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.common.ApiUrls;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
-import vn.com.hdbank.boardingpasshdbank.model.response.ResponseToken;
-import vn.com.hdbank.boardingpasshdbank.model.vietjet.entity.Passenger;
-import vn.com.hdbank.boardingpasshdbank.model.vietjet.PassengerVietjetInformationDTO;
-import vn.com.hdbank.boardingpasshdbank.model.vietjet.ReservationRequestDTO;
-import vn.com.hdbank.boardingpasshdbank.model.vietjet.entity.TicketVietjet;
-import vn.com.hdbank.boardingpasshdbank.model.vietjetResponse.Charge;
-import vn.com.hdbank.boardingpasshdbank.model.vietjetResponse.Journey;
-import vn.com.hdbank.boardingpasshdbank.model.vietjetResponse.TicKet;
+import vn.com.hdbank.boardingpasshdbank.model.vietjet.response.ResponseToken;
+import vn.com.hdbank.boardingpasshdbank.model.response.TicketVietjetInformation;
+import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketRequest;
+import vn.com.hdbank.boardingpasshdbank.model.entity.TicketVietjet;
+import vn.com.hdbank.boardingpasshdbank.model.vietjet.response.Charge;
+import vn.com.hdbank.boardingpasshdbank.model.vietjet.response.Journey;
+import vn.com.hdbank.boardingpasshdbank.model.vietjet.response.Passenger;
+import vn.com.hdbank.boardingpasshdbank.model.vietjet.response.TicKet;
 import vn.com.hdbank.boardingpasshdbank.repository.PassengerRepository;
 import vn.com.hdbank.boardingpasshdbank.repository.TicketVietjetRepository;
 import vn.com.hdbank.boardingpasshdbank.service.BaseService;
@@ -38,10 +38,10 @@ public class TicketVietJetServiceImpl extends BaseService {
     @Value("${auth.password}")
     private String authPass;
 
-    public PassengerVietjetInformationDTO checkPassengerVietJet(ReservationRequestDTO reservationRequestDTO) {
-        PassengerVietjetInformationDTO passengerVietjetInformationDTO = null;
+    public TicketVietjetInformation checkPassengerVietJet(TicketRequest ticketRequest) {
+        TicketVietjetInformation ticketVietjetInformation = null;
         try {
-            List<TicketVietjet> lstFindByFlightCodeAndPassengerIdIsNotNull = ticketVietjetRepository.findByFlightCodeAndPassengerIdIsNotNull(reservationRequestDTO.getFlightCode());
+            List<TicketVietjet> lstFindByFlightCodeAndPassengerIdIsNotNull = ticketVietjetRepository.findByFlightCodeAndPassengerIdIsNotNull(ticketRequest.getFlightCode());
             if (lstFindByFlightCodeAndPassengerIdIsNotNull.size() > 0) {
                 throw new CustomException(ApiResponseStatus.TICKET_VIETJET_EXISTED_AND_ASSIGNED);
             }
@@ -52,15 +52,15 @@ public class TicketVietJetServiceImpl extends BaseService {
             }
 
             URI passengerVietjetUri = new URIBuilder(ApiUrls.PASSENGER_VIET_JET_URL)
-                    .addParameter("reservationLocator", reservationRequestDTO.getReservationCode())
-                    .addParameter("airlineCode", reservationRequestDTO.getAirlineCode())
-                    .addParameter("flightNumber", reservationRequestDTO.getFlightNumber())
-                    .addParameter("seatRow", reservationRequestDTO.getSeatRow())
-                    .addParameter("seatCols", reservationRequestDTO.getSeatCols()).build();
-            if(StringUtils.isNotEmpty(reservationRequestDTO.getFirstName()) && StringUtils.isNotEmpty(reservationRequestDTO.getLastName()) ){
+                    .addParameter("reservationLocator", ticketRequest.getReservationCode())
+                    .addParameter("airlineCode", ticketRequest.getAirlineCode())
+                    .addParameter("flightNumber", ticketRequest.getFlightNumber())
+                    .addParameter("seatRow", ticketRequest.getSeatRow())
+                    .addParameter("seatCols", ticketRequest.getSeatCols()).build();
+            if(StringUtils.isNotEmpty(ticketRequest.getFirstName()) && StringUtils.isNotEmpty(ticketRequest.getLastName()) ){
                 passengerVietjetUri = new URIBuilder(passengerVietjetUri)
-                        .addParameter("passengerFirstName", reservationRequestDTO.getFirstName())
-                        .addParameter("passengerLastName", reservationRequestDTO.getLastName())
+                        .addParameter("passengerFirstName", ticketRequest.getFirstName())
+                        .addParameter("passengerLastName", ticketRequest.getLastName())
                         .build();
             }
 
@@ -71,7 +71,7 @@ public class TicketVietJetServiceImpl extends BaseService {
                 throw new CustomException(ApiResponseStatus.INVALID_TICKET);
             }
 
-            passengerVietjetInformationDTO = mapTicketResponseToCustomerTicketInformationDTO(ticketResponse);
+            ticketVietjetInformation = mapTicketResponseToCustomerTicketInformationDTO(ticketResponse);
 
         } catch (Exception e) {
             if (e instanceof CustomException) {
@@ -79,16 +79,16 @@ public class TicketVietJetServiceImpl extends BaseService {
             }
             throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
         }
-        return passengerVietjetInformationDTO;
+        return ticketVietjetInformation;
     }
 
-    private PassengerVietjetInformationDTO mapTicketResponseToCustomerTicketInformationDTO(String ticketResponse) throws IOException {
+    private TicketVietjetInformation mapTicketResponseToCustomerTicketInformationDTO(String ticketResponse) throws IOException {
         TicKet ticKet = JsonUtils.fromJsonString(ticketResponse, TicKet.class);
-        vn.com.hdbank.boardingpasshdbank.model.vietjetResponse.Passenger firstPassenger = ticKet.getPassengers().get(0);
+        Passenger firstPassenger = ticKet.getPassengers().get(0);
         Journey firstJourney = ticKet.getJourneys().get(0);
         List<Charge> charges = ticKet.getCharges();
         Double totalAmount = charges.stream().filter(c -> "FA".equals(c.getChargeCode())).mapToDouble(c -> c.getCurrencyAmounts().get(0).getTotalAmount()).sum();
-        return new PassengerVietjetInformationDTO(firstPassenger.getLastName() + " " + firstPassenger.getFirstName(), firstPassenger.getBirthDate(), String.valueOf(firstJourney.getFlightSegments().get(0).getScheduledDepartureLocalDatetime()), totalAmount);
+        return new TicketVietjetInformation(firstPassenger.getLastName() + " " + firstPassenger.getFirstName(), firstPassenger.getBirthDate(), String.valueOf(firstJourney.getFlightSegments().get(0).getScheduledDepartureLocalDatetime()), totalAmount);
     }
 
 

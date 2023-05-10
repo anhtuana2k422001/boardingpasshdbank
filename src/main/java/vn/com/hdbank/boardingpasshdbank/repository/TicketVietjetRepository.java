@@ -1,6 +1,6 @@
 package vn.com.hdbank.boardingpasshdbank.repository;
 
-import vn.com.hdbank.boardingpasshdbank.model.vietjet.entity.TicketVietjet;
+import vn.com.hdbank.boardingpasshdbank.model.entity.TicketVietjet;
 
 import java.util.List;
 
