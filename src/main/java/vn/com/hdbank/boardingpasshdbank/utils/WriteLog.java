@@ -12,12 +12,13 @@ public class WriteLog {
         LOGGER.info(message);
     }
 
-    public static void infoLog(String className, String methodName, Object data) {
-        LOGGER.info("[{}] [{}]: {}", className, methodName, data != null ? data.toString() : null);
+    public static void infoLog(String className, String methodName, Object... data) {
+        LOGGER.info("[{}] [{}]: {}", className, methodName, data);
     }
 
     public static void errorLog(String className, String methodName, String messageError) {
         LOGGER.error("[{}] [{}] [{}]", className, methodName, messageError);
+
     }
 
     public static void errorLog(String className, String methodName, String messageError, Throwable ex) {

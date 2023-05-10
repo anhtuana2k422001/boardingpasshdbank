@@ -1,5 +1,6 @@
 package vn.com.hdbank.boardingpasshdbank.model.vietjet;
 
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,9 +12,13 @@ import org.apache.commons.lang3.StringUtils;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReservationRequestDTO {
-    private String fullName;
+    private String lastName;
+    private String firstName;
+    @Pattern(regexp = "^[A-Za-z]{2}\\d{1,4}$", message = "Flight code must start with 2 letters and be followed by 1 to 4 digits")
     private String flightCode;
+    @Pattern(regexp = "^[a-zA-Z0-9]{1,6}$", message = "Reservation code must contain up to 6 alphanumeric characters")
     private String reservationCode;
+    @Pattern(regexp = "^\\d{1,3}[a-zA-Z]$", message = "Seats must have 1 or 3 digits followed by a letter")
     private String seats;
 
     //add more getter setter

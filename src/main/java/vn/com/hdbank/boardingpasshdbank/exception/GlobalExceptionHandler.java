@@ -1,5 +1,7 @@
 package vn.com.hdbank.boardingpasshdbank.exception;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.controller.PassengerController;
 import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
@@ -12,8 +14,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
 @RestControllerAdvice
+
 public class GlobalExceptionHandler {
     private static final String CLASS_NAME  = PassengerController.class.getName();
+    private static final Logger LOGGER  = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+
 
     @ExceptionHandler(CustomException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

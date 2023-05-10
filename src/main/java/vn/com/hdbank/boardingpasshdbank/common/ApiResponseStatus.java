@@ -18,9 +18,12 @@ public enum ApiResponseStatus {
 
     SERVICE_UNAVAILABLE("007", "Service Unavailable"),
     PASSENGER_EXISTED("008", "Passenger already existed"),
-    VIETJET_API_ERROR("009", "Unable to call Vietjet API"),
-    EXTERNAL_API_ERROR("010", "Error calling external API"),
 
+    TICKET_VIETJET_EXISTED_AND_ASSIGNED("009", "Ticket Vietjet already exists and has been assigned to a user"),
+    VIETJET_API_ERROR("010", "Unable to call Vietjet API"),
+    EXTERNAL_API_ERROR("011", "Error calling external API"),
+    INVALID_INPUT("012", "Invalid input"),
+    INVALID_TICKET("013", "Invalid ticket information"),
     ;
 
     private final String statusCode;
