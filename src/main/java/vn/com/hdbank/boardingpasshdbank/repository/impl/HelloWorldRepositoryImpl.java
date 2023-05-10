@@ -1,6 +1,6 @@
 package vn.com.hdbank.boardingpasshdbank.repository.impl;
 
-import vn.com.hdbank.boardingpasshdbank.model.helloworld.HelloWorld;
+import vn.com.hdbank.boardingpasshdbank.model.entity.HelloWorld;
 import vn.com.hdbank.boardingpasshdbank.repository.HelloWorldRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

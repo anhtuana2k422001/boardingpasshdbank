@@ -2,13 +2,12 @@ package vn.com.hdbank.boardingpasshdbank.repository.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
-import vn.com.hdbank.boardingpasshdbank.model.vietjet.entity.TicketVietjet;
+import vn.com.hdbank.boardingpasshdbank.model.entity.TicketVietjet;
 import vn.com.hdbank.boardingpasshdbank.repository.TicketVietjetRepository;
 
 import java.sql.ResultSet;

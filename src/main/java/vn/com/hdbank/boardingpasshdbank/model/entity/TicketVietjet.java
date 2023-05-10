@@ -1,4 +1,4 @@
-package vn.com.hdbank.boardingpasshdbank.model.vietjet.entity;
+package vn.com.hdbank.boardingpasshdbank.model.entity;
 
 import lombok.*;
 

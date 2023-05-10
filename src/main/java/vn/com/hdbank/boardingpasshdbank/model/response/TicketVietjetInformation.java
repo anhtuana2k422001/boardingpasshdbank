@@ -1,4 +1,4 @@
-package vn.com.hdbank.boardingpasshdbank.model.vietjet;
+package vn.com.hdbank.boardingpasshdbank.model.response;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class PassengerVietjetInformationDTO {
+public class TicketVietjetInformation {
     private String fullName;
     private String birthDate;
     private String flightTime;

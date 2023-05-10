@@ -2,7 +2,7 @@ package vn.com.hdbank.boardingpasshdbank.controller;
 
 import org.springframework.web.bind.annotation.*;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
-import vn.com.hdbank.boardingpasshdbank.model.helloworld.HelloWorld;
+import vn.com.hdbank.boardingpasshdbank.model.entity.HelloWorld;
 import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
 import vn.com.hdbank.boardingpasshdbank.service.impl.HelloWorldServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

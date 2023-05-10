@@ -2,16 +2,12 @@ package vn.com.hdbank.boardingpasshdbank.repository.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
-import vn.com.hdbank.boardingpasshdbank.model.vietjet.entity.Passenger;
+import vn.com.hdbank.boardingpasshdbank.model.entity.Passenger;
 import vn.com.hdbank.boardingpasshdbank.repository.PassengerRepository;
-import vn.com.hdbank.boardingpasshdbank.utils.WriteLog;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 @Repository

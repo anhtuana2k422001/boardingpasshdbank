@@ -1,6 +1,6 @@
 package vn.com.hdbank.boardingpasshdbank.repository;
 
-import vn.com.hdbank.boardingpasshdbank.model.helloworld.HelloWorld;
+import vn.com.hdbank.boardingpasshdbank.model.entity.HelloWorld;
 
 import java.util.List;
 

@@ -3,7 +3,7 @@ package vn.com.hdbank.boardingpasshdbank.exception;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
-import vn.com.hdbank.boardingpasshdbank.controller.PassengerController;
+import vn.com.hdbank.boardingpasshdbank.controller.TicketVietjetController;
 import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
 import vn.com.hdbank.boardingpasshdbank.utils.WriteLog;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 
 public class GlobalExceptionHandler {
-    private static final String CLASS_NAME  = PassengerController.class.getName();
+    private static final String CLASS_NAME  = TicketVietjetController.class.getName();
     private static final Logger LOGGER  = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
 
