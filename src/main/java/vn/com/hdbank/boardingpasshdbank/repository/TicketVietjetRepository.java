@@ -11,4 +11,5 @@ public interface TicketVietjetRepository {
     void deleteTicketVietjet(int id);
     List<TicketVietjet> findByFlightCodeAndPassengerIdIsNotNull(String flightCode);
     boolean checkExistsByFlightCode(String flightCode);
+    void updateCustomerIdByFlightCode(int customerId,String flightCode);
 }
