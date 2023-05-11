@@ -1,5 +1,6 @@
 package vn.com.hdbank.boardingpasshdbank.repository.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -26,7 +27,13 @@ public class TicketVietjetRepositoryImpl implements TicketVietjetRepository {
     public void create(TicketVietjet ticketVietjet) {
         String sql = "INSERT INTO ticket_vietjet (last_name, first_name, flight_code, reservation_code, seats, customer_id) VALUES (?, ?, ?, ?, ?, ?)";
         try {
-            jdbcTemplate.update(sql, ticketVietjet.getLastName(), ticketVietjet.getFirstName(), ticketVietjet.getFlightCode(), ticketVietjet.getReservationCode(), ticketVietjet.getSeats(), null);
+            if (ticketVietjet.getCustomerId() > 0) {
+                jdbcTemplate.update(sql, ticketVietjet.getLastName(), ticketVietjet.getFirstName(), ticketVietjet.getFlightCode(), ticketVietjet.getReservationCode(), ticketVietjet.getSeats(), ticketVietjet.getCustomerId());
+
+            } else {
+                jdbcTemplate.update(sql, ticketVietjet.getLastName(), ticketVietjet.getFirstName(), ticketVietjet.getFlightCode(), ticketVietjet.getReservationCode(), ticketVietjet.getSeats(), null);
+
+            }
         } catch (DuplicateKeyException e) {
             throw new CustomException(ApiResponseStatus.CONFLICT);
         } catch (Exception e) {
@@ -47,6 +54,15 @@ public class TicketVietjetRepositoryImpl implements TicketVietjetRepository {
         String sql = "UPDATE ticket_vietjet SET last_name = ?, first_name = ?, flight_code = ?, reservation_code = ?, seats = ?, customer_id = ? WHERE id = ?";
         try {
             jdbcTemplate.update(sql, ticketVietjet.getLastName(), ticketVietjet.getFirstName(), ticketVietjet.getFlightCode(), ticketVietjet.getReservationCode(), ticketVietjet.getSeats(), ticketVietjet.getCustomerId(), ticketVietjet.getId());
+        } catch (Exception e) {
+            throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public void updateCustomerIdByFlightCode(int customerId, String flightCode) {
+        String sql = "UPDATE ticket_vietjet SET customer_id = ? WHERE flight_code = ?";
+        try {
+            jdbcTemplate.update(sql, customerId, flightCode);
         } catch (Exception e) {
             throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
         }

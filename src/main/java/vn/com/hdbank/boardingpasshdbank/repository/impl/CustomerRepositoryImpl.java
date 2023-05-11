@@ -1,6 +1,7 @@
 package vn.com.hdbank.boardingpasshdbank.repository.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
@@ -56,11 +57,38 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         }
     }
 
+    public void updateCustomerTypeById(String customerType,int id) {
+        String sql = "UPDATE customer SET customer_type=? WHERE id=?";
+        try {
+            jdbcTemplate.update(sql, customerType,id);
+        } catch (Exception e) {
+            throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     public void delete(int customerId) {
         String sql = "DELETE FROM customer WHERE id=?";
         try {
             jdbcTemplate.update(sql, customerId);
+        } catch (Exception e) {
+            throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public Customer findById(int id) {
+        String sql = "SELECT id, first_name, last_name, birth_date, customer_type, created_at FROM customer WHERE id = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, new Object[]{id}, (rs, rowNum) -> new Customer(
+                    rs.getInt("id"),
+                    rs.getString("first_name"),
+                    rs.getString("last_name"),
+                    rs.getString("birth_date"),
+                    rs.getString("customer_type"),
+                    rs.getTimestamp("created_at").toLocalDateTime()
+            ));
+        } catch (EmptyResultDataAccessException e) {
+            throw new CustomException(ApiResponseStatus.NOT_FOUND);
         } catch (Exception e) {
             throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
         }

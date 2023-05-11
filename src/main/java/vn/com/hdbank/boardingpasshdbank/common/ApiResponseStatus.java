@@ -24,6 +24,7 @@ public enum ApiResponseStatus {
     EXTERNAL_API_ERROR("011", "Error calling external API"),
     INVALID_INPUT("012", "Invalid input"),
     INVALID_TICKET("013", "Invalid ticket information"),
+    CUSTOMER_NOT_VIETJET("014", "Customer is not a Vietjet passenger"),
     ;
 
     private final String statusCode;

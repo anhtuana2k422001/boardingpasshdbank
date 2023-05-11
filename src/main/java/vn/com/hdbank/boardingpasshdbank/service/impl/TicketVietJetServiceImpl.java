@@ -15,7 +15,6 @@ import vn.com.hdbank.boardingpasshdbank.model.vietjet.response.Charge;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.response.Journey;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.response.Passenger;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.response.TicKet;
-import vn.com.hdbank.boardingpasshdbank.repository.CustomerRepository;
 import vn.com.hdbank.boardingpasshdbank.repository.TicketVietjetRepository;
 import vn.com.hdbank.boardingpasshdbank.service.BaseService;
 import org.springframework.stereotype.Service;
@@ -29,8 +28,6 @@ import java.util.List;
 @Service
 public class TicketVietJetServiceImpl extends BaseService {
     @Autowired
-    private CustomerRepository passengerRepository;
-    @Autowired
     private TicketVietjetRepository ticketVietjetRepository;
 
     @Value("${auth.username}")
@@ -38,7 +35,7 @@ public class TicketVietJetServiceImpl extends BaseService {
     @Value("${auth.password}")
     private String authPass;
 
-    public TicketVietjetInformation checkPassengerVietJet(TicketRequest ticketRequest) {
+    public TicketVietjetInformation checkTicketVietJet(TicketRequest ticketRequest) {
         TicketVietjetInformation ticketVietjetInformation = null;
         try {
             List<TicketVietjet> lstFindByFlightCodeAndPassengerIdIsNotNull = ticketVietjetRepository.findByFlightCodeAndPassengerIdIsNotNull(ticketRequest.getFlightCode());
@@ -57,7 +54,7 @@ public class TicketVietJetServiceImpl extends BaseService {
                     .addParameter("flightNumber", ticketRequest.getFlightNumber())
                     .addParameter("seatRow", ticketRequest.getSeatRow())
                     .addParameter("seatCols", ticketRequest.getSeatCols()).build();
-            if(StringUtils.isNotEmpty(ticketRequest.getFirstName()) && StringUtils.isNotEmpty(ticketRequest.getLastName()) ){
+            if (StringUtils.isNotEmpty(ticketRequest.getFirstName()) && StringUtils.isNotEmpty(ticketRequest.getLastName())) {
                 passengerVietjetUri = new URIBuilder(passengerVietjetUri)
                         .addParameter("passengerFirstName", ticketRequest.getFirstName())
                         .addParameter("passengerLastName", ticketRequest.getLastName())
@@ -71,7 +68,7 @@ public class TicketVietJetServiceImpl extends BaseService {
                 throw new CustomException(ApiResponseStatus.INVALID_TICKET);
             }
 
-            ticketVietjetInformation = mapTicketResponseToTicketVietjetInformationAndSaveDB(ticketResponse,ticketRequest);
+            ticketVietjetInformation = mapTicketResponseToTicketVietjetInformationAndSaveDB(ticketResponse, ticketRequest);
         } catch (Exception e) {
             if (e instanceof CustomException) {
                 throw new CustomException(((CustomException) e).getApiResponseStatus());
@@ -81,14 +78,14 @@ public class TicketVietJetServiceImpl extends BaseService {
         return ticketVietjetInformation;
     }
 
-    private TicketVietjetInformation mapTicketResponseToTicketVietjetInformationAndSaveDB(String ticketResponse,TicketRequest ticketRequest) throws IOException {
+    private TicketVietjetInformation mapTicketResponseToTicketVietjetInformationAndSaveDB(String ticketResponse, TicketRequest ticketRequest) throws IOException {
         TicKet ticKet = JsonUtils.fromJsonString(ticketResponse, TicKet.class);
         Passenger firstPassenger = ticKet.getPassengers().get(0);
         Journey firstJourney = ticKet.getJourneys().get(0);
         List<Charge> charges = ticKet.getCharges();
         Double totalAmount = charges.stream().filter(c -> "FA".equals(c.getChargeCode())).mapToDouble(c -> c.getCurrencyAmounts().get(0).getTotalAmount()).sum();
         //save db
-        if(!ticketVietjetRepository.checkExistsByFlightCode(ticketRequest.getFlightCode())){
+        if (!ticketVietjetRepository.checkExistsByFlightCode(ticketRequest.getFlightCode())) {
             TicketVietjet saveTicket = new TicketVietjet(firstPassenger.getFirstName(), firstPassenger.getLastName(), ticketRequest.getFlightCode(), ticketRequest.getReservationCode(), ticketRequest.getSeats());
             ticketVietjetRepository.create(saveTicket);
         }

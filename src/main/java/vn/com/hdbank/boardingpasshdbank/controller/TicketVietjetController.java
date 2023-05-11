@@ -17,21 +17,22 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(path = "/api")
+@RequestMapping(path = "/api/flight-ticket")
 public class TicketVietjetController {
     private static final String CLASS_NAME = TicketVietjetController.class.getSimpleName();
     @Autowired
     TicketVietJetServiceImpl ticketVietJetService;
 
+    //API 1
     @PostMapping("/check-flight-ticket")
-    public ResponseEntity<ResponseInfo> checkInformationTicket(@Valid @RequestBody TicketRequest reservationRequestDTO, BindingResult bindingResult) {
+    public ResponseEntity<ResponseInfo<TicketVietjetInformation>> checkInformationTicket(@Valid @RequestBody TicketRequest ticketRequest, BindingResult bindingResult) {
 
         String uuid = UUID.randomUUID().toString();
         final String METHOD_NAME = "checkInformationTicket";
         CommonUtils.handleValidationErrors(bindingResult); //validate
 
-        TicketVietjetInformation ticketVietjetInformation = ticketVietJetService.checkPassengerVietJet(reservationRequestDTO);
-        ResponseInfo response = ResponseInfo.builder()
+        TicketVietjetInformation ticketVietjetInformation = ticketVietJetService.checkTicketVietJet(ticketRequest);
+        ResponseInfo<TicketVietjetInformation> response = ResponseInfo.<TicketVietjetInformation>builder()
                 .data(ticketVietjetInformation)
                 .code(ApiResponseStatus.SUCCESS.getStatusCode())
                 .message(ApiResponseStatus.SUCCESS.getStatusMessage())
