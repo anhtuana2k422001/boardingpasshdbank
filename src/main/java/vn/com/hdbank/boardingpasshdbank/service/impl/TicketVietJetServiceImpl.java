@@ -15,7 +15,7 @@ import vn.com.hdbank.boardingpasshdbank.model.vietjet.response.Charge;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.response.Journey;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.response.Passenger;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.response.TicKet;
-import vn.com.hdbank.boardingpasshdbank.repository.PassengerRepository;
+import vn.com.hdbank.boardingpasshdbank.repository.CustomerRepository;
 import vn.com.hdbank.boardingpasshdbank.repository.TicketVietjetRepository;
 import vn.com.hdbank.boardingpasshdbank.service.BaseService;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ import java.util.List;
 @Service
 public class TicketVietJetServiceImpl extends BaseService {
     @Autowired
-    private PassengerRepository passengerRepository;
+    private CustomerRepository passengerRepository;
     @Autowired
     private TicketVietjetRepository ticketVietjetRepository;
 

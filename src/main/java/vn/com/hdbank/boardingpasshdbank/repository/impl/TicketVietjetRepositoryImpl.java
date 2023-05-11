@@ -24,9 +24,9 @@ public class TicketVietjetRepositoryImpl implements TicketVietjetRepository {
     }
 
     public void create(TicketVietjet ticketVietjet) {
-        String sql = "INSERT INTO ticket_vietjet (last_name, first_name, flight_code, reservation_code, seats, passenger_id) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO ticket_vietjet (last_name, first_name, flight_code, reservation_code, seats, customer_id) VALUES (?, ?, ?, ?, ?, ?)";
         try {
-            jdbcTemplate.update(sql, ticketVietjet.getLastName(), ticketVietjet.getFirstName(), ticketVietjet.getFlightCode(), ticketVietjet.getReservationCode(), ticketVietjet.getSeats(),null);
+            jdbcTemplate.update(sql, ticketVietjet.getLastName(), ticketVietjet.getFirstName(), ticketVietjet.getFlightCode(), ticketVietjet.getReservationCode(), ticketVietjet.getSeats(), null);
         } catch (DuplicateKeyException e) {
             throw new CustomException(ApiResponseStatus.CONFLICT);
         } catch (Exception e) {
@@ -35,7 +35,7 @@ public class TicketVietjetRepositoryImpl implements TicketVietjetRepository {
     }
 
     public List<TicketVietjet> getAllTicketVietjets() {
-        String sql = "SELECT id, last_name, first_name, flight_code, reservation_code, seats, passenger_id, created_at FROM ticket_vietjet";
+        String sql = "SELECT id, last_name, first_name, flight_code, reservation_code, seats, customer_id, created_at FROM ticket_vietjet";
         try {
             return jdbcTemplate.query(sql, new TicketVietjetRowMapper());
         } catch (Exception e) {
@@ -44,9 +44,9 @@ public class TicketVietjetRepositoryImpl implements TicketVietjetRepository {
     }
 
     public void updateTicketVietjet(TicketVietjet ticketVietjet) {
-        String sql = "UPDATE ticket_vietjet SET last_name = ?, first_name = ?, flight_code = ?, reservation_code = ?, seats = ?, passenger_id = ? WHERE id = ?";
+        String sql = "UPDATE ticket_vietjet SET last_name = ?, first_name = ?, flight_code = ?, reservation_code = ?, seats = ?, customer_id = ? WHERE id = ?";
         try {
-            jdbcTemplate.update(sql, ticketVietjet.getLastName(), ticketVietjet.getFirstName(), ticketVietjet.getFlightCode(), ticketVietjet.getReservationCode(), ticketVietjet.getSeats(), ticketVietjet.getPassengerId(), ticketVietjet.getId());
+            jdbcTemplate.update(sql, ticketVietjet.getLastName(), ticketVietjet.getFirstName(), ticketVietjet.getFlightCode(), ticketVietjet.getReservationCode(), ticketVietjet.getSeats(), ticketVietjet.getCustomerId(), ticketVietjet.getId());
         } catch (Exception e) {
             throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
         }
@@ -62,7 +62,7 @@ public class TicketVietjetRepositoryImpl implements TicketVietjetRepository {
     }
 
     public List<TicketVietjet> findByFlightCodeAndPassengerIdIsNotNull(String flightCode) {
-        String sql = "SELECT * FROM ticket_vietjet WHERE flight_code = ? AND passenger_id IS NOT NULL";
+        String sql = "SELECT * FROM ticket_vietjet WHERE flight_code = ? AND customer_id IS NOT NULL";
         try {
             return jdbcTemplate.query(sql, new Object[]{flightCode}, new TicketVietjetRowMapper());
 
@@ -94,7 +94,7 @@ public class TicketVietjetRepositoryImpl implements TicketVietjetRepository {
             ticket.setFlightCode(rs.getString("flight_code"));
             ticket.setReservationCode(rs.getString("reservation_code"));
             ticket.setSeats(rs.getString("seats"));
-            ticket.setPassengerId(rs.getInt("passenger_id"));
+            ticket.setCustomerId(rs.getInt("customer_id"));
             ticket.setCreateAt(rs.getTimestamp("created_at").toLocalDateTime());
             return ticket;
         }
