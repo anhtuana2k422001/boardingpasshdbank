@@ -17,7 +17,7 @@ public class TicketVietjet {
     private String flightCode;
     private String reservationCode;
     private String seats;
-    private int passengerId;
+    private int customerId;
     private LocalDateTime createAt;
 
     public TicketVietjet(String firstName, String lastName, String flightCode, String reservationCode, String seats) {
