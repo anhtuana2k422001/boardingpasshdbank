@@ -12,11 +12,19 @@ import java.util.Date;
 @Data
 public class TicketVietjet {
     private int id;
-    private String lastName;
     private String firstName;
+    private String lastName;
     private String flightCode;
     private String reservationCode;
     private String seats;
     private int passengerId;
     private LocalDateTime createAt;
+
+    public TicketVietjet(String firstName, String lastName, String flightCode, String reservationCode, String seats) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.flightCode = flightCode;
+        this.reservationCode = reservationCode;
+        this.seats = seats;
+    }
 }

@@ -26,7 +26,7 @@ public class TicketVietjetRepositoryImpl implements TicketVietjetRepository {
     public void create(TicketVietjet ticketVietjet) {
         String sql = "INSERT INTO ticket_vietjet (last_name, first_name, flight_code, reservation_code, seats, passenger_id) VALUES (?, ?, ?, ?, ?, ?)";
         try {
-            jdbcTemplate.update(sql, ticketVietjet.getLastName(), ticketVietjet.getFirstName(), ticketVietjet.getFlightCode(), ticketVietjet.getReservationCode(), ticketVietjet.getSeats(), ticketVietjet.getPassengerId());
+            jdbcTemplate.update(sql, ticketVietjet.getLastName(), ticketVietjet.getFirstName(), ticketVietjet.getFlightCode(), ticketVietjet.getReservationCode(), ticketVietjet.getSeats(),null);
         } catch (DuplicateKeyException e) {
             throw new CustomException(ApiResponseStatus.CONFLICT);
         } catch (Exception e) {
@@ -66,6 +66,17 @@ public class TicketVietjetRepositoryImpl implements TicketVietjetRepository {
         try {
             return jdbcTemplate.query(sql, new Object[]{flightCode}, new TicketVietjetRowMapper());
 
+        } catch (Exception e) {
+            throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public boolean checkExistsByFlightCode(String flightCode) {
+        String sql = "SELECT COUNT(*) FROM ticket_vietjet WHERE flight_code = ?";
+        try {
+            int count = jdbcTemplate.queryForObject(sql, new Object[]{flightCode}, Integer.class);
+            return count > 0;
         } catch (Exception e) {
             throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
         }

@@ -39,7 +39,6 @@ public class HelloWorldServiceImpl extends BaseService {
             throw new CustomException(ApiResponseStatus.NOT_FOUND);
         }
 
-
     }
 
     public void delete(int id) {

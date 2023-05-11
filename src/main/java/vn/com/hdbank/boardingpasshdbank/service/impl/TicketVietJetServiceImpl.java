@@ -71,8 +71,7 @@ public class TicketVietJetServiceImpl extends BaseService {
                 throw new CustomException(ApiResponseStatus.INVALID_TICKET);
             }
 
-            ticketVietjetInformation = mapTicketResponseToCustomerTicketInformationDTO(ticketResponse);
-
+            ticketVietjetInformation = mapTicketResponseToTicketVietjetInformationAndSaveDB(ticketResponse,ticketRequest);
         } catch (Exception e) {
             if (e instanceof CustomException) {
                 throw new CustomException(((CustomException) e).getApiResponseStatus());
@@ -82,13 +81,20 @@ public class TicketVietJetServiceImpl extends BaseService {
         return ticketVietjetInformation;
     }
 
-    private TicketVietjetInformation mapTicketResponseToCustomerTicketInformationDTO(String ticketResponse) throws IOException {
+    private TicketVietjetInformation mapTicketResponseToTicketVietjetInformationAndSaveDB(String ticketResponse,TicketRequest ticketRequest) throws IOException {
         TicKet ticKet = JsonUtils.fromJsonString(ticketResponse, TicKet.class);
         Passenger firstPassenger = ticKet.getPassengers().get(0);
         Journey firstJourney = ticKet.getJourneys().get(0);
         List<Charge> charges = ticKet.getCharges();
         Double totalAmount = charges.stream().filter(c -> "FA".equals(c.getChargeCode())).mapToDouble(c -> c.getCurrencyAmounts().get(0).getTotalAmount()).sum();
+        //save db
+        if(!ticketVietjetRepository.checkExistsByFlightCode(ticketRequest.getFlightCode())){
+            TicketVietjet saveTicket = new TicketVietjet(firstPassenger.getFirstName(), firstPassenger.getLastName(), ticketRequest.getFlightCode(), ticketRequest.getReservationCode(), ticketRequest.getSeats());
+            ticketVietjetRepository.create(saveTicket);
+        }
         return new TicketVietjetInformation(firstPassenger.getLastName() + " " + firstPassenger.getFirstName(), firstPassenger.getBirthDate(), String.valueOf(firstJourney.getFlightSegments().get(0).getScheduledDepartureLocalDatetime()), totalAmount);
+
+
     }
 
 
