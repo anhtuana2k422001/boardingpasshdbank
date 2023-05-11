@@ -12,6 +12,9 @@ public class JsonUtils {
     }
 
     public static String toJsonString(Object object) {
+        if (object == null) {
+            return StringUtils.EMPTY;
+        }
         try {
             return objectMapper.writeValueAsString(object);
         } catch (Exception e){
@@ -19,6 +22,7 @@ public class JsonUtils {
             return StringUtils.EMPTY;
         }
     }
+
 
     public static  <T> T fromJsonString(String jsonString, Class<T> valueType) throws IOException {
         return objectMapper.readValue(jsonString, valueType);

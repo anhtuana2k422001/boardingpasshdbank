@@ -8,6 +8,11 @@ public class WriteLog {
 
     private WriteLog() {}
 
+    public static void infoLog(Class<?> clazz,  String message, Object object) {
+        Logger logger = LoggerFactory.getLogger(clazz);
+        logger.info("{} {}", message, object);
+    }
+
     public static void infoLog(String message){
         LOGGER.info(message);
     }

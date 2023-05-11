@@ -14,6 +14,9 @@ public class CommonUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonUtils.class);
 
+    private CommonUtils() {
+    }
+
     public static void handleValidationErrors(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<String> errors = new ArrayList<>();
