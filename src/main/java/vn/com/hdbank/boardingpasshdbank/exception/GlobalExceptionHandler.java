@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.controller.TicketVietjetController;
 import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
+import vn.com.hdbank.boardingpasshdbank.utils.JsonUtils;
 import vn.com.hdbank.boardingpasshdbank.utils.WriteLog;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ResponseInfo> handleVietJetApiException(CustomException ex) {
         // logging here
         final String METHOD_NAME = "handleVietJetApiException";
+        LOGGER.error("Error : {} ",ex);
         WriteLog.errorLog(CLASS_NAME, METHOD_NAME, ex.getMessage());
         ResponseInfo response = ResponseInfo.builder()
                 .code(ex.getStatusCode())
@@ -40,7 +42,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ResponseInfo> exception(Exception ex) {
         // logging here
         final String METHOD_NAME = "exception";
-        WriteLog.errorLog(CLASS_NAME, METHOD_NAME, ex.getMessage());
+        WriteLog.errorLog(CLASS_NAME, METHOD_NAME, ex.toString());
         ResponseInfo response = ResponseInfo.builder()
                 .code(ApiResponseStatus.INTERNAL_SERVER_ERROR.getStatusCode())
                 .message(ApiResponseStatus.INTERNAL_SERVER_ERROR.getStatusMessage())
