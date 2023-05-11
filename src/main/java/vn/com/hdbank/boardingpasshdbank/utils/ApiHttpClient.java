@@ -10,18 +10,18 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 
 public class ApiHttpClient {
 
-    private static final String CLASS_NAME = ApiHttpClient.class.getSimpleName();
+    private static final Logger LOGGER  = LoggerFactory.getLogger(ApiHttpClient.class);
 
     private static final CloseableHttpClient httpClient = HttpClients.createDefault();
 
-    private ApiHttpClient() {
-    }
-
+    private ApiHttpClient() {}
 
     public static String getToken(String url, String username, String password) {
         try {
@@ -33,7 +33,7 @@ public class ApiHttpClient {
 
             CloseableHttpResponse response = httpClient.execute(request);
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_FORBIDDEN) {
-                WriteLog.errorLog(CLASS_NAME, "getToken", "Forbidden");
+                LOGGER.error(ApiResponseStatus.EXTERNAL_API_ERROR.getStatusMessage());
                 throw new CustomException(ApiResponseStatus.EXTERNAL_API_ERROR);
             }
             HttpEntity entity = response.getEntity();
@@ -41,6 +41,7 @@ public class ApiHttpClient {
                 return EntityUtils.toString(entity);
             }
         } catch (Exception ex) {
+            LOGGER.error(ex.getMessage());
             throw new CustomException(ApiResponseStatus.EXTERNAL_API_ERROR);
         }
 
@@ -59,10 +60,9 @@ public class ApiHttpClient {
                 }
             }
         } catch (Exception ex) {
+            LOGGER.error(ex.getMessage());
             throw new CustomException(ApiResponseStatus.EXTERNAL_API_ERROR);
         }
-
-
         return null;
     }
 
@@ -81,10 +81,9 @@ public class ApiHttpClient {
                 return EntityUtils.toString(responseEntity);
             }
         } catch (Exception ex) {
+            LOGGER.error(ex.getMessage());
             throw new CustomException(ApiResponseStatus.EXTERNAL_API_ERROR);
         }
-
-
         return null;
     }
 
