@@ -22,7 +22,7 @@ public class TicketConfirmRequest {
     @Pattern(regexp = "^\\d{1,3}[a-zA-Z]$", message = "Seats must have 1 or 3 digits followed by a letter")
     private String seats;
 
-    private boolean isCustomerVietjet;
+    private Boolean isCustomerVietjet;
 
     //add more getter setter
     public String getAirlineCode() {

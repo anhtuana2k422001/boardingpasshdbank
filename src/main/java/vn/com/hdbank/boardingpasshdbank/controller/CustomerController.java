@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.model.entity.Customer;
+import vn.com.hdbank.boardingpasshdbank.model.response.ConfirmCustomerVietjet;
 import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketConfirmRequest;
 import vn.com.hdbank.boardingpasshdbank.service.impl.CustomerServiceImpl;
@@ -33,16 +34,16 @@ public class CustomerController {
 
     /* API 2: confirm customer VietJet */
     @PostMapping("/confirm-customer-vietjet/{customerId}")
-    public ResponseEntity<ResponseInfo<Customer>> confirmCustomerVietJet(@Valid @RequestBody TicketConfirmRequest request,
-                                                                         @RequestParam int customerId, BindingResult bindingResult){
+    public ResponseEntity<ResponseInfo<ConfirmCustomerVietjet>> confirmCustomerVietJet(@Valid @RequestBody TicketConfirmRequest request,
+                                                                                       @PathVariable int customerId, BindingResult bindingResult){
         CommonUtils.handleValidationErrors(bindingResult); /*validate*/
         String requestId = UUID.randomUUID().toString();
         MDC.put("requestId", requestId);
         String requestLog = JsonUtils.toJsonString(request);
         LOGGER.info(REQUEST, requestLog);
-        Customer customerInformation = customerService.confirmCustomerVietjet(request,customerId);
-        ResponseInfo<Customer> response = ResponseInfo.<Customer>builder()
-                .data(customerInformation)
+        ConfirmCustomerVietjet confirmCustomerVietjet = customerService.confirmCustomerVietjet(request,customerId);
+        ResponseInfo<ConfirmCustomerVietjet> response = ResponseInfo.<ConfirmCustomerVietjet>builder()
+                .data(confirmCustomerVietjet)
                 .code(ApiResponseStatus.SUCCESS.getStatusCode())
                 .message(ApiResponseStatus.SUCCESS.getStatusMessage())
                 .build();

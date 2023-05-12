@@ -15,5 +15,5 @@ public class Customer {
     private String lastName;
     private String birthDate;
     private String customerType;
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 }
