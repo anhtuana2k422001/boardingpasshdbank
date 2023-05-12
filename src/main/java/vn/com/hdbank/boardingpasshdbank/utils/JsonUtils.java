@@ -1,6 +1,7 @@
 package vn.com.hdbank.boardingpasshdbank.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +10,8 @@ import java.io.IOException;
 
 public class JsonUtils {
     private static final Logger LOGGER  = LoggerFactory.getLogger(JsonUtils.class);
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
 
     private JsonUtils() {}
 
