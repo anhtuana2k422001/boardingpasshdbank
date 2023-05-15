@@ -30,8 +30,8 @@ public enum ApiResponseStatus {
     PROGRAM_ENDED("017", "Chương trình quay thưởng đã dừng"),
     NO_PRIZE_CODE("018", "Khách hàng chưa có mã dự thưởng"),
     CUSTOMER_ROULETTE_SUCCESS("019", "Khách hàng đã quay số dự thưởng và nhận hoàn tiền thành công"),
-    NOT_SUCCESS  ("020", "Unsuccessful"),
-
+    UPDATE_PRIZE_ERROR  ("020", "Lỗi khi cập nhập dự thưởng"),
+    CHECK_TICKET_ERROR  ("021", "Lỗi khi kiểm tra vé"),
     ;
 
     private final String statusCode;

@@ -1,7 +1,6 @@
 package vn.com.hdbank.boardingpasshdbank.repository.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -14,7 +13,6 @@ import vn.com.hdbank.boardingpasshdbank.repository.PrizeRepository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 @Repository
@@ -22,32 +20,8 @@ public class PrizeRepositoryImpl implements PrizeRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
     public PrizeRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-    }
-
-    @Override
-    public List<Prize> findAll() {
-        String sql = "SELECT * FROM prize";
-        try {
-            return jdbcTemplate.query(sql, new PrizeRowMapper());
-        } catch (Exception e) {
-            throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @Override
-    public Optional<Prize> findById(int id) {
-        String sql = "SELECT * FROM prize WHERE id = ?";
-        try {
-            List<Prize> prizes = jdbcTemplate.query(sql, new Object[]{id}, new PrizeRowMapper());
-            return prizes.stream().findFirst();
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
-        } catch (Exception e) {
-            throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
     @Override

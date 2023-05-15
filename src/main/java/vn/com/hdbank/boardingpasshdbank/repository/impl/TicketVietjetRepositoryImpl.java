@@ -19,7 +19,6 @@ import java.util.List;
 public class TicketVietjetRepositoryImpl implements TicketVietjetRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
     public TicketVietjetRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -41,24 +40,6 @@ public class TicketVietjetRepositoryImpl implements TicketVietjetRepository {
         }
     }
 
-    public List<TicketVietjet> getAllTicketVietjets() {
-        String sql = "SELECT id, last_name, first_name, flight_code, reservation_code, seats, customer_id, created_at FROM ticket_vietjet";
-        try {
-            return jdbcTemplate.query(sql, new TicketVietjetRowMapper());
-        } catch (Exception e) {
-            throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public void updateTicketVietjet(TicketVietjet ticketVietjet) {
-        String sql = "UPDATE ticket_vietjet SET last_name = ?, first_name = ?, flight_code = ?, reservation_code = ?, seats = ?, customer_id = ? WHERE id = ?";
-        try {
-            jdbcTemplate.update(sql, ticketVietjet.getLastName(), ticketVietjet.getFirstName(), ticketVietjet.getFlightCode(), ticketVietjet.getReservationCode(), ticketVietjet.getSeats(), ticketVietjet.getCustomerId(), ticketVietjet.getId());
-        } catch (Exception e) {
-            throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     public void updateCustomerIdByFlightCode(int customerId, String flightCode) {
         String sql = "UPDATE ticket_vietjet SET customer_id = ? WHERE flight_code = ?";
         try {
@@ -68,20 +49,19 @@ public class TicketVietjetRepositoryImpl implements TicketVietjetRepository {
         }
     }
 
-    public void deleteTicketVietjet(int id) {
-        String sql = "DELETE FROM ticket_vietjet WHERE id = ?";
-        try {
-            jdbcTemplate.update(sql, id);
-        } catch (Exception e) {
-            throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     public List<TicketVietjet> findByFlightCodeAndPassengerIdIsNotNull(String flightCode) {
         String sql = "SELECT * FROM ticket_vietjet WHERE flight_code = ? AND customer_id IS NOT NULL";
         try {
-            return jdbcTemplate.query(sql, new Object[]{flightCode}, new TicketVietjetRowMapper());
-
+            return jdbcTemplate.query(sql, new Object[]{flightCode}, (rs, rowNum) -> new TicketVietjet(
+                    rs.getInt("id"),
+                    rs.getString("last_name"),
+                    rs.getString("first_name"),
+                    rs.getString("flight_code"),
+                    rs.getString("reservation_code"),
+                    rs.getString("seats"),
+                    rs.getInt("customer_id"),
+                    rs.getTimestamp("created_at").toLocalDateTime())
+            );
         } catch (Exception e) {
             throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
         }
@@ -95,24 +75,6 @@ public class TicketVietjetRepositoryImpl implements TicketVietjetRepository {
             return count > 0;
         } catch (Exception e) {
             throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-
-    public static class TicketVietjetRowMapper implements RowMapper<TicketVietjet> {
-
-        @Override
-        public TicketVietjet mapRow(ResultSet rs, int rowNum) throws SQLException {
-            TicketVietjet ticket = new TicketVietjet();
-            ticket.setId(rs.getInt("id"));
-            ticket.setLastName(rs.getString("last_name"));
-            ticket.setFirstName(rs.getString("first_name"));
-            ticket.setFlightCode(rs.getString("flight_code"));
-            ticket.setReservationCode(rs.getString("reservation_code"));
-            ticket.setSeats(rs.getString("seats"));
-            ticket.setCustomerId(rs.getInt("customer_id"));
-            ticket.setCreateAt(rs.getTimestamp("created_at").toLocalDateTime());
-            return ticket;
         }
     }
 }

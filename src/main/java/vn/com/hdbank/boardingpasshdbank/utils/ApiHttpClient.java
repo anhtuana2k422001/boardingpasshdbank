@@ -18,9 +18,7 @@ import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 import java.nio.charset.StandardCharsets;
 
 public class ApiHttpClient {
-
     private static final Logger LOGGER  = LoggerFactory.getLogger(ApiHttpClient.class);
-
     private static final CloseableHttpClient httpClient = HttpClients.createDefault();
 
     private ApiHttpClient() {}
