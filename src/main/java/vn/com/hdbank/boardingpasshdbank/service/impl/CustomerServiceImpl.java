@@ -13,6 +13,7 @@ import vn.com.hdbank.boardingpasshdbank.model.entity.Prize;
 import vn.com.hdbank.boardingpasshdbank.model.entity.TicketVietjet;
 import vn.com.hdbank.boardingpasshdbank.model.response.ConfirmCustomerVietjet;
 import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
+import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.CustomerPrizeRequest;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketConfirmRequest;
 import vn.com.hdbank.boardingpasshdbank.repository.CustomerRepository;
 import vn.com.hdbank.boardingpasshdbank.repository.PrizeRepository;
@@ -100,5 +101,11 @@ public class CustomerServiceImpl extends BaseService {
 
         return response;
 
+    }
+
+
+    // Update results prize for customer
+    public boolean updateCustomerPrize (CustomerPrizeRequest request, int customerId){
+        return prizeRepository.updateResultPrize(request, customerId);
     }
 }

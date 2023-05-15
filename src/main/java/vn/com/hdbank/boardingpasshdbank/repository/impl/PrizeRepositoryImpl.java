@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 import vn.com.hdbank.boardingpasshdbank.model.entity.Prize;
+import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.CustomerPrizeRequest;
 import vn.com.hdbank.boardingpasshdbank.repository.PrizeRepository;
 
 import java.sql.ResultSet;
@@ -69,26 +70,6 @@ public class PrizeRepositoryImpl implements PrizeRepository {
         }
     }
 
-    @Override
-    public void update(Prize prize) {
-        String sql = "UPDATE prize SET prize_code = ?, prize_amount = ?, customer_id = ?, used = ? WHERE id = ?";
-        try {
-            jdbcTemplate.update(sql, prize.getPrizeCode(), prize.getPrizeAmount(), prize.getCustomerId(), prize.isUsed(), prize.getId());
-        } catch (Exception e) {
-            throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @Override
-    public void deleteById(int id) {
-        String sql = "DELETE FROM prize WHERE id = ?";
-        try {
-            jdbcTemplate.update(sql, id);
-        } catch (Exception e) {
-            throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     private static class PrizeRowMapper implements RowMapper<Prize> {
         @Override
         public Prize mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -102,7 +83,6 @@ public class PrizeRepositoryImpl implements PrizeRepository {
             return prize;
         }
     }
-
 
     public String generatePrizeCode() {
         String prizeCode = null;
@@ -130,4 +110,12 @@ public class PrizeRepositoryImpl implements PrizeRepository {
             throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    public boolean updateResultPrize(CustomerPrizeRequest request, int customerId) {
+        String sql = "UPDATE prize SET prize_amount = ?, used = ? WHERE prize_code = ? AND customer_id = ?";
+        int count = jdbcTemplate.update(sql, request.getTotalAmount(), true, request.getPrizeCode(), customerId);
+        return count > 0;
+    }
+
 }
