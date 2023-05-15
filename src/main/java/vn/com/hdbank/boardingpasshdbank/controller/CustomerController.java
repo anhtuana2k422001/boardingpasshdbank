@@ -15,7 +15,7 @@ import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketConfirmRequest;
 import vn.com.hdbank.boardingpasshdbank.service.impl.CustomerServiceImpl;
 import vn.com.hdbank.boardingpasshdbank.service.impl.TicketVietJetServiceImpl;
-import vn.com.hdbank.boardingpasshdbank.utils.ValkidationUtils;
+import vn.com.hdbank.boardingpasshdbank.utils.ValidationUtils;
 import vn.com.hdbank.boardingpasshdbank.utils.JsonUtils;
 
 import java.util.UUID;
@@ -35,7 +35,7 @@ public class CustomerController {
     @PostMapping("/confirm-customer-vietjet/{customerId}")
     public ResponseEntity<ResponseInfo<ConfirmCustomerVietjet>> confirmCustomerVietJet(@Valid @RequestBody TicketConfirmRequest request,
                                                                                        @PathVariable int customerId, BindingResult bindingResult){
-        ValkidationUtils.handleValidationErrors(bindingResult); /*validate*/
+        ValidationUtils.handleValidationErrors(bindingResult); /*validate*/
         String requestId = UUID.randomUUID().toString();
         MDC.put("requestId", requestId);
         String requestLog = JsonUtils.toJsonString(request);
