@@ -10,7 +10,7 @@ import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
 import vn.com.hdbank.boardingpasshdbank.model.response.TicketVietjetInformation;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketRequest;
 import vn.com.hdbank.boardingpasshdbank.service.impl.TicketVietJetServiceImpl;
-import vn.com.hdbank.boardingpasshdbank.utils.CommonUtils;
+import vn.com.hdbank.boardingpasshdbank.utils.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +32,7 @@ public class TicketVietjetController {
     @PostMapping("/check-flight-ticket")
     public ResponseEntity<ResponseInfo<TicketVietjetInformation>> checkInformationTicket(@Valid @RequestBody TicketRequest request,
                                                                                          BindingResult bindingResult) {
-        CommonUtils.handleValidationErrors(bindingResult); /*validate*/
+        ValidationUtils.handleValidationErrors(bindingResult); /*validate*/
         String requestId = UUID.randomUUID().toString();
         MDC.put("requestId", requestId);
         String requestLog = JsonUtils.toJsonString(request);
@@ -48,5 +48,7 @@ public class TicketVietjetController {
         MDC.clear();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+
 
 }

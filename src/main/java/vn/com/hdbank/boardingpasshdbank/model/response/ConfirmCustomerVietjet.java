@@ -14,4 +14,5 @@ import java.util.List;
 public class ConfirmCustomerVietjet {
     private Customer customer;
     private List<Prize> prizes;
+    private String linkWebViewPrizes;
 }

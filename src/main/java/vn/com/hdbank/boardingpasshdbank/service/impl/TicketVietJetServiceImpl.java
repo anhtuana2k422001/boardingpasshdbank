@@ -31,8 +31,7 @@ import java.util.List;
 public class TicketVietJetServiceImpl extends BaseService {
     private static final Logger LOGGER  = LoggerFactory.getLogger(TicketVietJetServiceImpl.class);
 
-    @Autowired
-    private TicketVietjetRepository ticketVietjetRepository;
+
 
     @Value("${auth.username}")
     private String authUsername;
@@ -66,7 +65,7 @@ public class TicketVietJetServiceImpl extends BaseService {
             }
             String jwt = JsonUtils.fromJsonString(jwtResponse, ResponseToken.class).getToken();
             String ticketResponse = ApiHttpClient.executeGetRequest(passengerVietjetUri.toString(), jwt);
-            if (StringUtils.equals(ticketResponse, "")) {
+            if (StringUtils.equals(ticketResponse, StringUtils.EMPTY )) {
                 LOGGER.error(ApiResponseStatus.INVALID_TICKET.getStatusMessage());
                 throw new CustomException(ApiResponseStatus.INVALID_TICKET);
             }

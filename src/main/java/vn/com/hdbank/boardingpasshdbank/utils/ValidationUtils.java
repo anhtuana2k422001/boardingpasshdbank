@@ -10,11 +10,11 @@ import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommonUtils {
+public class ValidationUtils {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommonUtils.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ValidationUtils.class);
 
-    private CommonUtils() {}
+    private ValidationUtils() {}
 
     public static void handleValidationErrors(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

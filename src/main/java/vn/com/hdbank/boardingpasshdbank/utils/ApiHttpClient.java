@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 
+import java.nio.charset.StandardCharsets;
+
 public class ApiHttpClient {
 
     private static final Logger LOGGER  = LoggerFactory.getLogger(ApiHttpClient.class);
@@ -78,7 +80,7 @@ public class ApiHttpClient {
             CloseableHttpResponse response = httpClient.execute(request);
             HttpEntity responseEntity = response.getEntity();
             if (responseEntity != null) {
-                return EntityUtils.toString(responseEntity);
+                return EntityUtils.toString(responseEntity, StandardCharsets.UTF_8);
             }
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage());
