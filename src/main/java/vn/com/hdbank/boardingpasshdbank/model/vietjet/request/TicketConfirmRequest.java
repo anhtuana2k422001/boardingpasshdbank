@@ -12,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TicketConfirmRequest {
+public class TicketConfirmRequest extends BaseRequest {
     private String lastName;
     private String firstName;
     @Pattern(regexp = "^[A-Za-z]{2}\\d{1,4}$", message = "Flight code must start with 2 letters and be followed by 1 to 4 digits")

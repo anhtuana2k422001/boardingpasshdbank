@@ -9,14 +9,10 @@ import org.springframework.beans.factory.annotation.Value;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.common.ApiUrls;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
-import vn.com.hdbank.boardingpasshdbank.model.vietjet.response.ResponseToken;
+import vn.com.hdbank.boardingpasshdbank.model.vietjet.response.*;
 import vn.com.hdbank.boardingpasshdbank.model.response.TicketVietjetInformation;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketRequest;
 import vn.com.hdbank.boardingpasshdbank.model.entity.TicketVietjet;
-import vn.com.hdbank.boardingpasshdbank.model.vietjet.response.Charge;
-import vn.com.hdbank.boardingpasshdbank.model.vietjet.response.Journey;
-import vn.com.hdbank.boardingpasshdbank.model.vietjet.response.Passenger;
-import vn.com.hdbank.boardingpasshdbank.model.vietjet.response.TicKet;
 import vn.com.hdbank.boardingpasshdbank.repository.TicketVietjetRepository;
 import vn.com.hdbank.boardingpasshdbank.service.BaseService;
 import org.springframework.stereotype.Service;
@@ -33,11 +29,8 @@ public class TicketVietJetServiceImpl extends BaseService {
 
     @Autowired
     private TicketVietjetRepository ticketVietjetRepository;
-
-    @Value("${auth.username}")
-    private String authUsername;
-    @Value("${auth.password}")
-    private String authPass;
+    @Autowired
+    private UserAuthVietJet userAuthVietJet;
 
     public TicketVietjetInformation checkTicketVietJet(TicketRequest ticketRequest) {
         TicketVietjetInformation ticketVietjetInformation = null;
@@ -47,7 +40,7 @@ public class TicketVietJetServiceImpl extends BaseService {
                 LOGGER.error(ApiResponseStatus.TICKET_VIETJET_EXISTED_AND_ASSIGNED.getStatusMessage());
                 throw new CustomException(ApiResponseStatus.TICKET_VIETJET_EXISTED_AND_ASSIGNED);
             }
-            String jwtResponse = ApiHttpClient.getToken(ApiUrls.AUTHENTICATION_URL, authUsername, authPass);
+            String jwtResponse = ApiHttpClient.getToken(ApiUrls.AUTHENTICATION_URL, userAuthVietJet.getUserName(), userAuthVietJet.getPassWord());
             if (StringUtils.equals(jwtResponse, "")) {
                 LOGGER.error(ApiResponseStatus.VIETJET_API_ERROR.getStatusMessage());
                 throw new CustomException(ApiResponseStatus.VIETJET_API_ERROR);
