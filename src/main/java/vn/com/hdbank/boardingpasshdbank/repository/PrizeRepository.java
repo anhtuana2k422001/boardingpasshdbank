@@ -20,4 +20,5 @@ public interface PrizeRepository {
 
     String generatePrizeCode();
     boolean checkExistsPrizeCodeForVietjet(int customerId);
+
 }

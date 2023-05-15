@@ -10,13 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
-import vn.com.hdbank.boardingpasshdbank.model.entity.Customer;
 import vn.com.hdbank.boardingpasshdbank.model.response.ConfirmCustomerVietjet;
 import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketConfirmRequest;
 import vn.com.hdbank.boardingpasshdbank.service.impl.CustomerServiceImpl;
 import vn.com.hdbank.boardingpasshdbank.service.impl.TicketVietJetServiceImpl;
-import vn.com.hdbank.boardingpasshdbank.utils.CommonUtils;
+import vn.com.hdbank.boardingpasshdbank.utils.ValkidationUtils;
 import vn.com.hdbank.boardingpasshdbank.utils.JsonUtils;
 
 import java.util.UUID;
@@ -36,7 +35,7 @@ public class CustomerController {
     @PostMapping("/confirm-customer-vietjet/{customerId}")
     public ResponseEntity<ResponseInfo<ConfirmCustomerVietjet>> confirmCustomerVietJet(@Valid @RequestBody TicketConfirmRequest request,
                                                                                        @PathVariable int customerId, BindingResult bindingResult){
-        CommonUtils.handleValidationErrors(bindingResult); /*validate*/
+        ValkidationUtils.handleValidationErrors(bindingResult); /*validate*/
         String requestId = UUID.randomUUID().toString();
         MDC.put("requestId", requestId);
         String requestLog = JsonUtils.toJsonString(request);
@@ -51,6 +50,13 @@ public class CustomerController {
         LOGGER.info(RESPONSE, responseLog);
         MDC.clear();
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //API 3
+    @PostMapping("/check-customer-prize/{customerId}")
+    public ResponseEntity<ResponseInfo<Object>> checkCustomerPrize(@PathVariable int customerId){
+        ResponseInfo<Object> responseInfo =  customerService.checkCustomerPrize(customerId);
+        return new ResponseEntity<>(responseInfo,HttpStatus.OK);
     }
 
 }

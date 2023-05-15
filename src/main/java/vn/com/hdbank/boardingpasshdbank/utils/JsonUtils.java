@@ -12,7 +12,6 @@ public class JsonUtils {
     private static final Logger LOGGER  = LoggerFactory.getLogger(JsonUtils.class);
     private static final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
-
     private JsonUtils() {}
 
     public static String toJsonString(Object object) {
