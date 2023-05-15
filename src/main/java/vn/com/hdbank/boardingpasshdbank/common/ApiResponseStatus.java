@@ -25,6 +25,13 @@ public enum ApiResponseStatus {
     INVALID_INPUT("012", "Invalid input"),
     INVALID_TICKET("013", "Invalid ticket information"),
     CUSTOMER_NOT_VIETJET("014", "Customer is not a Vietjet passenger"),
+    NOT_ENOUGH_CONDITION_FOR_PRIZE("015", "Khách hàng không đủ điều kiện tham gia quay thưởng"),
+    CUSTOMER_JOINED_PRIZE_DRAW("016", "Khách hàng đã tham gia quay số dự thưởng"),
+    PROGRAM_ENDED("017", "Chương trình quay thưởng đã dừng"),
+    NO_PRIZE_CODE("018", "Khách hàng chưa có mã dự thưởng"),
+    CUSTOMER_ROULETTE_SUCCESS("019", "Khách hàng đã quay số dự thưởng và nhận hoàn tiền thành công"),
+
+
     ;
 
     private final String statusCode;

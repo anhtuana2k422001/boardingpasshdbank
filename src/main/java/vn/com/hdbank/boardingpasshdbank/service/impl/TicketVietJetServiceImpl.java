@@ -5,7 +5,6 @@ import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.common.ApiUrls;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
@@ -26,7 +25,6 @@ import java.util.List;
 @Service
 public class TicketVietJetServiceImpl extends BaseService {
     private static final Logger LOGGER  = LoggerFactory.getLogger(TicketVietJetServiceImpl.class);
-
     @Autowired
     private TicketVietjetRepository ticketVietjetRepository;
     @Autowired
@@ -59,7 +57,7 @@ public class TicketVietJetServiceImpl extends BaseService {
             }
             String jwt = JsonUtils.fromJsonString(jwtResponse, ResponseToken.class).getToken();
             String ticketResponse = ApiHttpClient.executeGetRequest(passengerVietjetUri.toString(), jwt);
-            if (StringUtils.equals(ticketResponse, "")) {
+            if (StringUtils.equals(ticketResponse, StringUtils.EMPTY )) {
                 LOGGER.error(ApiResponseStatus.INVALID_TICKET.getStatusMessage());
                 throw new CustomException(ApiResponseStatus.INVALID_TICKET);
             }
