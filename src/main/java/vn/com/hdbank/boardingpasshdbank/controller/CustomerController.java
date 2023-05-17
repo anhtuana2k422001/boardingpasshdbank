@@ -40,7 +40,7 @@ public class CustomerController {
         LOGGER.info(Constant.REQUEST, requestLog); /* Log request */
         ConfirmCustomerVietjet confirmCustomerVietjet = customerService.confirmCustomerVietjet(request,customerId);
         ResponseEntity<ResponseInfo<ConfirmCustomerVietjet>> responseEntity;
-        responseEntity = ResponseEntityHelper.successResponseEntity(confirmCustomerVietjet);
+        responseEntity = ResponseEntityHelper.successResponseEntity(confirmCustomerVietjet, request.getRequestId());
         String responseLog = JsonUtils.toJsonString(responseEntity);
         LOGGER.info(Constant.RESPONSE, responseLog);
         MDC.clear();
@@ -74,7 +74,7 @@ public class CustomerController {
         if(customerPrizeRequest){
             responseEntity = ResponseEntityHelper.successResponseEntity();
         }else{
-            responseEntity = ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.UPDATE_PRIZE_ERROR);
+            responseEntity = ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.UPDATE_PRIZE_ERROR, request.getRequestId());
         }
         String responseLog = JsonUtils.toJsonString(responseEntity);
         LOGGER.info(Constant.RESPONSE, responseLog);

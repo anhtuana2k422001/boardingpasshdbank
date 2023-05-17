@@ -44,7 +44,7 @@ public class TicketVietjetRepositoryImpl implements TicketVietjetRepository {
         }
     }
 
-    public List<TicketVietjet> findByFlightCodeAndPassengerIdIsNotNull(String flightCode) {
+    public List<TicketVietjet> findCustomerIdNotNull(String flightCode) {
         String sql = "SELECT * FROM ticket_vietjet WHERE flight_code = ? AND customer_id IS NOT NULL";
         try {
             return jdbcTemplate.query(sql, new Object[]{flightCode}, (rs, rowNum) -> new TicketVietjet(

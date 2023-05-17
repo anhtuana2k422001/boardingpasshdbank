@@ -7,11 +7,12 @@ import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
 public class ResponseEntityHelper {
     private ResponseEntityHelper() {}
 
-    public static <T> ResponseEntity<ResponseInfo<T>> successResponseEntity(T data) {
+    public static <T> ResponseEntity<ResponseInfo<T>> successResponseEntity(T data, String requestId) {
         ResponseInfo<T> response = ResponseInfo.<T>builder()
                 .data(data)
                 .code(ApiResponseStatus.SUCCESS.getStatusCode())
                 .message(ApiResponseStatus.SUCCESS.getStatusMessage())
+                .responseId(requestId)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -24,11 +25,11 @@ public class ResponseEntityHelper {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public static <T> ResponseEntity<ResponseInfo<T>> errorResponseEntity(
-            ApiResponseStatus apiResponseStatus) {
+    public static <T> ResponseEntity<ResponseInfo<T>> errorResponseEntity(ApiResponseStatus apiResponseStatus, String requestId) {
         ResponseInfo<T> response = ResponseInfo.<T>builder()
                 .code(apiResponseStatus.getStatusCode())
                 .message(apiResponseStatus.getStatusMessage())
+                .responseId(requestId)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

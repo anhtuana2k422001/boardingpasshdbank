@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface TicketVietjetRepository {
     void create(TicketVietjet ticketVietjet);
-    List<TicketVietjet> findByFlightCodeAndPassengerIdIsNotNull(String flightCode);
+    List<TicketVietjet> findCustomerIdNotNull(String flightCode);
     boolean checkExistsByFlightCode(String flightCode);
     void updateCustomerIdByFlightCode(int customerId,String flightCode);
 }
