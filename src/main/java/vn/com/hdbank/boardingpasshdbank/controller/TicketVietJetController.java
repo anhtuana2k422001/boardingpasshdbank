@@ -5,9 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.validation.BindingResult;
-import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.common.Constant;
-import vn.com.hdbank.boardingpasshdbank.common.ResponseEntityHelper;
 import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
 import vn.com.hdbank.boardingpasshdbank.model.response.TicketVietjetInformation;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketRequest;
@@ -36,13 +34,7 @@ public class TicketVietJetController {
         MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
         String requestLog = JsonUtils.toJsonString(request); /* Log request */
         LOGGER.info(Constant.REQUEST, requestLog);
-        TicketVietjetInformation ticketVietjetInformation = ticketVietJetService.checkTicketVietJet(request);
-        ResponseEntity<ResponseInfo<TicketVietjetInformation>> responseEntity;
-        if (ticketVietjetInformation != null){
-            responseEntity = ResponseEntityHelper.createSuccessResponseEntity(ticketVietjetInformation);
-        }else{
-            responseEntity = ResponseEntityHelper.createErrorResponseEntity(ApiResponseStatus.CHECK_TICKET_ERROR);
-        }
+        var responseEntity = ticketVietJetService.checkTicketVietJet(request);
         String response = JsonUtils.toJsonString(responseEntity);
         LOGGER.info(Constant.RESPONSE, response);   /* Log response */
         MDC.clear();
@@ -51,13 +43,17 @@ public class TicketVietJetController {
 
     // Case 2: Scan Boarding pass
     @PostMapping("/check-flight-ticket-scan")
-    public ResponseEntity<ResponseInfo<TicketVietjetInformation>> checkInformationTicketScan(@Valid @RequestBody TicketScanRequest request,
+    public ResponseEntity<ResponseInfo<TicketVietjetInformation>> checkScanInformationTicket(@Valid @RequestBody TicketScanRequest request,
                                                                                          BindingResult bindingResult) {
         ValidationUtils.handleValidationErrors(bindingResult); /* Validate */
         MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
         String requestLog = JsonUtils.toJsonString(request); /* Log request */
         LOGGER.info(Constant.REQUEST, requestLog);
-        return null;
+        var responseEntity = ticketVietJetService.checkScanTicketVietJet(request);
+        String response = JsonUtils.toJsonString(responseEntity);
+        LOGGER.info(Constant.RESPONSE, response);   /* Log response */
+        MDC.clear();
+        return responseEntity;
     }
 
 }

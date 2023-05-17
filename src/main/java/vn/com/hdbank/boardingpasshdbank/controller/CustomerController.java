@@ -17,11 +17,9 @@ import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.CustomerPrizeRequest;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketConfirmRequest;
 import vn.com.hdbank.boardingpasshdbank.service.impl.CustomerServiceImpl;
-import vn.com.hdbank.boardingpasshdbank.service.impl.TicketVietJetServiceImpl;
 import vn.com.hdbank.boardingpasshdbank.utils.MdcUtils;
 import vn.com.hdbank.boardingpasshdbank.utils.ValidationUtils;
 import vn.com.hdbank.boardingpasshdbank.utils.JsonUtils;
-import vn.com.hdbank.boardingpasshdbank.utils.Utils;
 
 import java.util.UUID;
 
@@ -39,10 +37,10 @@ public class CustomerController {
         ValidationUtils.handleValidationErrors(bindingResult); /*validate*/
         MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
         String requestLog = JsonUtils.toJsonString(request);
-        LOGGER.info(Constant.REQUEST, requestLog);
+        LOGGER.info(Constant.REQUEST, requestLog); /* Log request */
         ConfirmCustomerVietjet confirmCustomerVietjet = customerService.confirmCustomerVietjet(request,customerId);
         ResponseEntity<ResponseInfo<ConfirmCustomerVietjet>> responseEntity;
-        responseEntity = ResponseEntityHelper.createSuccessResponseEntity(confirmCustomerVietjet);
+        responseEntity = ResponseEntityHelper.successResponseEntity(confirmCustomerVietjet);
         String responseLog = JsonUtils.toJsonString(responseEntity);
         LOGGER.info(Constant.RESPONSE, responseLog);
         MDC.clear();
@@ -70,13 +68,13 @@ public class CustomerController {
                                                                                 @PathVariable int customerId){
         MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
         String requestLog = JsonUtils.toJsonString(request);
-        LOGGER.info(Constant.REQUEST, requestLog);
+        LOGGER.info(Constant.REQUEST, requestLog); /* Log request */
         boolean customerPrizeRequest =  customerService.updateCustomerPrize(request, customerId);
         ResponseEntity<ResponseInfo<CustomerPrizeRequest>> responseEntity;
         if(customerPrizeRequest){
-            responseEntity = ResponseEntityHelper.createSuccessResponseEntity();
+            responseEntity = ResponseEntityHelper.successResponseEntity();
         }else{
-            responseEntity = ResponseEntityHelper.createErrorResponseEntity(ApiResponseStatus.UPDATE_PRIZE_ERROR);
+            responseEntity = ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.UPDATE_PRIZE_ERROR);
         }
         String responseLog = JsonUtils.toJsonString(responseEntity);
         LOGGER.info(Constant.RESPONSE, responseLog);

@@ -23,7 +23,12 @@ public class JsonUtils {
         }
     }
 
-    public static  <T> T fromJsonString(String jsonString, Class<T> valueType) throws IOException {
-        return objectMapper.readValue(jsonString, valueType);
+    public static  <T> T fromJsonString(String jsonString, Class<T> valueType) {
+        try {
+            return objectMapper.readValue(jsonString, valueType);
+        } catch (Exception e){
+            LOGGER.error("Error to Json String: ", e);
+            throw new IllegalStateException("Error to Json String");
+        }
     }
 }

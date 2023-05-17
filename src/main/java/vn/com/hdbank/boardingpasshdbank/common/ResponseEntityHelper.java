@@ -6,7 +6,8 @@ import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
 
 public class ResponseEntityHelper {
     private ResponseEntityHelper() {}
-    public static <T> ResponseEntity<ResponseInfo<T>> createSuccessResponseEntity(T data) {
+
+    public static <T> ResponseEntity<ResponseInfo<T>> successResponseEntity(T data) {
         ResponseInfo<T> response = ResponseInfo.<T>builder()
                 .data(data)
                 .code(ApiResponseStatus.SUCCESS.getStatusCode())
@@ -15,7 +16,7 @@ public class ResponseEntityHelper {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public static <T> ResponseEntity<ResponseInfo<T>> createSuccessResponseEntity() {
+    public static <T> ResponseEntity<ResponseInfo<T>> successResponseEntity() {
         ResponseInfo<T> response = ResponseInfo.<T>builder()
                 .code(ApiResponseStatus.SUCCESS.getStatusCode())
                 .message(ApiResponseStatus.SUCCESS.getStatusMessage())
@@ -23,13 +24,13 @@ public class ResponseEntityHelper {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public static <T> ResponseEntity<ResponseInfo<T>> createErrorResponseEntity(
+    public static <T> ResponseEntity<ResponseInfo<T>> errorResponseEntity(
             ApiResponseStatus apiResponseStatus) {
         ResponseInfo<T> response = ResponseInfo.<T>builder()
                 .code(apiResponseStatus.getStatusCode())
                 .message(apiResponseStatus.getStatusMessage())
                 .build();
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }

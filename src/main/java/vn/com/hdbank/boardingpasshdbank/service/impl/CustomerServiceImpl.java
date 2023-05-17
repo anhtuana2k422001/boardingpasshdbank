@@ -10,14 +10,12 @@ import vn.com.hdbank.boardingpasshdbank.common.Constant;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 import vn.com.hdbank.boardingpasshdbank.model.entity.Customer;
 import vn.com.hdbank.boardingpasshdbank.model.entity.Prize;
-import vn.com.hdbank.boardingpasshdbank.model.entity.TicketVietjet;
 import vn.com.hdbank.boardingpasshdbank.model.response.ConfirmCustomerVietjet;
 import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.CustomerPrizeRequest;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketConfirmRequest;
 import vn.com.hdbank.boardingpasshdbank.repository.CustomerRepository;
 import vn.com.hdbank.boardingpasshdbank.repository.PrizeRepository;
-import vn.com.hdbank.boardingpasshdbank.repository.TicketVietjetRepository;
 import vn.com.hdbank.boardingpasshdbank.service.BaseService;
 
 import java.math.BigDecimal;
@@ -27,19 +25,19 @@ import java.util.List;
 @Service
 public class CustomerServiceImpl extends BaseService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomerServiceImpl.class);
-
-
+    @Autowired
+    protected CustomerRepository customerRepository;
     @Autowired
     private PrizeRepository prizeRepository;
 
     public ConfirmCustomerVietjet confirmCustomerVietjet(TicketConfirmRequest ticketConfirmRequest, int customerId) {
         if (!ticketVietjetRepository.checkExistsByFlightCode(ticketConfirmRequest.getFlightCode())) {
-            LOGGER.error(ApiResponseStatus.INVALID_TICKET.getStatusMessage());
+            LOGGER.info(ApiResponseStatus.INVALID_TICKET.getStatusMessage());
             throw new CustomException(ApiResponseStatus.INVALID_TICKET);
         }
 
         if (Boolean.FALSE.equals(ticketConfirmRequest.getIsCustomerVietjet())) {
-            LOGGER.error(ApiResponseStatus.CUSTOMER_NOT_VIETJET.getStatusMessage());
+            LOGGER.info(ApiResponseStatus.CUSTOMER_NOT_VIETJET.getStatusMessage());
             throw new CustomException(ApiResponseStatus.CUSTOMER_NOT_VIETJET);
         }
         //ticket set customerId reference to table Customer
@@ -66,11 +64,11 @@ public class CustomerServiceImpl extends BaseService {
     public ResponseInfo<Object> checkCustomerPrize(int customerId) {
         Customer customer = customerRepository.findById(customerId);
 
-        if (LocalDateTime.now().compareTo(Constant.VJ_ESKYONE_END_DATE) > 0) {
+        if (LocalDateTime.now().compareTo(Constant.VJ_E_SKY_ONE_END_DATE) > 0) {
             throw new CustomException(ApiResponseStatus.PROGRAM_ENDED);
         }
 
-        if (customer.getCreatedAt().compareTo(Constant.VJ_ESKYONE_START_DATE) < 0 || customer.getCreatedAt().compareTo(Constant.VJ_ESKYONE_END_DATE) > 0) {
+        if (customer.getCreatedAt().compareTo(Constant.VJ_E_SKY_ONE_START_DATE) < 0 || customer.getCreatedAt().compareTo(Constant.VJ_E_SKY_ONE_END_DATE) > 0) {
             throw new CustomException(ApiResponseStatus.NOT_ENOUGH_CONDITION_FOR_PRIZE);
         }
 
@@ -98,14 +96,13 @@ public class CustomerServiceImpl extends BaseService {
                     .data("Khách hàng được phép tham gia quay thưởng")
                     .build();
         }
-
         return response;
 
     }
 
 
     // Update results prize for customer
-    public boolean updateCustomerPrize (CustomerPrizeRequest request, int customerId){
+    public boolean updateCustomerPrize(CustomerPrizeRequest request, int customerId){
         return prizeRepository.updateResultPrize(request, customerId);
     }
 }
