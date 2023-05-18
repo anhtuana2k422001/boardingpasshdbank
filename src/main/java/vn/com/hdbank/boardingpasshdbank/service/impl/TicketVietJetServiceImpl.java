@@ -1,7 +1,6 @@
 package vn.com.hdbank.boardingpasshdbank.service.impl;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +21,14 @@ import vn.com.hdbank.boardingpasshdbank.service.utils.ApiVietJet;
 import vn.com.hdbank.boardingpasshdbank.utils.ApiHttpClient;
 import vn.com.hdbank.boardingpasshdbank.utils.JsonUtils;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+
 import java.util.List;
 
 @Service
 public class TicketVietJetServiceImpl extends BaseService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TicketVietJetServiceImpl.class);
     @Autowired
-    private UserAuthVietJet userAuthVietJet;
+    protected UserAuthVietJet userAuthVietJet;
 
     // Case 1: Service Self-entering information
     public ResponseEntity<ResponseInfo<TicketVietjetInformation>> checkTicketVietJet(TicketRequest request) {

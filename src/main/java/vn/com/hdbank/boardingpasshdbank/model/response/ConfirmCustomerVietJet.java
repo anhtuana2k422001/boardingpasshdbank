@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ConfirmCustomerVietjet {
+public class ConfirmCustomerVietJet {
     private Customer customer;
     private List<Prize> prizes;
     private String linkWebViewPrizes;

@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.validation.BindingResult;
 import vn.com.hdbank.boardingpasshdbank.common.Constant;
+import vn.com.hdbank.boardingpasshdbank.common.ResponseEntityHelper;
 import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
 import vn.com.hdbank.boardingpasshdbank.model.response.TicketVietjetInformation;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketRequest;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.com.hdbank.boardingpasshdbank.utils.JsonUtils;
 
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/api/flight-ticket")
@@ -30,11 +32,15 @@ public class TicketVietJetController {
     @PostMapping("/check-flight-ticket")
     public ResponseEntity<ResponseInfo<TicketVietjetInformation>> checkInformationTicket(@Valid @RequestBody TicketRequest request,
                                                                                          BindingResult bindingResult) {
-        ValidationUtils.handleValidationErrors(bindingResult); /* Validate */
+        ResponseEntity<ResponseInfo<TicketVietjetInformation>> responseEntity;
         MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
         String requestLog = JsonUtils.toJsonString(request); /* Log request */
         LOGGER.info(Constant.REQUEST, requestLog);
-        var responseEntity = ticketVietJetService.checkTicketVietJet(request);
+        Map<String, String> errors = ValidationUtils.validationHandler(bindingResult);
+        if (errors.size() > 0)
+            responseEntity =  ResponseEntityHelper.validateResponseEntity(errors, request.getRequestId());
+        else
+            responseEntity = ticketVietJetService.checkTicketVietJet(request);
         String response = JsonUtils.toJsonString(responseEntity);
         LOGGER.info(Constant.RESPONSE, response);   /* Log response */
         MDC.clear();
@@ -45,11 +51,15 @@ public class TicketVietJetController {
     @PostMapping("/check-flight-ticket-scan")
     public ResponseEntity<ResponseInfo<TicketVietjetInformation>> checkScanInformationTicket(@Valid @RequestBody TicketScanRequest request,
                                                                                          BindingResult bindingResult) {
-        ValidationUtils.handleValidationErrors(bindingResult); /* Validate */
+        ResponseEntity<ResponseInfo<TicketVietjetInformation>> responseEntity;
         MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
         String requestLog = JsonUtils.toJsonString(request); /* Log request */
         LOGGER.info(Constant.REQUEST, requestLog);
-        var responseEntity = ticketVietJetService.checkScanTicketVietJet(request);
+        Map<String, String> errors = ValidationUtils.validationHandler(bindingResult);
+        if (errors.size() > 0)
+            responseEntity =  ResponseEntityHelper.validateResponseEntity(errors, request.getRequestId());
+        else
+            responseEntity = ticketVietJetService.checkScanTicketVietJet(request);
         String response = JsonUtils.toJsonString(responseEntity);
         LOGGER.info(Constant.RESPONSE, response);   /* Log response */
         MDC.clear();

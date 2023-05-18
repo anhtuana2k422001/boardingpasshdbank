@@ -1,7 +1,7 @@
 package vn.com.hdbank.boardingpasshdbank.repository;
 
 import vn.com.hdbank.boardingpasshdbank.model.entity.Prize;
-import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.CustomerPrizeRequest;
+import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.InfoPrizeRequest;
 
 import java.util.List;
 
@@ -11,5 +11,5 @@ public interface PrizeRepository {
     void save(Prize prize);
     String generatePrizeCode();
     boolean checkExistsPrizeCodeForVietjet(int customerId);
-    boolean updateResultPrize(CustomerPrizeRequest request, int customerId);
+    boolean updateResultPrize(InfoPrizeRequest request, int customerId);
 }

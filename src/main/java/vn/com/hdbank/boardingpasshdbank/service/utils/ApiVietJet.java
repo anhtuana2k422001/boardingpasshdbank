@@ -2,9 +2,7 @@ package vn.com.hdbank.boardingpasshdbank.service.utils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
-import org.springframework.http.ResponseEntity;
 import vn.com.hdbank.boardingpasshdbank.common.ApiUrls;
-import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketRequest;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketScanRequest;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.response.ResponseToken;

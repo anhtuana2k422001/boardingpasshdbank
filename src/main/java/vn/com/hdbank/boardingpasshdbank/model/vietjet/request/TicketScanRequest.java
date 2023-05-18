@@ -2,6 +2,8 @@ package vn.com.hdbank.boardingpasshdbank.model.vietjet.request;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,12 +17,14 @@ import org.apache.commons.lang3.StringUtils;
 public class TicketScanRequest extends BaseRequest{
     @NotNull
     @NotEmpty
+    @Size(max = 2, message = "formatCode no more than 3 characters")
     private String formatCode;
     @NotNull
     @NotEmpty
     private String fullName;
     @NotNull
     @NotEmpty
+    @Pattern(regexp = "^[a-zA-Z0-9]{1,6}$", message = "Reservation code must contain up to 6 alphanumeric characters")
     private String reservationCode;
     @NotNull
     @NotEmpty

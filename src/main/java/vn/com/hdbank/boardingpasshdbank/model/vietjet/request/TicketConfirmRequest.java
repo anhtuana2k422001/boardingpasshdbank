@@ -21,7 +21,7 @@ public class TicketConfirmRequest extends BaseRequest {
     private String reservationCode;
     @Pattern(regexp = "^\\d{1,3}[a-zA-Z]$", message = "Seats must have 1 or 3 digits followed by a letter")
     private String seats;
-
+    private int customerId;
     private Boolean isCustomerVietjet;
 
     //add more getter setter

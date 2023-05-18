@@ -1,13 +1,12 @@
 package vn.com.hdbank.boardingpasshdbank.repository.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 import vn.com.hdbank.boardingpasshdbank.model.entity.Prize;
-import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.CustomerPrizeRequest;
+import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.InfoPrizeRequest;
 import vn.com.hdbank.boardingpasshdbank.repository.PrizeRepository;
 
 import java.sql.ResultSet;
@@ -86,7 +85,7 @@ public class PrizeRepositoryImpl implements PrizeRepository {
     }
 
     @Override
-    public boolean updateResultPrize(CustomerPrizeRequest request, int customerId) {
+    public boolean updateResultPrize(InfoPrizeRequest request, int customerId) {
         String sql = "UPDATE prize SET prize_amount = ?, used = ? WHERE prize_code = ? AND customer_id = ?";
         int count = jdbcTemplate.update(sql, request.getTotalAmount(), true, request.getPrizeCode(), customerId);
         return count > 0;

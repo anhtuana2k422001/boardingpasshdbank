@@ -4,32 +4,48 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
 
+import java.util.Map;
+
 public class ResponseEntityHelper {
     private ResponseEntityHelper() {}
 
     public static <T> ResponseEntity<ResponseInfo<T>> successResponseEntity(T data, String requestId) {
         ResponseInfo<T> response = ResponseInfo.<T>builder()
-                .data(data)
-                .code(ApiResponseStatus.SUCCESS.getStatusCode())
-                .message(ApiResponseStatus.SUCCESS.getStatusMessage())
                 .responseId(requestId)
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    public static <T> ResponseEntity<ResponseInfo<T>> successResponseEntity() {
-        ResponseInfo<T> response = ResponseInfo.<T>builder()
                 .code(ApiResponseStatus.SUCCESS.getStatusCode())
                 .message(ApiResponseStatus.SUCCESS.getStatusMessage())
+                .data(data)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public static <T> ResponseEntity<ResponseInfo<T>> errorResponseEntity(ApiResponseStatus apiResponseStatus, String requestId) {
+    public static <T> ResponseEntity<ResponseInfo<T>> successResponseEntity(ApiResponseStatus apiResponseStatus, T data, String requestId) {
         ResponseInfo<T> response = ResponseInfo.<T>builder()
+                .responseId(requestId)
                 .code(apiResponseStatus.getStatusCode())
                 .message(apiResponseStatus.getStatusMessage())
+                .data(data)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    public static <T> ResponseEntity<ResponseInfo<T>> errorResponseEntity(ApiResponseStatus apiResponseStatus,
+                                                                          String requestId) {
+        ResponseInfo<T> response = ResponseInfo.<T>builder()
                 .responseId(requestId)
+                .code(apiResponseStatus.getStatusCode())
+                .message(apiResponseStatus.getStatusMessage())
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    public static <T> ResponseEntity<ResponseInfo<T>> validateResponseEntity(Map<String, String> errors,
+                                                                             String requestId) {
+        ResponseInfo<T> response = ResponseInfo.<T>builder()
+                .responseId(requestId)
+                .code(ApiResponseStatus.VALIDATE_TICKET_ERROR_MESSAGE .getStatusCode())
+                .message(ApiResponseStatus.VALIDATE_TICKET_ERROR_MESSAGE .getStatusMessage())
+                .validate(errors)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
