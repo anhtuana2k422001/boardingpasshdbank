@@ -1,4 +1,4 @@
-package vn.com.hdbank.boardingpasshdbank.config;
+package vn.com.hdbank.boardingpasshdbank.security;
 
 
 import io.jsonwebtoken.*;
