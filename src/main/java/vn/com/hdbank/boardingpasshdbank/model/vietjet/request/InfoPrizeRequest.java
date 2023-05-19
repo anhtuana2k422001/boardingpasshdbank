@@ -1,5 +1,7 @@
 package vn.com.hdbank.boardingpasshdbank.model.vietjet.request;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Setter
@@ -7,7 +9,11 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InfoPrizeRequest extends BaseRequest{
-    private int customerId;
+    @NotNull
+    private Integer customerId;
+    @NotNull
+    @NotEmpty
     private String prizeCode;
+    @NotNull
     private Double totalAmount;
 }

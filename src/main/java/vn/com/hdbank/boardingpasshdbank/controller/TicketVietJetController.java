@@ -8,7 +8,7 @@ import org.springframework.validation.BindingResult;
 import vn.com.hdbank.boardingpasshdbank.common.Constant;
 import vn.com.hdbank.boardingpasshdbank.common.ResponseEntityHelper;
 import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
-import vn.com.hdbank.boardingpasshdbank.model.response.TicketVietjetInformation;
+import vn.com.hdbank.boardingpasshdbank.model.response.TicketVietJetInformation;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketRequest;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketScanRequest;
 import vn.com.hdbank.boardingpasshdbank.service.impl.TicketVietJetServiceImpl;
@@ -30,9 +30,9 @@ public class TicketVietJetController {
     /* API 1: check-flight-ticketVietJet */
     // Case 1: Self-entering information
     @PostMapping("/check-flight-ticket")
-    public ResponseEntity<ResponseInfo<TicketVietjetInformation>> checkInformationTicket(@Valid @RequestBody TicketRequest request,
+    public ResponseEntity<ResponseInfo<TicketVietJetInformation>> checkInformationTicket(@Valid @RequestBody TicketRequest request,
                                                                                          BindingResult bindingResult) {
-        ResponseEntity<ResponseInfo<TicketVietjetInformation>> responseEntity;
+        ResponseEntity<ResponseInfo<TicketVietJetInformation>> responseEntity;
         MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
         String requestLog = JsonUtils.toJsonString(request); /* Log request */
         LOGGER.info(Constant.REQUEST, requestLog);
@@ -49,9 +49,9 @@ public class TicketVietJetController {
 
     // Case 2: Scan Boarding pass
     @PostMapping("/check-flight-ticket-scan")
-    public ResponseEntity<ResponseInfo<TicketVietjetInformation>> checkScanInformationTicket(@Valid @RequestBody TicketScanRequest request,
-                                                                                         BindingResult bindingResult) {
-        ResponseEntity<ResponseInfo<TicketVietjetInformation>> responseEntity;
+    public ResponseEntity<ResponseInfo<TicketVietJetInformation>> checkScanInformationTicket(@Valid @RequestBody TicketScanRequest request,
+                                                                                             BindingResult bindingResult) {
+        ResponseEntity<ResponseInfo<TicketVietJetInformation>> responseEntity;
         MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
         String requestLog = JsonUtils.toJsonString(request); /* Log request */
         LOGGER.info(Constant.REQUEST, requestLog);

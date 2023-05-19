@@ -1,12 +1,15 @@
 package vn.com.hdbank.boardingpasshdbank.model.vietjet.request;
 
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
+import vn.com.hdbank.boardingpasshdbank.common.Validate;
+
 
 @Getter
 @Setter
@@ -15,31 +18,16 @@ import org.apache.commons.lang3.StringUtils;
 public class TicketConfirmRequest extends BaseRequest {
     private String lastName;
     private String firstName;
-    @Pattern(regexp = "^[A-Za-z]{2}\\d{1,4}$", message = "Flight code must start with 2 letters and be followed by 1 to 4 digits")
+    @Pattern(regexp = Validate.FLIGHT_CODE., message = Validate.FLIGHT_CODE.)
     private String flightCode;
-    @Pattern(regexp = "^[a-zA-Z0-9]{1,6}$", message = "Reservation code must contain up to 6 alphanumeric characters")
+    @Pattern(regexp = "^[a-zA-Z0-9]{1,6}$", message = "Mã đặt chỗ phải chứa tối đa 6 ký tự chữ và số") /*Reservation code must contain up to 6 alphanumeric characters*/
     private String reservationCode;
-    @Pattern(regexp = "^\\d{1,3}[a-zA-Z]$", message = "Seats must have 1 or 3 digits followed by a letter")
+    @Pattern(regexp = "^\\d{1,3}[a-zA-Z]$", message = "Ghế phải có 1 hoặc 3 chữ số theo sau là một chữ cái") /*Seats must have 1 or 3 digits followed by a letter*/
+    @NotNull
+    @NotEmpty (message = "")
     private String seats;
-    private int customerId;
-    private Boolean isCustomerVietjet;
-
-    //add more getter setter
-    public String getAirlineCode() {
-        return StringUtils.substring(flightCode, 0, 2);
-    }
-
-    public String getFlightNumber() {
-        return StringUtils.substring(flightCode, 2);
-    }
-
-    public String getSeatRow() {
-        return StringUtils.substring(seats, 0, StringUtils.length(seats) - 1);
-    }
-
-    public String getSeatCols() {
-        return StringUtils.substring(seats, StringUtils.length(seats) - 1);
-    }
-
-
+    @NotNull
+    private Integer customerId;
+    @NotNull
+    private Boolean isCustomerVietJet;
 }

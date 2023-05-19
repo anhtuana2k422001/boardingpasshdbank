@@ -14,7 +14,6 @@ import vn.com.hdbank.boardingpasshdbank.common.ResponseEntityHelper;
 import vn.com.hdbank.boardingpasshdbank.model.response.ConfirmCustomerVietJet;
 import vn.com.hdbank.boardingpasshdbank.model.response.CustomerPrizeStatus;
 import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
-import vn.com.hdbank.boardingpasshdbank.model.response.ResultPrize;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.CustomerPrizeRequest;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.InfoPrizeRequest;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketConfirmRequest;
@@ -46,7 +45,7 @@ public class CustomerController {
         if (errors.size() > 0)
             responseEntity =  ResponseEntityHelper.validateResponseEntity(errors, request.getRequestId());
         else
-            responseEntity = customerService.confirmCustomerVietjet(request);
+            responseEntity = customerService.confirmCustomerVietJet(request);
         String responseLog = JsonUtils.toJsonString(responseEntity);
         LOGGER.info(Constant.RESPONSE, responseLog);
         MDC.clear();
@@ -74,9 +73,9 @@ public class CustomerController {
 
     /* API 4 : Update customer prize  */
     @PostMapping("/update-customer-prize")
-    public ResponseEntity<ResponseInfo<ResultPrize>> updateCustomerPrize(@Valid @RequestBody InfoPrizeRequest request,
+    public ResponseEntity<ResponseInfo<String>> updateCustomerPrize(@Valid @RequestBody InfoPrizeRequest request,
                                                                          BindingResult bindingResult){
-        ResponseEntity<ResponseInfo<ResultPrize>> responseEntity;
+        ResponseEntity<ResponseInfo<String>> responseEntity;
         MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
         String requestLog = JsonUtils.toJsonString(request);
         LOGGER.info(Constant.REQUEST, requestLog); /* Log request */

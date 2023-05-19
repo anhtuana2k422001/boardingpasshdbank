@@ -49,5 +49,4 @@ public class TicketRequest extends BaseRequest {
         return StringUtils.substring(seats, StringUtils.length(seats) - 1);
     }
 
-
 }

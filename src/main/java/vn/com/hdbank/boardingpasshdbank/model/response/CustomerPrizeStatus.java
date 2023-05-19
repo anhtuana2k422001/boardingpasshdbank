@@ -1,9 +1,7 @@
 package vn.com.hdbank.boardingpasshdbank.model.response;
 
 import lombok.*;
-import vn.com.hdbank.boardingpasshdbank.model.entity.Customer;
 
-import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -11,8 +9,8 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Data
 public class CustomerPrizeStatus {
-    private Customer customer;
-    private String statusPrize;
-    private BigDecimal totalAmount;
+    private boolean usedPrize;
+    private String prizeStatus;
+    private PrizeResult prizeResult;
     private String linkWebViewPrizes;
 }

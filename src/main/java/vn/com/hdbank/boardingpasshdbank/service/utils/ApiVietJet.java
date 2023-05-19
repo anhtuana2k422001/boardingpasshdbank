@@ -14,7 +14,6 @@ import java.net.URISyntaxException;
 
 public class ApiVietJet {
     private ApiVietJet() {}
-
     public static String callApiPassenger(String jwtResponse, TicketRequest request) {
         try {
             URI passengerVietjetUri = new URIBuilder(ApiUrls.PASSENGER_VIET_JET_URL)

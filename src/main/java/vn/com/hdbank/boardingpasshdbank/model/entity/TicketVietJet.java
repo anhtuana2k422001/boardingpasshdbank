@@ -3,14 +3,13 @@ package vn.com.hdbank.boardingpasshdbank.model.entity;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class TicketVietjet {
+public class TicketVietJet {
     private int id;
     private String firstName;
     private String lastName;
@@ -20,7 +19,7 @@ public class TicketVietjet {
     private int customerId;
     private LocalDateTime createAt;
 
-    public TicketVietjet(String firstName, String lastName, String flightCode, String reservationCode, String seats) {
+    public TicketVietJet(String firstName, String lastName, String flightCode, String reservationCode, String seats) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.flightCode = flightCode;

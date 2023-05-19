@@ -5,7 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
-import vn.com.hdbank.boardingpasshdbank.model.entity.TicketVietjet;
+import vn.com.hdbank.boardingpasshdbank.model.entity.TicketVietJet;
 import vn.com.hdbank.boardingpasshdbank.repository.TicketVietjetRepository;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public class TicketVietjetRepositoryImpl implements TicketVietjetRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void create(TicketVietjet ticketVietjet) {
+    public void create(TicketVietJet ticketVietjet) {
         String sql = "INSERT INTO ticket_vietjet (last_name, first_name, flight_code, reservation_code, seats, customer_id) VALUES (?, ?, ?, ?, ?, ?)";
         try {
             if (ticketVietjet.getCustomerId() > 0) {
@@ -29,7 +29,7 @@ public class TicketVietjetRepositoryImpl implements TicketVietjetRepository {
 
             }
         } catch (DuplicateKeyException e) {
-            throw new CustomException(ApiResponseStatus.CONFLICT);
+            throw new CustomException(ApiResponseStatus.DUPLICATED);
         } catch (Exception e) {
             throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
         }
@@ -44,10 +44,10 @@ public class TicketVietjetRepositoryImpl implements TicketVietjetRepository {
         }
     }
 
-    public List<TicketVietjet> findCustomerIdNotNull(String flightCode) {
+    public List<TicketVietJet> findCustomerIdNotNull(String flightCode) {
         String sql = "SELECT * FROM ticket_vietjet WHERE flight_code = ? AND customer_id IS NOT NULL";
         try {
-            return jdbcTemplate.query(sql, new Object[]{flightCode}, (rs, rowNum) -> new TicketVietjet(
+            return jdbcTemplate.query(sql, new Object[]{flightCode}, (rs, rowNum) -> new TicketVietJet(
                     rs.getInt("id"),
                     rs.getString("last_name"),
                     rs.getString("first_name"),

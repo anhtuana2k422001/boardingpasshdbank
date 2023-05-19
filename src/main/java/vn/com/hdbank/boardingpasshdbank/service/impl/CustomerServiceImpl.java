@@ -6,16 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
-import vn.com.hdbank.boardingpasshdbank.common.ApiUrls;
 import vn.com.hdbank.boardingpasshdbank.common.Constant;
 import vn.com.hdbank.boardingpasshdbank.common.ResponseEntityHelper;
-import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 import vn.com.hdbank.boardingpasshdbank.model.entity.Customer;
 import vn.com.hdbank.boardingpasshdbank.model.entity.Prize;
 import vn.com.hdbank.boardingpasshdbank.model.response.ConfirmCustomerVietJet;
 import vn.com.hdbank.boardingpasshdbank.model.response.CustomerPrizeStatus;
+import vn.com.hdbank.boardingpasshdbank.model.response.PrizeResult;
 import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
-import vn.com.hdbank.boardingpasshdbank.model.response.ResultPrize;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.CustomerPrizeRequest;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.InfoPrizeRequest;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketConfirmRequest;
@@ -23,7 +21,6 @@ import vn.com.hdbank.boardingpasshdbank.repository.CustomerRepository;
 import vn.com.hdbank.boardingpasshdbank.repository.PrizeRepository;
 import vn.com.hdbank.boardingpasshdbank.service.BaseService;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -35,75 +32,99 @@ public class CustomerServiceImpl extends BaseService {
     @Autowired
     protected PrizeRepository prizeRepository;
 
-    public ResponseEntity<ResponseInfo<ConfirmCustomerVietJet>> confirmCustomerVietjet(TicketConfirmRequest request) {
-        if (!ticketVietjetRepository.checkExistsByFlightCode(request.getFlightCode())) {
+    public ResponseEntity<ResponseInfo<ConfirmCustomerVietJet>> confirmCustomerVietJet(TicketConfirmRequest request) {
+        String requestId = request.getRequestId();
+        int customerId = request.getCustomerId();
+        String flightCode = request.getFlightCode();
+        if (!ticketVietjetRepository.checkExistsByFlightCode(flightCode)) {
             LOGGER.info(ApiResponseStatus.INVALID_TICKET.getStatusMessage());
-            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.INVALID_TICKET, request.getRequestId());
+            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.INVALID_TICKET, requestId);
         }
 
-        if (Boolean.FALSE.equals(request.getIsCustomerVietjet())) {
-            LOGGER.info(ApiResponseStatus.CUSTOMER_NOT_VIETJET.getStatusMessage());
-            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.CUSTOMER_NOT_VIETJET, request.getRequestId());
+        if (Boolean.FALSE.equals(request.getIsCustomerVietJet())) {
+            LOGGER.info(ApiResponseStatus.CUSTOMER_NOT_VIET_JET.getStatusMessage());
+            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.CUSTOMER_NOT_VIET_JET, requestId);
         }
+
+        Customer customerInfo = customerRepository.findById(customerId);
+        if (customerInfo == null) {
+            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.NOT_FOUND_CUSTOMER, requestId);
+        }
+
         /* Ticket set customerId reference to table Customer*/
-        ticketVietjetRepository.updateCustomerIdByFlightCode(request.getCustomerId(), request.getFlightCode());
+        ticketVietjetRepository.updateCustomerIdByFlightCode(customerId, flightCode);
         /* Update Customer Type */
-        customerRepository.updateCustomerTypeById("VJ", request.getCustomerId());
+        customerRepository.updateCustomerTypeById("VJ", customerId);
         /* generate bonus code and save it in db for customer */
-        if (!prizeRepository.checkExistsPrizeCodeForVietjet(request.getCustomerId())) {
+        if (!prizeRepository.checkExistsPrizeCodeForVietjet(customerId)) {
             String prizeCodeGenerate = prizeRepository.generatePrizeCode();
             Prize savePrize = new Prize();
-            savePrize.setCustomerId(request.getCustomerId());
+            savePrize.setCustomerId(customerId);
             savePrize.setPrizeCode(prizeCodeGenerate);
             prizeRepository.save(savePrize);
         }
-        Customer customerInfo = customerRepository.findById(request.getCustomerId());
-        List<Prize> prizeInfo = prizeRepository.findByCustomerId(request.getCustomerId());
-        ConfirmCustomerVietJet confirmCustomerVietjet = new ConfirmCustomerVietJet(customerInfo, prizeInfo, ApiUrls.LINK_WEB_VIEW_PRIZES);
 
-        return ResponseEntityHelper.successResponseEntity(confirmCustomerVietjet, request.getRequestId());
+        List<Prize> prizeInfo = prizeRepository.findByCustomerId(customerId);
+        ConfirmCustomerVietJet confirmCustomerVietjet = new ConfirmCustomerVietJet(customerInfo, prizeInfo, Constant.LINK_WEB_PRIZES);
+        return ResponseEntityHelper.successResponseEntity(confirmCustomerVietjet, requestId);
     }
 
 
     public ResponseEntity<ResponseInfo<CustomerPrizeStatus>> checkCustomerPrize(CustomerPrizeRequest request) {
-        // TODO: MAKE AGAIN API - 3
         int customerId = request.getCustomerId();
+        String requestId = request.getRequestId();
+
         Customer customer = customerRepository.findById(customerId);
-        if (LocalDateTime.now().compareTo(Constant.VJ_E_SKY_ONE_END_DATE) > 0) {
-            throw new CustomException(ApiResponseStatus.PROGRAM_ENDED);
-        }
-        if (customer.getCreatedAt().compareTo(Constant.VJ_E_SKY_ONE_START_DATE) < 0 || customer.getCreatedAt().compareTo(Constant.VJ_E_SKY_ONE_END_DATE) > 0) {
-            throw new CustomException(ApiResponseStatus.NOT_ENOUGH_CONDITION_FOR_PRIZE);
-        }
-        Prize prizeInfo = prizeRepository.findByCustomerId(customerId).get(0);
-        if (Boolean.TRUE.equals(prizeInfo.isUsed())) {
-            throw new CustomException(ApiResponseStatus.CUSTOMER_JOINED_PRIZE_DRAW);
-        }
-        if (Boolean.FALSE.equals(prizeRepository.checkExistsPrizeCodeForVietjet(customerId))) {
-            throw new CustomException(ApiResponseStatus.NO_PRIZE_CODE);
+        if (customer == null) {
+            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.NOT_FOUND_CUSTOMER, requestId);
         }
 
-        CustomerPrizeStatus customerPrizeStatus;
-        if (Boolean.TRUE.equals(prizeInfo.isUsed()) && prizeInfo.getPrizeAmount().compareTo(new BigDecimal(0)) > 0) {
-            customerPrizeStatus = new CustomerPrizeStatus(customer, null, prizeInfo.getPrizeAmount(), ApiUrls.LINK_WEB_VIEW_PRIZES);
-            return ResponseEntityHelper.successResponseEntity(ApiResponseStatus.CUSTOMER_ROULETTE_SUCCESS,
-                    customerPrizeStatus,  request.getRequestId());
-        } else {
-            customerPrizeStatus = new CustomerPrizeStatus(customer, null, prizeInfo.getPrizeAmount(), ApiUrls.LINK_WEB_VIEW_PRIZES);
-            return ResponseEntityHelper.successResponseEntity(ApiResponseStatus.CUSTOMER_PRIZE_SUCCESS,
-                    customerPrizeStatus,  request.getRequestId());
+        if (LocalDateTime.now().isAfter(Constant.VJ_E_SKY_ONE_END_DATE)) {
+            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.PROGRAM_ENDED, requestId);
+        }
+
+        if (customer.getCreatedAt().isBefore(Constant.VJ_E_SKY_ONE_START_DATE)
+                || customer.getCreatedAt().isAfter(Constant.VJ_E_SKY_ONE_END_DATE)) {
+            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.NOT_ENOUGH_CONDITION_FOR_PRIZE, requestId);
+        }
+
+        if (Boolean.FALSE.equals(prizeRepository.checkExistsPrizeCodeForVietjet(customerId))) {
+            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.NO_PRIZE_CODE, requestId);
+        }
+
+        Prize prizeInfo = prizeRepository.findByCustomerId(customerId).get(0);
+        if(Boolean.TRUE.equals(prizeInfo.isUsed())){
+            return ResponseEntityHelper.successResponseEntity(new CustomerPrizeStatus(
+                    Boolean.TRUE,
+                    Constant.CUSTOMER_PRIZE_SUCCESS,
+                    new PrizeResult(
+                            Constant.VIET_JET_LUCKY_CONTENT,
+                            Constant.BANK_ACCOUNT,
+                            Constant.BALANCE_AFTER_TRANSACTION,
+                            prizeInfo.getPrizeAmount()),
+                    null
+            ), requestId);
+        }else{
+            return ResponseEntityHelper.successResponseEntity(new CustomerPrizeStatus(
+                    Boolean.FALSE,
+                    Constant.PRIZE_SUCCESS_NOT_DIALED,
+                    null,
+                    Constant.LINK_WEB_PRIZES
+            ), requestId);
         }
     }
 
     /* Update results prize for customer */
-    public ResponseEntity<ResponseInfo<ResultPrize>>  updateCustomerPrize(InfoPrizeRequest request){
-        boolean updated =  prizeRepository.updateResultPrize(request, request.getCustomerId());
-        ResultPrize resultPrize  = null;
-        // TODO: MAKE AGAIN API - 4 LOGIC
-        // totle
-
-        if(updated)
-            resultPrize = new ResultPrize("MAKE AGAIN API - 4", 5500.0);
-        return ResponseEntityHelper.successResponseEntity(resultPrize, request.getRequestId());
+    public ResponseEntity<ResponseInfo<String>> updateCustomerPrize(InfoPrizeRequest request){
+        String requestId = request.getRequestId();
+        int customerId = request.getCustomerId();
+        Customer customer = customerRepository.findById(customerId);
+        if (customer == null) {
+            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.NOT_FOUND_CUSTOMER, requestId);
+        }
+        boolean updated =  prizeRepository.updateResultPrize(request, customerId);
+        if(!updated)
+            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.UPDATE_PRIZE_ERROR, requestId);
+        return ResponseEntityHelper.successResponseEntity(requestId);
     }
 }

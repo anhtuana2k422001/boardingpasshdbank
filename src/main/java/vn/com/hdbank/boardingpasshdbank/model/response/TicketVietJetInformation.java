@@ -5,7 +5,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class TicketVietjetInformation {
+public class TicketVietJetInformation {
     private String fullName;
     private String birthDate;
     private String flightTime;

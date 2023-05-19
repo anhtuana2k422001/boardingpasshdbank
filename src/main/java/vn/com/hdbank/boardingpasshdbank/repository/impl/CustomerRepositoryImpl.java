@@ -17,7 +17,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void updateCustomerTypeById(String customerType,int id) {
+    public void updateCustomerTypeById(String customerType, int id) {
         String sql = "UPDATE customer SET customer_type=? WHERE id=?";
         try {
             jdbcTemplate.update(sql, customerType,id);
@@ -39,7 +39,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
                     rs.getTimestamp("created_at").toLocalDateTime()
             ));
         } catch (EmptyResultDataAccessException e) {
-            throw new CustomException(ApiResponseStatus.NOT_FOUND);
+            return null;
         } catch (Exception e) {
             throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
         }

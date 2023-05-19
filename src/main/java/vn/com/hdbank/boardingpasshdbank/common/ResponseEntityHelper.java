@@ -19,12 +19,11 @@ public class ResponseEntityHelper {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public static <T> ResponseEntity<ResponseInfo<T>> successResponseEntity(ApiResponseStatus apiResponseStatus, T data, String requestId) {
-        ResponseInfo<T> response = ResponseInfo.<T>builder()
+    public static <T> ResponseEntity<ResponseInfo<T>> successResponseEntity(String requestId) {
+            ResponseInfo<T> response = ResponseInfo.<T>builder()
                 .responseId(requestId)
-                .code(apiResponseStatus.getStatusCode())
-                .message(apiResponseStatus.getStatusMessage())
-                .data(data)
+                .code(ApiResponseStatus.SUCCESS.getStatusCode())
+                .message(ApiResponseStatus.SUCCESS.getStatusMessage())
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -43,8 +42,8 @@ public class ResponseEntityHelper {
                                                                              String requestId) {
         ResponseInfo<T> response = ResponseInfo.<T>builder()
                 .responseId(requestId)
-                .code(ApiResponseStatus.VALIDATE_TICKET_ERROR_MESSAGE .getStatusCode())
-                .message(ApiResponseStatus.VALIDATE_TICKET_ERROR_MESSAGE .getStatusMessage())
+                .code(ApiResponseStatus.VALIDATE_INVALID_INPUT .getStatusCode())
+                .message(ApiResponseStatus.VALIDATE_INVALID_INPUT .getStatusMessage())
                 .validate(errors)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
