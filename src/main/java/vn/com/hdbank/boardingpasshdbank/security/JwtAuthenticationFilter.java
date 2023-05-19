@@ -1,4 +1,4 @@
-package vn.com.hdbank.boardingpasshdbank.config;
+package vn.com.hdbank.boardingpasshdbank.security;
 
 
 import jakarta.servlet.FilterChain;
@@ -24,10 +24,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private  final JwtUtilities jwtUtilities ;
-    private final CustomerServiceImpl customerUserDetailsService ;
-    //
-    private final CustomerRepository customerRepository;
-
+    private final CustomerUserDetailsService customerUserDetailsService ;
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
@@ -40,14 +37,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         {
             String email = jwtUtilities.extractUsername(token);
 
-//            UserDetails userDetails = customerRepository.findById(email);
-//            if (userDetails != null) {
-//                UsernamePasswordAuthenticationToken authentication =
-//                        new UsernamePasswordAuthenticationToken(userDetails.getUsername() ,null , userDetails.getAuthorities());
-//                log.info("authenticated user with email :{}", email);
-//                SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//            }
+            UserDetails userDetails = customerUserDetailsService.loadUserByUsername(email);
+            if (userDetails != null) {
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(userDetails.getUsername() ,null , userDetails.getAuthorities());
+                log.info("authenticated user with email :{}", email);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            }
         }
         filterChain.doFilter(request,response);
     }
