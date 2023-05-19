@@ -14,7 +14,4 @@ public class Constant {
     public static final double BALANCE_AFTER_TRANSACTION = 101200000;
     public static final String LINK_WEB_PRIZES = "https://link-webview-prizes.com";
 
-    /*VALIDATE*/
-    public static final String  VALIDATE_FLIGHT_CODE = "Mã chuyến bay phải bắt đầu bằng 2 chữ cái và theo sau là 1 đến 4 chữ số"; /*Flight code must start with 2 letters and be followed by 1 to 4 digits*/
-
 }

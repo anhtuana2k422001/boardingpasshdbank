@@ -9,37 +9,44 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
+import vn.com.hdbank.boardingpasshdbank.common.Validate;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class TicketScanRequest extends BaseRequest{
-    @NotNull
-    @NotEmpty
-    @Size(max = 2, message = "formatCode no more than 3 characters")
+
+    @NotNull (message = Validate.MESSAGE_NOT_NULL)
+    @NotEmpty (message = Validate.MESSAGE_NOT_EMPTY)
     private String formatCode;
-    @NotNull
-    @NotEmpty
+
+    @NotNull (message = Validate.MESSAGE_NOT_NULL)
+    @NotEmpty (message = Validate.MESSAGE_NOT_EMPTY)
     private String fullName;
-    @NotNull
-    @NotEmpty
-    @Pattern(regexp = "^[a-zA-Z0-9]{1,6}$", message = "Reservation code must contain up to 6 alphanumeric characters")
+
+    @NotNull (message = Validate.MESSAGE_NOT_NULL)
+    @Pattern(regexp = Validate.REGEXP_RESERVATION_CODE, message = Validate.MESSAGE_RESERVATION_CODE)
     private String reservationCode;
-    @NotNull
-    @NotEmpty
+
+    @NotNull (message = Validate.MESSAGE_NOT_NULL)
+    @NotEmpty (message = Validate.MESSAGE_NOT_EMPTY)
     private String flightName; /* SG -> HN */
-    @NotNull
-    @NotEmpty
+
+    @NotNull (message = Validate.MESSAGE_NOT_NULL)
+    @NotEmpty (message = Validate.MESSAGE_NOT_EMPTY)
     private String airlineCode; /*  VJ */
-    @NotNull
-    @NotEmpty
+
+    @NotNull (message = Validate.MESSAGE_NOT_NULL)
+    @NotEmpty (message = Validate.MESSAGE_NOT_EMPTY)
     private String flightNumber; /*  0130 */
-    @NotNull
-    @NotEmpty
+
+    @NotNull (message = Validate.MESSAGE_NOT_NULL)
+    @NotEmpty (message = Validate.MESSAGE_NOT_EMPTY)
     private String boardingTime; /*  201  quy đổi từ 20/07 sang Julian date */
-    @NotNull
-    @NotEmpty
+
+    @NotNull (message = Validate.MESSAGE_NOT_NULL)
+    @NotEmpty (message = Validate.MESSAGE_NOT_EMPTY)
     private String checkInNumber; /* 003B0127: số ghế là 3B và số thứ tự check in là 127 */
 
     public String getFistName(){

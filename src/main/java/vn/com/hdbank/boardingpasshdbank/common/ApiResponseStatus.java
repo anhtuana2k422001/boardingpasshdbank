@@ -4,7 +4,7 @@ public enum ApiResponseStatus {
     SUCCESS("000", "Thành công"), /* Successfully */
     INTERNAL_SERVER_ERROR("001", "Lỗi máy chủ nội bộ"), /*Internal Server Error*/
     DUPLICATED("002", "Trùng lặp"), /*Duplicated */
-    VIET_JET_EXISTED_AND_ASSIGNED("003", "Ticket Vietjet already exists and has been assigned to a user"),
+    VIET_JET_EXISTED_AND_ASSIGNED("003", "Vé đã tồn tại và được gắn với 1 khách hàng"), /* Ticket already exists and is tied to 1 customer*/
     VIET_JET_API_ERROR("004", "Không gọi được Vietjet API"), /*Unable to call VietJet API*/
     EXTERNAL_API_ERROR("005", "Lỗi khi gọi API bên ngoài"),  /*Error calling external API*/
     VALIDATE_INVALID_INPUT("006", "Đầu vào không hợp lệ"), /*Invalid input*/

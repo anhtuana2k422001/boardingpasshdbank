@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import vn.com.hdbank.boardingpasshdbank.common.Validate;
 
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,16 +17,22 @@ import vn.com.hdbank.boardingpasshdbank.common.Validate;
 public class TicketConfirmRequest extends BaseRequest {
     private String lastName;
     private String firstName;
-    @Pattern(regexp = Validate.FLIGHT_CODE., message = Validate.FLIGHT_CODE.)
+
+    @NotNull (message = Validate.MESSAGE_NOT_NULL)
+    @Pattern(regexp = Validate.REGEXP_FLIGHT_CODE, message = Validate.MESSAGE_FLIGHT_CODE)
     private String flightCode;
-    @Pattern(regexp = "^[a-zA-Z0-9]{1,6}$", message = "Mã đặt chỗ phải chứa tối đa 6 ký tự chữ và số") /*Reservation code must contain up to 6 alphanumeric characters*/
+
+    @NotNull (message = Validate.MESSAGE_NOT_NULL)
+    @Pattern(regexp = Validate.REGEXP_RESERVATION_CODE, message = Validate.MESSAGE_RESERVATION_CODE)
     private String reservationCode;
-    @Pattern(regexp = "^\\d{1,3}[a-zA-Z]$", message = "Ghế phải có 1 hoặc 3 chữ số theo sau là một chữ cái") /*Seats must have 1 or 3 digits followed by a letter*/
-    @NotNull
-    @NotEmpty (message = "")
+
+    @NotNull (message = Validate.MESSAGE_NOT_NULL)
+    @Pattern(regexp = Validate.REGEXP_SEATS, message = Validate.MESSAGE_SEATS)
     private String seats;
-    @NotNull
+
+    @NotNull (message = Validate.MESSAGE_NOT_NULL)
     private Integer customerId;
-    @NotNull
+
+    @NotNull (message = Validate.MESSAGE_NOT_NULL)
     private Boolean isCustomerVietJet;
 }
