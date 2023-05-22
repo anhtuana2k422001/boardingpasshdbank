@@ -1,9 +1,9 @@
 package vn.com.hdbank.boardingpasshdbank.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import vn.com.hdbank.boardingpasshdbank.repository.TicketVietjetRepository;
+import vn.com.hdbank.boardingpasshdbank.repository.TicketVietJetRepository;
 
 public class BaseService {
     @Autowired
-    protected TicketVietjetRepository ticketVietjetRepository;
+    protected TicketVietJetRepository ticketVietjetRepository;
 }

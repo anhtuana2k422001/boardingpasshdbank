@@ -13,8 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import vn.com.hdbank.boardingpasshdbank.repository.CustomerRepository;
-import vn.com.hdbank.boardingpasshdbank.service.impl.CustomerServiceImpl;
+
 
 import java.io.IOException;
 

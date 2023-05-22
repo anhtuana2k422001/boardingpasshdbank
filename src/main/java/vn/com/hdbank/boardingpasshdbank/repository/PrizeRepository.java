@@ -10,6 +10,6 @@ public interface PrizeRepository {
     List<Prize> findByCustomerId(int customerId);
     void save(Prize prize);
     String generatePrizeCode();
-    boolean checkExistsPrizeCodeForVietjet(int customerId);
+    boolean checkExistsPrizeCodeForVietJet(int customerId);
     boolean updateResultPrize(InfoPrizeRequest request, int customerId);
 }

@@ -15,6 +15,7 @@ public enum ApiResponseStatus {
     PROGRAM_ENDED("011", "Chương trình quay thưởng đã dừng"), /*The prize draw has stopped*/
     NO_PRIZE_CODE("012", "Khách hàng chưa có mã dự thưởng"), /*Customers do not have a coupon code*/
     UPDATE_PRIZE_ERROR ("013","Cập nhật thông tin vé không thành công"),  /*Update ticket information failed */
+    INVALID_CLIENT_REQUEST("014","Yêu cầu ứng dụng khách không hợp lệ");
     ;
 
     private final String statusCode;

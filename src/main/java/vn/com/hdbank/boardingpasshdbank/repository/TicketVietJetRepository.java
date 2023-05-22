@@ -4,7 +4,7 @@ import vn.com.hdbank.boardingpasshdbank.model.entity.TicketVietJet;
 
 import java.util.List;
 
-public interface TicketVietjetRepository {
+public interface TicketVietJetRepository {
     void create(TicketVietJet ticketVietjet);
     List<TicketVietJet> findCustomerIdNotNull(String flightCode);
     boolean checkExistsByFlightCode(String flightCode);

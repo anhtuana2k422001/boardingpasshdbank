@@ -22,7 +22,7 @@ public class JsonUtils {
         }
     }
 
-    public static  <T> T fromJsonString(String jsonString, Class<T> valueType) {
+    public static <T> T fromJsonString(String jsonString, Class<T> valueType) {
         try {
             return objectMapper.readValue(jsonString, valueType);
         } catch (Exception e){

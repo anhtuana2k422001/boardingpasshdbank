@@ -28,7 +28,7 @@ public class TicketVietJetController {
     @Autowired
     TicketVietJetServiceImpl ticketVietJetService;
     /* API 1: check-flight-ticketVietJet */
-    // Case 1: Self-entering information
+    /* Case 1: Self-entering information */
     @PostMapping("/check-flight-ticket")
     public ResponseEntity<ResponseInfo<TicketVietJetInformation>> checkInformationTicket(@Valid @RequestBody TicketRequest request,
                                                                                          BindingResult bindingResult) {
@@ -47,7 +47,7 @@ public class TicketVietJetController {
         return responseEntity;
     }
 
-    // Case 2: Scan Boarding pass
+    /* Case 2: Scan Boarding pass */
     @PostMapping("/check-flight-ticket-scan")
     public ResponseEntity<ResponseInfo<TicketVietJetInformation>> checkScanInformationTicket(@Valid @RequestBody TicketScanRequest request,
                                                                                              BindingResult bindingResult) {

@@ -28,9 +28,9 @@ import java.util.List;
 public class CustomerServiceImpl extends BaseService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomerServiceImpl.class);
     @Autowired
-    protected CustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
     @Autowired
-    protected PrizeRepository prizeRepository;
+    private PrizeRepository prizeRepository;
 
     public ResponseEntity<ResponseInfo<ConfirmCustomerVietJet>> confirmCustomerVietJet(TicketConfirmRequest request) {
         String requestId = request.getRequestId();
@@ -56,7 +56,7 @@ public class CustomerServiceImpl extends BaseService {
         /* Update Customer Type */
         customerRepository.updateCustomerTypeById("VJ", customerId);
         /* generate bonus code and save it in db for customer */
-        if (!prizeRepository.checkExistsPrizeCodeForVietjet(customerId)) {
+        if (!prizeRepository.checkExistsPrizeCodeForVietJet(customerId)) {
             String prizeCodeGenerate = prizeRepository.generatePrizeCode();
             Prize savePrize = new Prize();
             savePrize.setCustomerId(customerId);
@@ -88,7 +88,7 @@ public class CustomerServiceImpl extends BaseService {
             return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.NOT_ENOUGH_CONDITION_FOR_PRIZE, requestId);
         }
 
-        if (Boolean.FALSE.equals(prizeRepository.checkExistsPrizeCodeForVietjet(customerId))) {
+        if (Boolean.FALSE.equals(prizeRepository.checkExistsPrizeCodeForVietJet(customerId))) {
             return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.NO_PRIZE_CODE, requestId);
         }
 

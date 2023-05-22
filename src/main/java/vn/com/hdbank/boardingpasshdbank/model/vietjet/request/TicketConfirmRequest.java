@@ -1,9 +1,7 @@
 package vn.com.hdbank.boardingpasshdbank.model.vietjet.request;
 
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,9 +13,6 @@ import vn.com.hdbank.boardingpasshdbank.common.Validate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TicketConfirmRequest extends BaseRequest {
-    private String lastName;
-    private String firstName;
-
     @NotNull (message = Validate.MESSAGE_NOT_NULL)
     @Pattern(regexp = Validate.REGEXP_FLIGHT_CODE, message = Validate.MESSAGE_FLIGHT_CODE)
     private String flightCode;
@@ -31,6 +26,7 @@ public class TicketConfirmRequest extends BaseRequest {
     private String seats;
 
     @NotNull (message = Validate.MESSAGE_NOT_NULL)
+    @Min(value = 1, message = Validate.MESSAGE_REQUIRED_ID)
     private Integer customerId;
 
     @NotNull (message = Validate.MESSAGE_NOT_NULL)

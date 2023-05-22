@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.common.ApiUrls;
 import vn.com.hdbank.boardingpasshdbank.common.ResponseEntityHelper;
-import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketScanRequest;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.response.*;
@@ -28,74 +27,68 @@ import java.util.List;
 public class TicketVietJetServiceImpl extends BaseService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TicketVietJetServiceImpl.class);
     @Autowired
-    protected UserAuthVietJet userAuthVietJet;
+    private UserAuthVietJet userAuthVietJet;
 
-    // Case 1: Service Self-entering information
+    /* Case 1: Service Self-entering information */
     public ResponseEntity<ResponseInfo<TicketVietJetInformation>> checkTicketVietJet(TicketRequest request) {
-        try {
-            List<TicketVietJet> ticketVietjetList = ticketVietjetRepository.findCustomerIdNotNull(request.getFlightCode());
-            if (!ticketVietjetList.isEmpty()) {
-                LOGGER.info(ApiResponseStatus.VIET_JET_EXISTED_AND_ASSIGNED.getStatusMessage());
-                return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.VIET_JET_EXISTED_AND_ASSIGNED, request.getRequestId());
-            }
-            String jwtResponse = ApiHttpClient.getToken(ApiUrls.AUTHENTICATION_URL, userAuthVietJet.getUserName(), userAuthVietJet.getPassWord());
-            if (StringUtils.isEmpty(jwtResponse)) {
-                LOGGER.info(ApiResponseStatus.VIET_JET_API_ERROR.getStatusMessage());
-                return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.VIET_JET_API_ERROR, request.getRequestId());
-            }
-            String ticketResponse = ApiVietJet.callApiPassenger(jwtResponse, request);
-
-            if (StringUtils.isEmpty(ticketResponse)) {
-                LOGGER.info(ApiResponseStatus.INVALID_TICKET.getStatusMessage());
-                return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.INVALID_TICKET, request.getRequestId());
-            }
-            /* Handle response and save */
-            TicketVietJetInformation ticketVietjetInformation = mapTicketRequest(ticketResponse,
-                    request.getFlightCode(),
-                    request.getReservationCode(),
-                    request.getSeats()
-            );
-            return ResponseEntityHelper.successResponseEntity(ticketVietjetInformation, request.getRequestId());
-        } catch (Exception e) {
-            LOGGER.error(ApiResponseStatus.INTERNAL_SERVER_ERROR.getStatusMessage());
-            throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
+        String requestId = request.getRequestId();
+        String flightCode = request.getFlightCode();
+        String reservationCode = request.getReservationCode();
+        String seats = request.getSeats();
+        List<TicketVietJet> ticketVietjetList = ticketVietjetRepository.findCustomerIdNotNull(flightCode);
+        if (!ticketVietjetList.isEmpty()) {
+            LOGGER.info(ApiResponseStatus.VIET_JET_EXISTED_AND_ASSIGNED.getStatusMessage());
+            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.VIET_JET_EXISTED_AND_ASSIGNED, requestId);
         }
+        String jwtResponse = ApiHttpClient.getToken(ApiUrls.AUTHENTICATION_URL, userAuthVietJet.getUserName(), userAuthVietJet.getPassWord());
+        if (StringUtils.isEmpty(jwtResponse)) {
+            LOGGER.info(ApiResponseStatus.VIET_JET_API_ERROR.getStatusMessage());
+            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.VIET_JET_API_ERROR, requestId);
+        }
+        String ticketResponse = ApiVietJet.callApiPassenger(jwtResponse, request);
+
+        if (StringUtils.isEmpty(ticketResponse)) {
+            LOGGER.info(ApiResponseStatus.INVALID_TICKET.getStatusMessage());
+            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.INVALID_TICKET, requestId);
+        }
+        /* Handle response and save */
+        TicketVietJetInformation ticketVietjetInformation = handleTicketResponse(
+                ticketResponse, flightCode, reservationCode, seats
+        );
+        return ResponseEntityHelper.successResponseEntity(ticketVietjetInformation, requestId);
     }
 
-    // Case 2: Service Scan Boarding pass
+    /* Case 2: Service Scan Boarding pass */
     public ResponseEntity<ResponseInfo<TicketVietJetInformation>> checkScanTicketVietJet(TicketScanRequest request) {
-        try {
-            List<TicketVietJet> ticketVietjetList = ticketVietjetRepository.findCustomerIdNotNull(request.getFlightCode());
-            if (!ticketVietjetList.isEmpty()) {
-                LOGGER.info(ApiResponseStatus.VIET_JET_EXISTED_AND_ASSIGNED.getStatusMessage());
-                return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.VIET_JET_EXISTED_AND_ASSIGNED, request.getRequestId());
-            }
-            String jwtResponse = ApiHttpClient.getToken(ApiUrls.AUTHENTICATION_URL, userAuthVietJet.getUserName(), userAuthVietJet.getPassWord());
-            if (StringUtils.isEmpty(jwtResponse)) {
-                LOGGER.info(ApiResponseStatus.VIET_JET_API_ERROR.getStatusMessage());
-                return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.VIET_JET_API_ERROR, request.getRequestId());
-            }
-            String ticketResponse = ApiVietJet.callApiScanPassenger(jwtResponse, request);
-            if (StringUtils.isEmpty(ticketResponse)) {
-                LOGGER.info(ApiResponseStatus.INVALID_TICKET.getStatusMessage());
-                return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.INVALID_TICKET, request.getRequestId());
-            }
-            /* Handle response and save */
-            TicketVietJetInformation ticketVietjetInformation = mapTicketRequest(ticketResponse,
-                    request.getFlightCode(),
-                    request.getReservationCode(),
-                    request.getSeats()
-            );
-            return ResponseEntityHelper.successResponseEntity(ticketVietjetInformation, request.getRequestId());
-        } catch (Exception e) {
-            LOGGER.error(ApiResponseStatus.INTERNAL_SERVER_ERROR.getStatusMessage());
-            throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
+        String requestId = request.getRequestId();
+        String flightCode = request.getFlightCode();
+        String reservationCode = request.getReservationCode();
+        String seats = request.getSeats();
+        List<TicketVietJet> ticketVietjetList = ticketVietjetRepository.findCustomerIdNotNull(flightCode);
+        if (!ticketVietjetList.isEmpty()) {
+            LOGGER.info(ApiResponseStatus.VIET_JET_EXISTED_AND_ASSIGNED.getStatusMessage());
+            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.VIET_JET_EXISTED_AND_ASSIGNED, requestId);
         }
+        String jwtResponse = ApiHttpClient.getToken(ApiUrls.AUTHENTICATION_URL, userAuthVietJet.getUserName(), userAuthVietJet.getPassWord());
+        if (StringUtils.isEmpty(jwtResponse)) {
+            LOGGER.info(ApiResponseStatus.VIET_JET_API_ERROR.getStatusMessage());
+            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.VIET_JET_API_ERROR, requestId);
+        }
+        String ticketResponse = ApiVietJet.callApiScanPassenger(jwtResponse, request);
+        if (StringUtils.isEmpty(ticketResponse)) {
+            LOGGER.info(ApiResponseStatus.INVALID_TICKET.getStatusMessage());
+            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.INVALID_TICKET, requestId);
+        }
+        /* Handle response and save */
+        TicketVietJetInformation ticketVietjetInformation = handleTicketResponse(
+                ticketResponse, flightCode, reservationCode, seats
+        );
+        return ResponseEntityHelper.successResponseEntity(ticketVietjetInformation, requestId);
     }
 
     /* Return ticket information and save database */
-    private TicketVietJetInformation mapTicketRequest(String ticketResponse, String flightCode,
-                                                      String reservationCode, String seats) {
+    private TicketVietJetInformation handleTicketResponse(String ticketResponse, String flightCode,
+                                                      String reservationCode, String seats){
         TicKet ticKet = JsonUtils.fromJsonString(ticketResponse, TicKet.class);
         Passenger firstPassenger = ticKet.getPassengers().get(0);
         Journey firstJourney = ticKet.getJourneys().get(0);
@@ -115,8 +108,5 @@ public class TicketVietJetServiceImpl extends BaseService {
                 totalAmount
         );
     }
-
-
-
 
 }
