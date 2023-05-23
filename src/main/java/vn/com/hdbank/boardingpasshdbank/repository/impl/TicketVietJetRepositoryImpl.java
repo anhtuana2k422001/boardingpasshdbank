@@ -1,7 +1,6 @@
 package vn.com.hdbank.boardingpasshdbank.repository.impl;
 
 import lombok.AllArgsConstructor;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -11,7 +10,6 @@ import vn.com.hdbank.boardingpasshdbank.model.entity.TicketVietJet;
 import vn.com.hdbank.boardingpasshdbank.repository.TicketVietJetRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
@@ -21,44 +19,39 @@ public class TicketVietJetRepositoryImpl implements TicketVietJetRepository {
     public void create(TicketVietJet ticketVietjet) {
         String sql = "INSERT INTO ticket_vietjet (last_name, first_name, flight_code, reservation_code, seats, customer_id) VALUES (?, ?, ?, ?, ?, ?)";
         try {
-            jdbcTemplate.update(sql, ticketVietjet.getLastName(), ticketVietjet.getFirstName(), ticketVietjet.getFlightCode(), ticketVietjet.getReservationCode(), ticketVietjet.getSeats(), null);
-        } catch (DuplicateKeyException e) {
-            throw new CustomException(ApiResponseStatus.DUPLICATED);
+             jdbcTemplate.update(sql, ticketVietjet.getLastName(), ticketVietjet.getFirstName(), ticketVietjet.getFlightCode(), ticketVietjet.getReservationCode(), ticketVietjet.getSeats(), null);
         } catch (Exception e) {
-            throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
         }
     }
 
-    public void updateCustomerIdByFlightCode(int customerId, String flightCode) {
-        String sql = "UPDATE ticket_vietjet SET customer_id = ? WHERE flight_code = ?";
+    public void updateCustomerIdByFlightCode(int customerId, String reservationCode) {
+        String sql = "UPDATE ticket_vietjet SET customer_id = ? WHERE reservation_code = ?";
         try {
-            jdbcTemplate.update(sql, customerId, flightCode);
+            jdbcTemplate.update(sql, customerId, reservationCode);
         } catch (Exception e) {
-            throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
         }
     }
 
-    @SuppressWarnings("deprecation")
-    public List<TicketVietJet> findCustomerIdNotNull(String flightCode) {
-        String sql = "SELECT * FROM ticket_vietjet WHERE flight_code = ? AND customer_id IS NOT NULL";
+    public List<TicketVietJet> findCustomerIdNotNull(String reservationCode) {
+        String sql = "SELECT * FROM ticket_vietjet WHERE reservation_code = ? AND customer_id IS NOT NULL";
         try {
-            return jdbcTemplate.query(sql, new Object[]{flightCode}, new BeanPropertyRowMapper<>(TicketVietJet.class));
+            return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(TicketVietJet.class), reservationCode);
         } catch (Exception e) {
-            throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
         }
     }
 
-
-    @SuppressWarnings("deprecation")
     @Override
-    public boolean checkExistsByFlightCode(String flightCode) {
-        String sql = "SELECT COUNT(*) FROM ticket_vietjet WHERE flight_code = ?";
+    public boolean checkExistsByFlightCode(String reservationCode) {
+        String sql = "SELECT COUNT(*) FROM ticket_vietjet WHERE reservation_code = ?";
         try {
-            int count = Optional.ofNullable(jdbcTemplate.queryForObject(sql, new Object[]{flightCode},
-                    Integer.class)).orElse(0);
-            return count > 0;
+            Integer count = jdbcTemplate.queryForObject(sql, Integer.class, reservationCode);
+            return count != null && count > 0;
         } catch (Exception e) {
-            throw new CustomException(ApiResponseStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
         }
     }
+
 }

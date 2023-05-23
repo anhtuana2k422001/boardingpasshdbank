@@ -1,5 +1,7 @@
 package vn.com.hdbank.boardingpasshdbank.service.utils;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
 import vn.com.hdbank.boardingpasshdbank.common.ApiUrls;
@@ -12,8 +14,8 @@ import vn.com.hdbank.boardingpasshdbank.utils.JsonUtils;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApiVietJet {
-    private ApiVietJet() {}
     public static String callApiPassenger(String jwtResponse, TicketRequest request) {
         try {
             URI passengerVietjetUri = new URIBuilder(ApiUrls.PASSENGER_VIET_JET_URL)

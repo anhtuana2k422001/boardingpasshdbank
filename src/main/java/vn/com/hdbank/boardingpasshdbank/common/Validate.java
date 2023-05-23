@@ -1,7 +1,10 @@
 package vn.com.hdbank.boardingpasshdbank.common;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Validate {
-    private Validate(){}
     public static final String MESSAGE_NOT_EMPTY = "Trường thông tin không được để trống";
     public static final String MESSAGE_NOT_NULL = "Trường thông tin cầu bắt buộc";
     public static final String MESSAGE_FLIGHT_CODE = "Mã chuyến bay phải bắt đầu bằng 2 chữ cái và theo sau là 1 đến 4 chữ số";      /*Flight code must start with 2 letters and be followed by 1 to 4 digits*/

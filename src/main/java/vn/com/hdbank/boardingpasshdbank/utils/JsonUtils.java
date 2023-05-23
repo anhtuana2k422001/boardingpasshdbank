@@ -2,16 +2,17 @@ package vn.com.hdbank.boardingpasshdbank.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JsonUtils {
     private static final Logger LOGGER  = LoggerFactory.getLogger(JsonUtils.class);
     private static final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
-    private JsonUtils() {}
 
     public static String toJsonString(Object object) {
         try {

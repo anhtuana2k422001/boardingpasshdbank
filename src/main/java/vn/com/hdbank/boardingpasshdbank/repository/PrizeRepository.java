@@ -11,5 +11,7 @@ public interface PrizeRepository {
     void save(Prize prize);
     String generatePrizeCode();
     boolean checkExistsPrizeCodeForVietJet(int customerId);
-    boolean updateResultPrize(InfoPrizeRequest request, int customerId);
+    boolean updateResultPrize(InfoPrizeRequest request);
+    boolean checkResultPrize(InfoPrizeRequest request);
+    boolean checkUsedPrize(InfoPrizeRequest request);
 }

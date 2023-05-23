@@ -1,10 +1,10 @@
 package vn.com.hdbank.boardingpasshdbank.service.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.common.Constant;
 import vn.com.hdbank.boardingpasshdbank.common.ResponseEntityHelper;
@@ -19,40 +19,37 @@ import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.InfoPrizeRequest;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketConfirmRequest;
 import vn.com.hdbank.boardingpasshdbank.repository.CustomerRepository;
 import vn.com.hdbank.boardingpasshdbank.repository.PrizeRepository;
-import vn.com.hdbank.boardingpasshdbank.service.BaseService;
+import vn.com.hdbank.boardingpasshdbank.repository.TicketVietJetRepository;
+import vn.com.hdbank.boardingpasshdbank.service.validate.DatabaseValidation;
+import vn.com.hdbank.boardingpasshdbank.utils.ValidationUtils;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
-public class CustomerServiceImpl extends BaseService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CustomerServiceImpl.class);
-    @Autowired
-    private CustomerRepository customerRepository;
-    @Autowired
-    private PrizeRepository prizeRepository;
+@AllArgsConstructor
+public class CustomerServiceImpl {
+    private final CustomerRepository customerRepository;
+    private final PrizeRepository prizeRepository;
+    private final TicketVietJetRepository ticketVietjetRepository;
 
-    public ResponseEntity<ResponseInfo<ConfirmCustomerVietJet>> confirmCustomerVietJet(TicketConfirmRequest request) {
+    public ResponseEntity<ResponseInfo<ConfirmCustomerVietJet>> confirmCustomerVietJet(TicketConfirmRequest request,
+                                                                                       BindingResult bindingResult) {
         String requestId = request.getRequestId();
         int customerId = request.getCustomerId();
-        String flightCode = request.getFlightCode();
-        if (!ticketVietjetRepository.checkExistsByFlightCode(flightCode)) {
-            LOGGER.info(ApiResponseStatus.INVALID_TICKET.getStatusMessage());
-            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.INVALID_TICKET, requestId);
+        String reservationCode = request.getReservationCode();
+        /*------------------- Validate ticket request -------------------*/
+        Map<String, String> errors = ValidationUtils.validationHandler(bindingResult);
+        if (errors.size() > 0)
+            return ResponseEntityHelper.validateResponseEntity(errors, request.getRequestId());
+        /*------------------- Validate database -------------------*/
+        ApiResponseStatus response =  DatabaseValidation.validateConfirmCustomer(request,
+                customerRepository, ticketVietjetRepository);
+        if (!StringUtils.equals(Constant.SUCCESS_CODE, response.getStatusCode())) {
+            return ResponseEntityHelper.errorResponseEntity(response, requestId);
         }
-
-        if (Boolean.FALSE.equals(request.getIsCustomerVietJet())) {
-            LOGGER.info(ApiResponseStatus.CUSTOMER_NOT_VIET_JET.getStatusMessage());
-            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.CUSTOMER_NOT_VIET_JET, requestId);
-        }
-
-        Customer customerInfo = customerRepository.findById(customerId);
-        if (customerInfo == null) {
-            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.NOT_FOUND_CUSTOMER, requestId);
-        }
-
-        /* Ticket set customerId reference to table Customer*/
-        ticketVietjetRepository.updateCustomerIdByFlightCode(customerId, flightCode);
+        /* Ticket set customerId reference to table Customer */
+        ticketVietjetRepository.updateCustomerIdByFlightCode(customerId, reservationCode);
         /* Update Customer Type */
         customerRepository.updateCustomerTypeById("VJ", customerId);
         /* generate bonus code and save it in db for customer */
@@ -63,38 +60,31 @@ public class CustomerServiceImpl extends BaseService {
             savePrize.setPrizeCode(prizeCodeGenerate);
             prizeRepository.save(savePrize);
         }
-
         List<Prize> prizeInfo = prizeRepository.findByCustomerId(customerId);
+        Customer customerInfo = customerRepository.findById(customerId);
         ConfirmCustomerVietJet confirmCustomerVietjet = new ConfirmCustomerVietJet(customerInfo, prizeInfo, Constant.LINK_WEB_PRIZES);
-        return ResponseEntityHelper.successResponseEntity(confirmCustomerVietjet, requestId);
+        return ResponseEntityHelper.successResponseEntity(
+                ApiResponseStatus.SUCCESS, confirmCustomerVietjet, requestId);
     }
 
-
-    public ResponseEntity<ResponseInfo<CustomerPrizeStatus>> checkCustomerPrize(CustomerPrizeRequest request) {
+    public ResponseEntity<ResponseInfo<CustomerPrizeStatus>> checkCustomerPrize(CustomerPrizeRequest request,
+                                                                                BindingResult bindingResult) {
         int customerId = request.getCustomerId();
         String requestId = request.getRequestId();
-
-        Customer customer = customerRepository.findById(customerId);
-        if (customer == null) {
-            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.NOT_FOUND_CUSTOMER, requestId);
+        /*------------------- Validate ticket request -------------------*/
+        Map<String, String> errors = ValidationUtils.validationHandler(bindingResult);
+        if (errors.size() > 0)
+            return ResponseEntityHelper.validateResponseEntity(errors, requestId);
+        /*------------------- Validate database -------------------*/
+        ApiResponseStatus response =  DatabaseValidation.validateCheckPrize(request,
+                customerRepository, prizeRepository);
+        if (!StringUtils.equals(Constant.SUCCESS_CODE, response.getStatusCode())) {
+            return ResponseEntityHelper.errorResponseEntity(response, requestId);
         }
-
-        if (LocalDateTime.now().isAfter(Constant.VJ_E_SKY_ONE_END_DATE)) {
-            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.PROGRAM_ENDED, requestId);
-        }
-
-        if (customer.getCreatedAt().isBefore(Constant.VJ_E_SKY_ONE_START_DATE)
-                || customer.getCreatedAt().isAfter(Constant.VJ_E_SKY_ONE_END_DATE)) {
-            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.NOT_ENOUGH_CONDITION_FOR_PRIZE, requestId);
-        }
-
-        if (Boolean.FALSE.equals(prizeRepository.checkExistsPrizeCodeForVietJet(customerId))) {
-            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.NO_PRIZE_CODE, requestId);
-        }
-
         Prize prizeInfo = prizeRepository.findByCustomerId(customerId).get(0);
         if(Boolean.TRUE.equals(prizeInfo.isUsed())){
-            return ResponseEntityHelper.successResponseEntity(new CustomerPrizeStatus(
+            return ResponseEntityHelper.successResponseEntity(ApiResponseStatus.SUCCESS,
+                    new CustomerPrizeStatus(
                     Boolean.TRUE,
                     Constant.CUSTOMER_PRIZE_SUCCESS,
                     new PrizeResult(
@@ -105,7 +95,8 @@ public class CustomerServiceImpl extends BaseService {
                     null
             ), requestId);
         }else{
-            return ResponseEntityHelper.successResponseEntity(new CustomerPrizeStatus(
+            return ResponseEntityHelper.successResponseEntity(ApiResponseStatus.SUCCESS,
+                    new CustomerPrizeStatus(
                     Boolean.FALSE,
                     Constant.PRIZE_SUCCESS_NOT_DIALED,
                     null,
@@ -115,16 +106,19 @@ public class CustomerServiceImpl extends BaseService {
     }
 
     /* Update results prize for customer */
-    public ResponseEntity<ResponseInfo<String>> updateCustomerPrize(InfoPrizeRequest request){
+    public ResponseEntity<ResponseInfo<String>> updateCustomerPrize(InfoPrizeRequest request,
+                                                                    BindingResult bindingResult){
         String requestId = request.getRequestId();
-        int customerId = request.getCustomerId();
-        Customer customer = customerRepository.findById(customerId);
-        if (customer == null) {
-            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.NOT_FOUND_CUSTOMER, requestId);
+        /*------------------- Validate ticket request -------------------*/
+        Map<String, String> errors = ValidationUtils.validationHandler(bindingResult);
+        if (errors.size() > 0)
+            return ResponseEntityHelper.validateResponseEntity(errors, request.getRequestId());
+        /*------------------- Validate database -------------------*/
+        ApiResponseStatus response =  DatabaseValidation.validateUpdatePrize(request,
+                customerRepository, prizeRepository);
+        if (!StringUtils.equals(Constant.SUCCESS_CODE, response.getStatusCode())) {
+            return ResponseEntityHelper.errorResponseEntity(response, requestId);
         }
-        boolean updated =  prizeRepository.updateResultPrize(request, customerId);
-        if(!updated)
-            return ResponseEntityHelper.errorResponseEntity(ApiResponseStatus.UPDATE_PRIZE_ERROR, requestId);
         return ResponseEntityHelper.successResponseEntity(requestId);
     }
 }

@@ -1,5 +1,7 @@
 package vn.com.hdbank.boardingpasshdbank.utils;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -17,12 +19,10 @@ import vn.com.hdbank.boardingpasshdbank.exception.ApiException;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 
 import java.nio.charset.StandardCharsets;
-
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApiHttpClient {
     private static final Logger LOGGER  = LoggerFactory.getLogger(ApiHttpClient.class);
     private static final CloseableHttpClient httpClient = HttpClients.createDefault();
-
-    private ApiHttpClient() {}
 
     public static String getToken(String url, String username, String password) {
         try {
