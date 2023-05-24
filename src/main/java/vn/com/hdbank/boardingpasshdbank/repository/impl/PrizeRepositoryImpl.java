@@ -1,11 +1,12 @@
 package vn.com.hdbank.boardingpasshdbank.repository.impl;
 
 import lombok.AllArgsConstructor;
-import org.springframework.dao.DuplicateKeyException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
+import vn.com.hdbank.boardingpasshdbank.common.Constant;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 import vn.com.hdbank.boardingpasshdbank.model.entity.Prize;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.InfoPrizeRequest;
@@ -17,6 +18,7 @@ import java.util.Random;
 
 @Repository
 @AllArgsConstructor
+@Slf4j
 public class PrizeRepositoryImpl implements PrizeRepository {
 
     private final JdbcTemplate jdbcTemplate;
@@ -28,6 +30,7 @@ public class PrizeRepositoryImpl implements PrizeRepository {
         try {
             return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Prize.class), customerId);
         } catch (Exception e) {
+            LOGGER.error(Constant.ERROR, e);
             throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
         }
     }
@@ -37,14 +40,14 @@ public class PrizeRepositoryImpl implements PrizeRepository {
         String sql = "INSERT INTO prize (prize_code, prize_amount, customer_id, used) VALUES (?, ?, ?, ?)";
         try {
             jdbcTemplate.update(sql, prize.getPrizeCode(), prize.getPrizeAmount(), prize.getCustomerId(), prize.isUsed());
-        }catch (DuplicateKeyException e) {
-            throw new CustomException(ApiResponseStatus.DUPLICATED);
         }
         catch (Exception e) {
+            LOGGER.error(Constant.ERROR, e);
             throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
         }
     }
 
+    @Override
     public String generatePrizeCode() {
         try {
             String prizeCode = null;
@@ -60,6 +63,7 @@ public class PrizeRepositoryImpl implements PrizeRepository {
             }
             return prizeCode;
         } catch (Exception e) {
+            LOGGER.error(Constant.ERROR, e);
             throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
         }
     }
@@ -71,6 +75,7 @@ public class PrizeRepositoryImpl implements PrizeRepository {
             Integer count = jdbcTemplate.queryForObject(sql, Integer.class, customerId);
             return count != null && count > 0;
         } catch (Exception e) {
+            LOGGER.error(Constant.ERROR, e);
             throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
         }
     }
@@ -82,6 +87,7 @@ public class PrizeRepositoryImpl implements PrizeRepository {
             int count = jdbcTemplate.update(sql, request.getTotalAmount(), Boolean.TRUE, request.getPrizeCode(), request.getCustomerId());
             return count > 0;
         } catch (Exception e) {
+            LOGGER.error(Constant.ERROR, e);
             throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
         }
     }
@@ -94,6 +100,7 @@ public class PrizeRepositoryImpl implements PrizeRepository {
                     request.getCustomerId(), request.getPrizeCode());
             return count != null && count > 0;
         } catch (Exception e) {
+            LOGGER.error(Constant.ERROR, e);
             throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
         }
     }
@@ -106,6 +113,7 @@ public class PrizeRepositoryImpl implements PrizeRepository {
                     request.getCustomerId(), request.getPrizeCode());
             return count != null && count > 0;
         } catch (Exception e) {
+            LOGGER.error(Constant.ERROR, e);
             throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
         }
     }

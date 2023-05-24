@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.common.Constant;
-import vn.com.hdbank.boardingpasshdbank.common.ResponseEntityHelper;
+import vn.com.hdbank.boardingpasshdbank.common.ResponseService;
 import vn.com.hdbank.boardingpasshdbank.model.entity.Customer;
 import vn.com.hdbank.boardingpasshdbank.model.entity.Prize;
 import vn.com.hdbank.boardingpasshdbank.model.response.ConfirmCustomerVietJet;
@@ -20,6 +20,7 @@ import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketConfirmReque
 import vn.com.hdbank.boardingpasshdbank.repository.CustomerRepository;
 import vn.com.hdbank.boardingpasshdbank.repository.PrizeRepository;
 import vn.com.hdbank.boardingpasshdbank.repository.TicketVietJetRepository;
+import vn.com.hdbank.boardingpasshdbank.service.CustomerService;
 import vn.com.hdbank.boardingpasshdbank.service.validate.DatabaseValidation;
 import vn.com.hdbank.boardingpasshdbank.utils.ValidationUtils;
 
@@ -28,11 +29,12 @@ import java.util.Map;
 
 @Service
 @AllArgsConstructor
-public class CustomerServiceImpl {
+public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final PrizeRepository prizeRepository;
     private final TicketVietJetRepository ticketVietjetRepository;
 
+    @Override
     public ResponseEntity<ResponseInfo<ConfirmCustomerVietJet>> confirmCustomerVietJet(TicketConfirmRequest request,
                                                                                        BindingResult bindingResult) {
         String requestId = request.getRequestId();
@@ -41,12 +43,12 @@ public class CustomerServiceImpl {
         /*------------------- Validate ticket request -------------------*/
         Map<String, String> errors = ValidationUtils.validationHandler(bindingResult);
         if (errors.size() > 0)
-            return ResponseEntityHelper.validateResponseEntity(errors, request.getRequestId());
+            return ResponseService.validateResponseEntity(errors, request.getRequestId());
         /*------------------- Validate database -------------------*/
         ApiResponseStatus response =  DatabaseValidation.validateConfirmCustomer(request,
                 customerRepository, ticketVietjetRepository);
         if (!StringUtils.equals(Constant.SUCCESS_CODE, response.getStatusCode())) {
-            return ResponseEntityHelper.errorResponseEntity(response, requestId);
+            return ResponseService.errorResponseEntity(response, requestId);
         }
         /* Ticket set customerId reference to table Customer */
         ticketVietjetRepository.updateCustomerIdByFlightCode(customerId, reservationCode);
@@ -63,10 +65,11 @@ public class CustomerServiceImpl {
         List<Prize> prizeInfo = prizeRepository.findByCustomerId(customerId);
         Customer customerInfo = customerRepository.findById(customerId);
         ConfirmCustomerVietJet confirmCustomerVietjet = new ConfirmCustomerVietJet(customerInfo, prizeInfo, Constant.LINK_WEB_PRIZES);
-        return ResponseEntityHelper.successResponseEntity(
+        return ResponseService.successResponseEntity(
                 ApiResponseStatus.SUCCESS, confirmCustomerVietjet, requestId);
     }
 
+    @Override
     public ResponseEntity<ResponseInfo<CustomerPrizeStatus>> checkCustomerPrize(CustomerPrizeRequest request,
                                                                                 BindingResult bindingResult) {
         int customerId = request.getCustomerId();
@@ -74,16 +77,18 @@ public class CustomerServiceImpl {
         /*------------------- Validate ticket request -------------------*/
         Map<String, String> errors = ValidationUtils.validationHandler(bindingResult);
         if (errors.size() > 0)
-            return ResponseEntityHelper.validateResponseEntity(errors, requestId);
+            return ResponseService.validateResponseEntity(errors, requestId);
         /*------------------- Validate database -------------------*/
         ApiResponseStatus response =  DatabaseValidation.validateCheckPrize(request,
                 customerRepository, prizeRepository);
+
         if (!StringUtils.equals(Constant.SUCCESS_CODE, response.getStatusCode())) {
-            return ResponseEntityHelper.errorResponseEntity(response, requestId);
+            return ResponseService.errorResponseEntity(response, requestId);
         }
+
         Prize prizeInfo = prizeRepository.findByCustomerId(customerId).get(0);
         if(Boolean.TRUE.equals(prizeInfo.isUsed())){
-            return ResponseEntityHelper.successResponseEntity(ApiResponseStatus.SUCCESS,
+            return ResponseService.successResponseEntity(ApiResponseStatus.SUCCESS,
                     new CustomerPrizeStatus(
                     Boolean.TRUE,
                     Constant.CUSTOMER_PRIZE_SUCCESS,
@@ -94,31 +99,36 @@ public class CustomerServiceImpl {
                             prizeInfo.getPrizeAmount()),
                     null
             ), requestId);
-        }else{
-            return ResponseEntityHelper.successResponseEntity(ApiResponseStatus.SUCCESS,
-                    new CustomerPrizeStatus(
-                    Boolean.FALSE,
-                    Constant.PRIZE_SUCCESS_NOT_DIALED,
-                    null,
-                    Constant.LINK_WEB_PRIZES
-            ), requestId);
         }
+
+        return ResponseService.successResponseEntity(ApiResponseStatus.SUCCESS,
+                new CustomerPrizeStatus(
+                Boolean.FALSE,
+                Constant.PRIZE_SUCCESS_NOT_DIALED,
+                null,
+                Constant.LINK_WEB_PRIZES
+        ), requestId);
+
     }
 
     /* Update results prize for customer */
+    @Override
     public ResponseEntity<ResponseInfo<String>> updateCustomerPrize(InfoPrizeRequest request,
                                                                     BindingResult bindingResult){
         String requestId = request.getRequestId();
+
         /*------------------- Validate ticket request -------------------*/
         Map<String, String> errors = ValidationUtils.validationHandler(bindingResult);
         if (errors.size() > 0)
-            return ResponseEntityHelper.validateResponseEntity(errors, request.getRequestId());
+            return ResponseService.validateResponseEntity(errors, requestId);
+
         /*------------------- Validate database -------------------*/
         ApiResponseStatus response =  DatabaseValidation.validateUpdatePrize(request,
                 customerRepository, prizeRepository);
         if (!StringUtils.equals(Constant.SUCCESS_CODE, response.getStatusCode())) {
-            return ResponseEntityHelper.errorResponseEntity(response, requestId);
+            return ResponseService.errorResponseEntity(response, requestId);
         }
-        return ResponseEntityHelper.successResponseEntity(requestId);
+
+        return ResponseService.successResponseEntity(requestId);
     }
 }

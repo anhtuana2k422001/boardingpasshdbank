@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
+import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JsonUtils {
@@ -28,7 +30,7 @@ public class JsonUtils {
             return objectMapper.readValue(jsonString, valueType);
         } catch (Exception e){
             LOGGER.error("Error to Json String: ", e);
-            throw new IllegalStateException("Error to Json String");
+            return null;
         }
     }
 }

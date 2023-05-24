@@ -1,13 +1,12 @@
 package vn.com.hdbank.boardingpasshdbank;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
+@Slf4j
 public class BoardingPassHdBankApplication {
-	private static final Logger LOGGER = LoggerFactory.getLogger(BoardingPassHdBankApplication.class);
 	public static void main(String[] args) {
 		SpringApplication.run(BoardingPassHdBankApplication.class, args);
 		LOGGER.info("Run App Successful");

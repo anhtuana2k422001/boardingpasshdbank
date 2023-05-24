@@ -1,73 +1,81 @@
 package vn.com.hdbank.boardingpasshdbank.controller;
 
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import vn.com.hdbank.boardingpasshdbank.common.Constant;
+import vn.com.hdbank.boardingpasshdbank.common.ResponseController;
+import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 import vn.com.hdbank.boardingpasshdbank.model.response.ConfirmCustomerVietJet;
 import vn.com.hdbank.boardingpasshdbank.model.response.CustomerPrizeStatus;
 import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.CustomerPrizeRequest;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.InfoPrizeRequest;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketConfirmRequest;
-import vn.com.hdbank.boardingpasshdbank.service.impl.CustomerServiceImpl;
+import vn.com.hdbank.boardingpasshdbank.service.CustomerService;
 import vn.com.hdbank.boardingpasshdbank.utils.MdcUtils;
 import vn.com.hdbank.boardingpasshdbank.utils.JsonUtils;
 
 
 @RestController
 @RequestMapping(path = "/api/customer")
+@Slf4j
 public class CustomerController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CustomerController.class);
     @Autowired
-    CustomerServiceImpl customerService;
+    CustomerService customerService;
 
     /* API 2: confirm customer DatabaseValidation */
     @PostMapping("/confirm-customer-vietjet")
     public ResponseEntity<ResponseInfo<ConfirmCustomerVietJet>> confirmCustomerVietJet(@Valid @RequestBody TicketConfirmRequest request,
                                                                                        BindingResult bindingResult){
-        //ValidationUtils.handleValidationErrors(bindingResult); /*validate*/
-        MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
-        String requestLog = JsonUtils.toJsonString(request);
-        LOGGER.info(Constant.REQUEST, requestLog); /* Log request */
-        var responseEntity = customerService.confirmCustomerVietJet(request, bindingResult);
-        String responseLog = JsonUtils.toJsonString(responseEntity);
-        LOGGER.info(Constant.RESPONSE, responseLog);
-        MDC.clear();
-        return responseEntity;
+        try{
+            MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
+            LOGGER.info(Constant.REQUEST, JsonUtils.toJsonString(request)); /* Log request */
+            var responseEntity = customerService.confirmCustomerVietJet(request, bindingResult);
+            LOGGER.info(Constant.RESPONSE, JsonUtils.toJsonString(responseEntity));
+            return responseEntity;
+        }catch (CustomException e){
+            LOGGER.info(Constant.FORMAT_EXCEPTION, e.getStatusCode(), e.getStatusMessage());
+            return ResponseController.exceptionResponseEntity(e.getApiResponseStatus(), request.getRequestId());
+        } finally {
+            MDC.clear();
+        }
     }
 
     /* API 3 : Check customer prize status  */
     @PostMapping("/check-customer-prize")
     public ResponseEntity<ResponseInfo<CustomerPrizeStatus>> checkCustomerPrize(@Valid @RequestBody CustomerPrizeRequest request,
                                                                                 BindingResult bindingResult){
-        MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
-        String requestLog = JsonUtils.toJsonString(request);
-        LOGGER.info(Constant.REQUEST, requestLog); /* Log request */
-        var responseEntity =  customerService.checkCustomerPrize(request, bindingResult);
-        String responseLog = JsonUtils.toJsonString(responseEntity);
-        LOGGER.info(Constant.RESPONSE, responseLog);
-        MDC.clear();
-        return responseEntity;
+        try{
+            MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
+            LOGGER.info(Constant.REQUEST, JsonUtils.toJsonString(request)); /* Log request */
+            var responseEntity =  customerService.checkCustomerPrize(request, bindingResult);
+            LOGGER.info(Constant.RESPONSE, JsonUtils.toJsonString(responseEntity));
+            return responseEntity;
+        }catch (CustomException e){
+            LOGGER.info(Constant.FORMAT_EXCEPTION, e.getStatusCode(), e.getStatusMessage());
+            return ResponseController.exceptionResponseEntity(e.getApiResponseStatus(), request.getRequestId());
+        }
     }
 
     /* API 4 : Update customer prize  */
     @PostMapping("/update-customer-prize")
     public ResponseEntity<ResponseInfo<String>> updateCustomerPrize(@Valid @RequestBody InfoPrizeRequest request,
                                                                          BindingResult bindingResult) {
-        MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
-        String requestLog = JsonUtils.toJsonString(request);
-        LOGGER.info(Constant.REQUEST, requestLog); /* Log request */
-        var responseEntity = customerService.updateCustomerPrize(request, bindingResult);
-        String responseLog = JsonUtils.toJsonString(responseEntity);
-        LOGGER.info(Constant.RESPONSE, responseLog);
-        MDC.clear();
-        return responseEntity;
+        try{
+            MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
+            LOGGER.info(Constant.REQUEST, JsonUtils.toJsonString(request)); /* Log request */
+            var responseEntity = customerService.updateCustomerPrize(request, bindingResult);
+            LOGGER.info(Constant.RESPONSE, JsonUtils.toJsonString(responseEntity));
+            return responseEntity;
+        }catch (CustomException e){
+            LOGGER.info(Constant.FORMAT_EXCEPTION, e.getStatusCode(), e.getStatusMessage());
+            return ResponseController.exceptionResponseEntity(e.getApiResponseStatus(), request.getRequestId());
+        }
     }
 
 }

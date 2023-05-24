@@ -19,7 +19,8 @@ public enum ApiResponseStatus {
     DATABASE_ERROR("015", "Lỗi cơ sở dữ liệu"), /*Database error*/
     PRIZE_CODE_ERROR("016", "Mã dự thưởng của khách hàng không chính xác"), /*Customer's prize code is incorrect*/
     USED_PRIZE_CODE("017", "Khách hàng đã được cập phần thưởng trước đó"), /*The customer has already received the reward before*/
-    USED_TICKET_ERROR("018", "Khách hàng không hợp lệ, vé đã được sử dụng cho khách hàng khác") /*Invalid customer, ticket already used*/
+    USED_TICKET_ERROR("018", "Khách hàng không hợp lệ, vé đã được sử dụng cho khách hàng khác"), /*Invalid customer, ticket already used*/
+    RESPONSE_API_ERROR("019", "Dữ liệu từ Api trả về không đúng") /*Data from Api returned incorrect*/
     ;
 
     private final String statusCode;

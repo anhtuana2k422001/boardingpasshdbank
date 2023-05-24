@@ -14,24 +14,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
 @RestControllerAdvice
-
 public class GlobalExceptionHandler {
     private static final Logger LOGGER  = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(CustomException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ResponseError> handleCustomException(CustomException ex) {
-        ResponseError response = ResponseError.builder()
-                .code(ex.getStatusCode())
-                .message(ex.getStatusMessage())
-                .build();
-        LOGGER.error(Constant.ERROR, ex);
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @ExceptionHandler(ApiException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<ResponseError> handleApiException(ApiException ex) {
         ResponseError response = ResponseError.builder()
                 .code(ex.getStatusCode())
                 .message(ex.getStatusMessage())

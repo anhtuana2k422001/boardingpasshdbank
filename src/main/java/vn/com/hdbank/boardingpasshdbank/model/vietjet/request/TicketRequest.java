@@ -2,10 +2,7 @@ package vn.com.hdbank.boardingpasshdbank.model.vietjet.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 import vn.com.hdbank.boardingpasshdbank.common.Validate;
 

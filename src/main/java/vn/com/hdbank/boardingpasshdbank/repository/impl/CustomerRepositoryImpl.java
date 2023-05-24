@@ -1,10 +1,12 @@
 package vn.com.hdbank.boardingpasshdbank.repository.impl;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
+import vn.com.hdbank.boardingpasshdbank.common.Constant;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 import vn.com.hdbank.boardingpasshdbank.model.entity.Customer;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketConfirmRequest;
@@ -15,8 +17,8 @@ import java.util.List;
 
 @Repository
 @AllArgsConstructor
+@Slf4j
 public class CustomerRepositoryImpl implements CustomerRepository {
-
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -25,6 +27,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         try {
             jdbcTemplate.update(sql, customerType, id);
         } catch (Exception e) {
+            LOGGER.error(Constant.ERROR, e);
             throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
         }
     }
@@ -36,6 +39,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
             List<Customer> customers = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Customer.class), id);
             return customers.isEmpty() ? null : customers.get(0);
         }catch (Exception e) {
+            LOGGER.error(Constant.ERROR, e);
             throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
         }
     }
@@ -47,6 +51,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
             Integer count = jdbcTemplate.queryForObject(sql, Integer.class, request.getReservationCode(), request.getCustomerId());
             return count != null && count > 0;
         } catch (Exception e) {
+            LOGGER.error(Constant.ERROR, e);
             throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
         }
     }

@@ -9,7 +9,7 @@ import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
 import java.util.Map;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ResponseEntityHelper {
+public class ResponseService {
     public static <T> ResponseEntity<ResponseInfo<T>> successResponseEntity(ApiResponseStatus apiResponseStatus,
                                                                             T data, String requestId) {
         ResponseInfo<T> response = ResponseInfo.<T>builder()

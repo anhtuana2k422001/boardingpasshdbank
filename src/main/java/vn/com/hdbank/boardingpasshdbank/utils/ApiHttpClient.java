@@ -15,7 +15,6 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
-import vn.com.hdbank.boardingpasshdbank.exception.ApiException;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 
 import java.nio.charset.StandardCharsets;
@@ -30,6 +29,7 @@ public class ApiHttpClient {
             request.setHeader("Content-Type", "application/json");
 
             String jsonBody = String.format("{\"username\":\"%s\",\"password\":\"%s\"}", username, password);
+
             request.setEntity(new StringEntity(jsonBody));
 
             CloseableHttpResponse response = httpClient.execute(request);
@@ -43,7 +43,7 @@ public class ApiHttpClient {
             }
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage());
-            throw new ApiException(ApiResponseStatus.EXTERNAL_API_ERROR);
+            throw new CustomException(ApiResponseStatus.EXTERNAL_API_ERROR);
         }
 
         return null;
@@ -62,7 +62,7 @@ public class ApiHttpClient {
             }
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage());
-            throw new ApiException(ApiResponseStatus.EXTERNAL_API_ERROR);
+            throw new CustomException(ApiResponseStatus.EXTERNAL_API_ERROR);
         }
         return null;
     }
@@ -83,7 +83,7 @@ public class ApiHttpClient {
             }
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage());
-            throw new ApiException(ApiResponseStatus.EXTERNAL_API_ERROR);
+            throw new CustomException(ApiResponseStatus.EXTERNAL_API_ERROR);
         }
         return null;
     }
