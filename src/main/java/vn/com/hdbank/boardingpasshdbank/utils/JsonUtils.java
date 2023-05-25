@@ -4,23 +4,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
-import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
+import vn.com.hdbank.boardingpasshdbank.common.Constant;
+
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Slf4j
 public class JsonUtils {
-    private static final Logger LOGGER  = LoggerFactory.getLogger(JsonUtils.class);
     private static final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
-
 
     public static String toJsonString(Object object) {
         try {
             return objectMapper.writeValueAsString(object);
         } catch (Exception e){
-            LOGGER.error("Error to Json String: ", e);
+            LOGGER.error(Constant.ERROR_JSON_TO_STRING, e);
             return StringUtils.EMPTY;
         }
     }
@@ -29,7 +27,7 @@ public class JsonUtils {
         try {
             return objectMapper.readValue(jsonString, valueType);
         } catch (Exception e){
-            LOGGER.error("Error to Json String: ", e);
+            LOGGER.error(Constant.ERROR_FROM_JSON_STRING, e);
             return null;
         }
     }

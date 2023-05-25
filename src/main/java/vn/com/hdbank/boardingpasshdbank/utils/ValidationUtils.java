@@ -2,16 +2,17 @@ package vn.com.hdbank.boardingpasshdbank.utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import vn.com.hdbank.boardingpasshdbank.common.Constant;
+
 import java.util.HashMap;
 import java.util.Map;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Slf4j
 public class ValidationUtils {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ValidationUtils.class);
 
     public static Map<String, String> validationHandler(BindingResult bindingResult) {
         Map<String, String> errors = new HashMap<>();
@@ -19,7 +20,7 @@ public class ValidationUtils {
             for (FieldError error : bindingResult.getFieldErrors()) {
                 errors.put(error.getField(), error.getDefaultMessage());
             }
-            LOGGER.error("Validation errors: {}", errors);
+            LOGGER.error(Constant.ERROR_VALIDATE, errors);
         }
         return errors;
     }

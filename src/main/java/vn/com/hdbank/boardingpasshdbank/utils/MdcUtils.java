@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
+import vn.com.hdbank.boardingpasshdbank.common.Constant;
 
 import java.util.UUID;
 
@@ -13,6 +14,6 @@ public class MdcUtils {
         if (StringUtils.isEmpty(requestId)) {
             requestId = UUID.randomUUID().toString();
         }
-        MDC.put("requestId", requestId);
+        MDC.put(Constant.REQUEST_ID, requestId);
     }
 }

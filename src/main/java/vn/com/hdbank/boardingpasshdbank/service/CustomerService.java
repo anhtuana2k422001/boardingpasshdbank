@@ -10,10 +10,10 @@ import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.InfoPrizeRequest;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketConfirmRequest;
 
 public interface CustomerService {
-    ResponseEntity<ResponseInfo<ConfirmCustomerVietJet>>
-    confirmCustomerVietJet(TicketConfirmRequest request, BindingResult bindingResult);
-    ResponseEntity<ResponseInfo<CustomerPrizeStatus>>
-    checkCustomerPrize(CustomerPrizeRequest request, BindingResult bindingResult);
-    ResponseEntity<ResponseInfo<String>>
-    updateCustomerPrize(InfoPrizeRequest request, BindingResult bindingResult);
+    ResponseInfo<ConfirmCustomerVietJet> confirmCustomerVietJet(TicketConfirmRequest request,
+                                                                BindingResult bindingResult);
+    ResponseInfo<CustomerPrizeStatus> checkCustomerPrize(CustomerPrizeRequest request,
+                                                         BindingResult bindingResult);
+    ResponseInfo<String> updateCustomerPrize(InfoPrizeRequest request,
+                                             BindingResult bindingResult);
 }

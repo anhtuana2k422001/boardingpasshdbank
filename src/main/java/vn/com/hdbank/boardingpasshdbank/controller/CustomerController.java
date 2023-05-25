@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import vn.com.hdbank.boardingpasshdbank.common.Constant;
@@ -30,51 +29,49 @@ public class CustomerController {
 
     /* API 2: confirm customer DatabaseValidation */
     @PostMapping("/confirm-customer-vietjet")
-    public ResponseEntity<ResponseInfo<ConfirmCustomerVietJet>> confirmCustomerVietJet(@Valid @RequestBody TicketConfirmRequest request,
-                                                                                       BindingResult bindingResult){
+    public org.springframework.http.ResponseEntity<ResponseInfo<ConfirmCustomerVietJet>> confirmCustomerVietJet(@Valid @RequestBody TicketConfirmRequest request,
+                                                                                                                BindingResult bindingResult){
         try{
             MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
             LOGGER.info(Constant.REQUEST, JsonUtils.toJsonString(request)); /* Log request */
-            var responseEntity = customerService.confirmCustomerVietJet(request, bindingResult);
-            LOGGER.info(Constant.RESPONSE, JsonUtils.toJsonString(responseEntity));
-            return responseEntity;
+            var response = customerService.confirmCustomerVietJet(request, bindingResult);
+            LOGGER.info(Constant.RESPONSE, JsonUtils.toJsonString(response));
+            return ResponseController.responseEntity(response);
         }catch (CustomException e){
-            LOGGER.info(Constant.FORMAT_EXCEPTION, e.getStatusCode(), e.getStatusMessage());
-            return ResponseController.exceptionResponseEntity(e.getApiResponseStatus(), request.getRequestId());
-        } finally {
-            MDC.clear();
+            LOGGER.info(Constant.FORMAT_LOG, e.getStatusCode(), e.getStatusMessage());
+            return ResponseController.responseEntity(e.getApiResponseStatus(), request.getRequestId());
         }
     }
 
     /* API 3 : Check customer prize status  */
     @PostMapping("/check-customer-prize")
-    public ResponseEntity<ResponseInfo<CustomerPrizeStatus>> checkCustomerPrize(@Valid @RequestBody CustomerPrizeRequest request,
-                                                                                BindingResult bindingResult){
+    public org.springframework.http.ResponseEntity<ResponseInfo<CustomerPrizeStatus>> checkCustomerPrize(@Valid @RequestBody CustomerPrizeRequest request,
+                                                                                                         BindingResult bindingResult){
         try{
             MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
             LOGGER.info(Constant.REQUEST, JsonUtils.toJsonString(request)); /* Log request */
-            var responseEntity =  customerService.checkCustomerPrize(request, bindingResult);
-            LOGGER.info(Constant.RESPONSE, JsonUtils.toJsonString(responseEntity));
-            return responseEntity;
+            var response =  customerService.checkCustomerPrize(request, bindingResult);
+            LOGGER.info(Constant.RESPONSE, JsonUtils.toJsonString(response));
+            return ResponseController.responseEntity(response);
         }catch (CustomException e){
-            LOGGER.info(Constant.FORMAT_EXCEPTION, e.getStatusCode(), e.getStatusMessage());
-            return ResponseController.exceptionResponseEntity(e.getApiResponseStatus(), request.getRequestId());
+            LOGGER.info(Constant.FORMAT_LOG, e.getStatusCode(), e.getStatusMessage());
+            return ResponseController.responseEntity(e.getApiResponseStatus(), request.getRequestId());
         }
     }
 
     /* API 4 : Update customer prize  */
     @PostMapping("/update-customer-prize")
-    public ResponseEntity<ResponseInfo<String>> updateCustomerPrize(@Valid @RequestBody InfoPrizeRequest request,
-                                                                         BindingResult bindingResult) {
+    public org.springframework.http.ResponseEntity<ResponseInfo<String>> updateCustomerPrize(@Valid @RequestBody InfoPrizeRequest request,
+                                                                                             BindingResult bindingResult) {
         try{
             MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
             LOGGER.info(Constant.REQUEST, JsonUtils.toJsonString(request)); /* Log request */
-            var responseEntity = customerService.updateCustomerPrize(request, bindingResult);
-            LOGGER.info(Constant.RESPONSE, JsonUtils.toJsonString(responseEntity));
-            return responseEntity;
+            var response = customerService.updateCustomerPrize(request, bindingResult);
+            LOGGER.info(Constant.RESPONSE, JsonUtils.toJsonString(response));
+            return ResponseController.responseEntity(response);
         }catch (CustomException e){
-            LOGGER.info(Constant.FORMAT_EXCEPTION, e.getStatusCode(), e.getStatusMessage());
-            return ResponseController.exceptionResponseEntity(e.getApiResponseStatus(), request.getRequestId());
+            LOGGER.info(Constant.FORMAT_LOG, e.getStatusCode(), e.getStatusMessage());
+            return ResponseController.responseEntity(e.getApiResponseStatus(), request.getRequestId());
         }
     }
 

@@ -1,8 +1,8 @@
 package vn.com.hdbank.boardingpasshdbank.service.impl;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.common.ApiUrls;
@@ -30,34 +30,40 @@ import java.util.Map;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class TicketVietJetServiceImpl implements TicketVietJetService {
     private final UserAuthVietJet userAuthVietJet;
     private final TicketVietJetRepository ticketVietjetRepository;
 
     /* Case 1: Service Self-entering information */
     @Override
-    public ResponseEntity<ResponseInfo<TicketVietJetInformation>> checkTicketVietJet(TicketRequest request,
-                                                                                     BindingResult bindingResult) {
+    public ResponseInfo<TicketVietJetInformation> checkTicketVietJet(TicketRequest request,
+                                                                     BindingResult bindingResult) {
         String requestId = request.getRequestId();
         String flightCode = request.getFlightCode();
         String reservationCode = request.getReservationCode();
         String seats = request.getSeats();
+
         /*------------------- Validate ticket request ------------------- */
         Map<String, String> errors = ValidationUtils.validationHandler(bindingResult);
         if (errors.size() > 0)
-            return ResponseService.validateResponseEntity(errors, request.getRequestId());
+            return ResponseService.validateResponse(errors, request.getRequestId());
 
-        /*------------------- Validate Access Api -------------------*/
-        ApiResponseStatus responseApi =  ApiVietJetValidation.validateApiTickKet(request,
+        /*------------------- Validate Api -------------------*/
+        ApiResponseStatus apiResponseStatus =  ApiVietJetValidation.validateApiTickKet(request,
                 userAuthVietJet.getUserName(), userAuthVietJet.getPassWord());
-        if (!StringUtils.equals(Constant.SUCCESS_CODE, responseApi.getStatusCode())) {
-            return ResponseService.errorResponseEntity(responseApi, requestId);
+
+        if(!ApiResponseStatus.SUCCESS.equals(apiResponseStatus)){
+            LOGGER.info(Constant.FORMAT_LOG, apiResponseStatus.getStatusCode(), apiResponseStatus.getStatusMessage());
+            return ResponseService.errorResponse(apiResponseStatus, requestId);
         }
 
         /*------------------- Validate database -------------------*/
-        ApiResponseStatus responseDb = DatabaseValidation.validateTicket(reservationCode, ticketVietjetRepository);
-        if (!StringUtils.equals(Constant.SUCCESS_CODE, responseDb.getStatusCode())) {
-            return ResponseService.errorResponseEntity(responseDb, requestId);
+        ApiResponseStatus apiResponseStatusDb = DatabaseValidation.validateTicket(reservationCode, ticketVietjetRepository);
+
+        if(!ApiResponseStatus.SUCCESS.equals(apiResponseStatusDb)){
+            LOGGER.info(Constant.FORMAT_LOG, apiResponseStatusDb.getStatusCode(), apiResponseStatusDb.getStatusMessage());
+            return ResponseService.errorResponse(apiResponseStatusDb, requestId);
         }
 
         String jwtResponse = ApiHttpClient.getToken(ApiUrls.AUTHENTICATION_URL, userAuthVietJet.getUserName(), userAuthVietJet.getPassWord());
@@ -68,17 +74,17 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
             /* Handle ticKet response and save */
             TicketVietJetInformation ticketVietjetInformation = handleTicketResponse(
                     ticKet, flightCode, reservationCode, seats);
-            return ResponseService.successResponseEntity(ApiResponseStatus.SUCCESS,
+            return ResponseService.successResponse(ApiResponseStatus.SUCCESS,
                     ticketVietjetInformation, requestId);
         }
 
-        return ResponseService.errorResponseEntity(ApiResponseStatus.RESPONSE_API_ERROR, requestId);
+        return ResponseService.errorResponse(ApiResponseStatus.RESPONSE_API_ERROR, requestId);
     }
 
     /* Case 2: Service Scan Boarding pass */
     @Override
-    public ResponseEntity<ResponseInfo<TicketVietJetInformation>> checkScanTicketVietJet(TicketScanRequest request,
-                                                                                         BindingResult bindingResult) {
+    public ResponseInfo<TicketVietJetInformation> checkScanTicketVietJet(TicketScanRequest request,
+                                                                         BindingResult bindingResult) {
         String requestId = request.getRequestId();
         String flightCode = request.getFlightCode();
         String reservationCode = request.getReservationCode();
@@ -87,19 +93,23 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
         /*------------------- Validate ticket request -------------------*/
         Map<String, String> errors = ValidationUtils.validationHandler(bindingResult);
         if (errors.size() > 0)
-            return ResponseService.validateResponseEntity(errors, request.getRequestId());
+            return ResponseService.validateResponse(errors, request.getRequestId());
 
-        /*------------------- Validate Access Api -------------------*/
-        ApiResponseStatus responseApi = ApiVietJetValidation.validateApiTickKetScan(request,
+        /*------------------- Validate Api -------------------*/
+        ApiResponseStatus apiResponseStatus = ApiVietJetValidation.validateApiTickKetScan(request,
                 userAuthVietJet.getUserName(), userAuthVietJet.getPassWord());
-        if (!StringUtils.equals(Constant.SUCCESS_CODE, responseApi.getStatusCode())) {
-            return ResponseService.errorResponseEntity(responseApi, requestId);
+
+        if(!ApiResponseStatus.SUCCESS.equals(apiResponseStatus)){
+            LOGGER.info(Constant.FORMAT_LOG, apiResponseStatus.getStatusCode(), apiResponseStatus.getStatusMessage());
+            return ResponseService.errorResponse(apiResponseStatus, requestId);
         }
 
         /*-------------------  Validate database -------------------*/
-        ApiResponseStatus responseDb = DatabaseValidation.validateTicket(reservationCode, ticketVietjetRepository);
-        if (!StringUtils.equals(Constant.SUCCESS_CODE, responseDb.getStatusCode())) {
-            return ResponseService.errorResponseEntity(responseDb, requestId);
+        ApiResponseStatus apiResponseStatusDb = DatabaseValidation.validateTicket(reservationCode, ticketVietjetRepository);
+
+        if(!ApiResponseStatus.SUCCESS.equals(apiResponseStatusDb)){
+            LOGGER.info(Constant.FORMAT_LOG, apiResponseStatusDb.getStatusCode(), apiResponseStatusDb.getStatusMessage());
+            return ResponseService.errorResponse(apiResponseStatusDb, requestId);
         }
 
         String jwtResponse = ApiHttpClient.getToken(ApiUrls.AUTHENTICATION_URL,
@@ -111,16 +121,16 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
            /* Handle ticKet response and save */
             TicketVietJetInformation ticketVietjetInformation = handleTicketResponse(
                     ticKet, flightCode, reservationCode, seats);
-           return ResponseService.successResponseEntity(ApiResponseStatus.SUCCESS,
+           return ResponseService.successResponse(ApiResponseStatus.SUCCESS,
                    ticketVietjetInformation, requestId);
         }
 
-        return ResponseService.errorResponseEntity(ApiResponseStatus.RESPONSE_API_ERROR, requestId);
+        return ResponseService.errorResponse(ApiResponseStatus.RESPONSE_API_ERROR, requestId);
     }
 
     /* Return ticket information and save database */
     private TicketVietJetInformation handleTicketResponse(TicKet ticKet, String flightCode,
-                                                      String reservationCode, String seats){
+                                                          String reservationCode, String seats){
         Passenger firstPassenger = ticKet.getPassengers().get(0);
         Journey firstJourney = ticKet.getJourneys().get(0);
         List<Charge> charges = ticKet.getCharges();

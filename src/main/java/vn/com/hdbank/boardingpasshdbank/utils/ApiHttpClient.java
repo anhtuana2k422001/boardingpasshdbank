@@ -2,6 +2,7 @@ package vn.com.hdbank.boardingpasshdbank.utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -12,15 +13,14 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
+import vn.com.hdbank.boardingpasshdbank.common.Constant;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 
 import java.nio.charset.StandardCharsets;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Slf4j
 public class ApiHttpClient {
-    private static final Logger LOGGER  = LoggerFactory.getLogger(ApiHttpClient.class);
     private static final CloseableHttpClient httpClient = HttpClients.createDefault();
 
     public static String getToken(String url, String username, String password) {
@@ -29,18 +29,23 @@ public class ApiHttpClient {
             request.setHeader("Content-Type", "application/json");
 
             String jsonBody = String.format("{\"username\":\"%s\",\"password\":\"%s\"}", username, password);
-
             request.setEntity(new StringEntity(jsonBody));
+            LOGGER.info(Constant.REQUEST, request);   /* Log request */
 
             CloseableHttpResponse response = httpClient.execute(request);
+            LOGGER.info(Constant.RESPONSE, response);   /* Log response */
+
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_FORBIDDEN) {
                 LOGGER.error(ApiResponseStatus.EXTERNAL_API_ERROR.getStatusMessage());
                 throw new CustomException(ApiResponseStatus.EXTERNAL_API_ERROR);
             }
+
             HttpEntity entity = response.getEntity();
             if (entity != null) {
+                LOGGER.info(Constant.RESPONSE, response);   /* Log response */
                 return EntityUtils.toString(entity);
             }
+
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage());
             throw new CustomException(ApiResponseStatus.EXTERNAL_API_ERROR);
@@ -53,8 +58,10 @@ public class ApiHttpClient {
         try {
             HttpUriRequest request = new HttpGet(url);
             request.setHeader("Authorization", "Bearer " + jwt);
+            //LOGGER.info(Constant.REQUEST, JsonUtils.toJsonString(request));   /* Log request */
 
             try (CloseableHttpResponse response = httpClient.execute(request)) {
+                //LOGGER.info(Constant.RESPONSE, response);   /* Log response */
                 HttpEntity entity = response.getEntity();
                 if (entity != null) {
                     return EntityUtils.toString(entity);
@@ -75,8 +82,11 @@ public class ApiHttpClient {
 
             StringEntity entity = new StringEntity(requestBody);
             request.setEntity(entity);
+            LOGGER.info(Constant.REQUEST, request);   /* Log request */
 
             CloseableHttpResponse response = httpClient.execute(request);
+            LOGGER.info(Constant.RESPONSE, response);   /* Log response */
+
             HttpEntity responseEntity = response.getEntity();
             if (responseEntity != null) {
                 return EntityUtils.toString(responseEntity, StandardCharsets.UTF_8);
