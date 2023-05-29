@@ -2,7 +2,6 @@ package vn.com.hdbank.boardingpasshdbank.controller;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +28,8 @@ public class CustomerController {
 
     /* API 2: confirm customer DatabaseValidation */
     @PostMapping("/confirm-customer-vietjet")
-    public org.springframework.http.ResponseEntity<ResponseInfo<ConfirmCustomerVietJet>> confirmCustomerVietJet(@Valid @RequestBody TicketConfirmRequest request,
-                                                                                                                BindingResult bindingResult){
+    public org.springframework.http.ResponseEntity<ResponseInfo<ConfirmCustomerVietJet>>
+    confirmCustomerVietJet(@Valid @RequestBody TicketConfirmRequest request, BindingResult bindingResult){
         try{
             MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
             LOGGER.info(Constant.REQUEST, JsonUtils.toJsonString(request)); /* Log request */
@@ -45,8 +44,8 @@ public class CustomerController {
 
     /* API 3 : Check customer prize status  */
     @PostMapping("/check-customer-prize")
-    public org.springframework.http.ResponseEntity<ResponseInfo<CustomerPrizeStatus>> checkCustomerPrize(@Valid @RequestBody CustomerPrizeRequest request,
-                                                                                                         BindingResult bindingResult){
+    public org.springframework.http.ResponseEntity<ResponseInfo<CustomerPrizeStatus>>
+    checkCustomerPrize(@Valid @RequestBody CustomerPrizeRequest request, BindingResult bindingResult){
         try{
             MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
             LOGGER.info(Constant.REQUEST, JsonUtils.toJsonString(request)); /* Log request */
@@ -61,8 +60,8 @@ public class CustomerController {
 
     /* API 4 : Update customer prize  */
     @PostMapping("/update-customer-prize")
-    public org.springframework.http.ResponseEntity<ResponseInfo<String>> updateCustomerPrize(@Valid @RequestBody InfoPrizeRequest request,
-                                                                                             BindingResult bindingResult) {
+    public org.springframework.http.ResponseEntity<ResponseInfo<String>>
+    updateCustomerPrize(@Valid @RequestBody InfoPrizeRequest request, BindingResult bindingResult) {
         try{
             MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
             LOGGER.info(Constant.REQUEST, JsonUtils.toJsonString(request)); /* Log request */

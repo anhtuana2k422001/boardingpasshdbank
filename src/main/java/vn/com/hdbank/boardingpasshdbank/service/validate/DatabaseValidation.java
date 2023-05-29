@@ -4,8 +4,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.common.Constant;
-import vn.com.hdbank.boardingpasshdbank.model.entity.Customer;
-import vn.com.hdbank.boardingpasshdbank.model.entity.TicketVietJet;
+import vn.com.hdbank.boardingpasshdbank.entity.Customer;
+import vn.com.hdbank.boardingpasshdbank.entity.TicketVietJet;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.*;
 import vn.com.hdbank.boardingpasshdbank.repository.CustomerRepository;
 import vn.com.hdbank.boardingpasshdbank.repository.PrizeRepository;
@@ -38,7 +38,8 @@ public class DatabaseValidation {
             return ApiResponseStatus.CUSTOMER_NOT_VIET_JET;
         }
 
-        if (!ticketVietjetRepository.checkExistsByFlightCode(reservationCode)) {
+        boolean exists = ticketVietjetRepository.checkExistsByFlightCode(reservationCode);
+        if (!exists) {
             return ApiResponseStatus.INVALID_TICKET;
         }
 

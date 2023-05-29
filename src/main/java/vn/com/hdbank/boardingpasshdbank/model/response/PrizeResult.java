@@ -12,5 +12,5 @@ public class PrizeResult {
     private String statusInformation;
     private String bankAccount;
     private String balanceAfterTransaction;
-    private  double totalAmount;
+    private double totalAmount;
 }

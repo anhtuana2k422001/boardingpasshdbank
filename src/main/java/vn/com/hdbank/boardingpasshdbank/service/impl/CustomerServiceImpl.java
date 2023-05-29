@@ -7,8 +7,8 @@ import org.springframework.validation.BindingResult;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.common.Constant;
 import vn.com.hdbank.boardingpasshdbank.common.ResponseService;
-import vn.com.hdbank.boardingpasshdbank.model.entity.Customer;
-import vn.com.hdbank.boardingpasshdbank.model.entity.Prize;
+import vn.com.hdbank.boardingpasshdbank.entity.Customer;
+import vn.com.hdbank.boardingpasshdbank.entity.Prize;
 import vn.com.hdbank.boardingpasshdbank.model.response.ConfirmCustomerVietJet;
 import vn.com.hdbank.boardingpasshdbank.model.response.CustomerPrizeStatus;
 import vn.com.hdbank.boardingpasshdbank.model.response.PrizeResult;
@@ -99,23 +99,25 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         Prize prizeInfo = prizeRepository.findByCustomerId(customerId).get(0);
-        if(Boolean.TRUE.equals(prizeInfo.isUsed())){
+        if (Boolean.TRUE.equals(prizeInfo.isUsed())) {
             return ResponseService.successResponse(ApiResponseStatus.CUSTOMER_PRIZE_SUCCESS,
-                    new CustomerPrizeStatus(new PrizeResult(
-                            Constant.VIET_JET_LUCKY_CONTENT,
-                            Constant.BANK_ACCOUNT,
-                            Constant.BALANCE_AFTER_TRANSACTION,
-                            prizeInfo.getPrizeAmount().doubleValue()),
-                    null
-            ), requestId);
+                    CustomerPrizeStatus.builder()
+                            .prizeResult(
+                                    PrizeResult.builder()
+                                            .statusInformation(Constant.VIET_JET_LUCKY_CONTENT)
+                                            .bankAccount(Constant.BANK_ACCOUNT)
+                                            .balanceAfterTransaction(Constant.BALANCE_AFTER_TRANSACTION)
+                                            .totalAmount(prizeInfo.getPrizeAmount().doubleValue()).build())
+                            .linkWebViewPrizes(null).build()
+                    , requestId);
         }
 
         return ResponseService.successResponse(ApiResponseStatus.PRIZE_SUCCESS_NOT_DIALED,
-                new CustomerPrizeStatus(
-                null,
-                Constant.LINK_WEB_PRIZES
-        ), requestId);
-
+                CustomerPrizeStatus.builder()
+                        .prizeResult(null)
+                        .linkWebViewPrizes(Constant.LINK_WEB_PRIZES)
+                        .build()
+                , requestId);
     }
 
     /* Update results prize for customer */

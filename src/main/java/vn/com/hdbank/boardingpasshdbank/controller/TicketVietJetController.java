@@ -26,8 +26,8 @@ public class TicketVietJetController {
     /* API 1: check-flight-ticketVietJet */
     /* Case 1: Self-entering information */
     @PostMapping("/check-flight-ticket")
-    public org.springframework.http.ResponseEntity<ResponseInfo<TicketVietJetInformation>> checkInformationTicket(@Valid @RequestBody TicketRequest request,
-                                                                                                                  BindingResult bindingResult) {
+    public org.springframework.http.ResponseEntity<ResponseInfo<TicketVietJetInformation>>
+    checkInformationTicket(@Valid @RequestBody TicketRequest request, BindingResult bindingResult) {
         try{
             MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
             LOGGER.info(Constant.REQUEST, JsonUtils.toJsonString(request)); /* Log request */
@@ -42,7 +42,8 @@ public class TicketVietJetController {
 
     /* Case 2: Scan Boarding pass */
     @PostMapping("/check-flight-ticket-scan")
-    public org.springframework.http.ResponseEntity<ResponseInfo<TicketVietJetInformation>> checkScanInformationTicket(@Valid @RequestBody TicketScanRequest request, BindingResult bindingResult) {
+    public org.springframework.http.ResponseEntity<ResponseInfo<TicketVietJetInformation>>
+    checkScanInformationTicket(@Valid @RequestBody TicketScanRequest request, BindingResult bindingResult) {
         try{
             MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
             LOGGER.info(Constant.REQUEST, JsonUtils.toJsonString(request)); /* Log request */
@@ -54,4 +55,5 @@ public class TicketVietJetController {
             return ResponseController.responseEntity(e.getApiResponseStatus(), request.getRequestId());
         }
     }
+
 }

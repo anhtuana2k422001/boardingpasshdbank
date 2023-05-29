@@ -13,7 +13,6 @@ import vn.com.hdbank.boardingpasshdbank.utils.ApiHttpClient;
 import vn.com.hdbank.boardingpasshdbank.utils.JsonUtils;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApiVietJet {
@@ -32,7 +31,7 @@ public class ApiVietJet {
                 return ApiHttpClient.executeGetRequest(passengerVietjetUri.toString(), jwt);
             }
             return null;
-        } catch (URISyntaxException e) {
+        } catch (Exception e) {
             return StringUtils.EMPTY;
         }
     }
@@ -54,8 +53,9 @@ public class ApiVietJet {
                 return ApiHttpClient.executeGetRequest(passengerVietjetUri.toString(), jwt);
             }
             return null;
-        } catch (URISyntaxException e) {
+        } catch (Exception e) {
             return StringUtils.EMPTY;
         }
     }
+
 }

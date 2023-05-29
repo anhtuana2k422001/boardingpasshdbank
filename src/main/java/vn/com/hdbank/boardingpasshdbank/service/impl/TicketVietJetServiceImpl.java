@@ -13,12 +13,11 @@ import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketScanRequest;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.response.*;
 import vn.com.hdbank.boardingpasshdbank.model.response.TicketVietJetInformation;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketRequest;
-import vn.com.hdbank.boardingpasshdbank.model.entity.TicketVietJet;
+import vn.com.hdbank.boardingpasshdbank.entity.TicketVietJet;
 import vn.com.hdbank.boardingpasshdbank.repository.TicketVietJetRepository;
 import org.springframework.stereotype.Service;
 import vn.com.hdbank.boardingpasshdbank.service.TicketVietJetService;
 import vn.com.hdbank.boardingpasshdbank.service.utils.ApiVietJet;
-import vn.com.hdbank.boardingpasshdbank.service.validate.ApiVietJetValidation;
 import vn.com.hdbank.boardingpasshdbank.service.validate.DatabaseValidation;
 import vn.com.hdbank.boardingpasshdbank.utils.ApiHttpClient;
 import vn.com.hdbank.boardingpasshdbank.utils.JsonUtils;
@@ -50,12 +49,15 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
             return ResponseService.validateResponse(errors, request.getRequestId());
 
         /*------------------- Validate Api -------------------*/
-        ApiResponseStatus apiResponseStatus =  ApiVietJetValidation.validateApiTickKet(request,
+        String jwtResponse = ApiHttpClient.getToken(ApiUrls.AUTHENTICATION_URL,
                 userAuthVietJet.getUserName(), userAuthVietJet.getPassWord());
+        if (StringUtils.isEmpty(jwtResponse)) {
+            return ResponseService.errorResponse(ApiResponseStatus.VIET_JET_API_ERROR, requestId);
+        }
 
-        if(!ApiResponseStatus.SUCCESS.equals(apiResponseStatus)){
-            LOGGER.info(Constant.FORMAT_LOG, apiResponseStatus.getStatusCode(), apiResponseStatus.getStatusMessage());
-            return ResponseService.errorResponse(apiResponseStatus, requestId);
+        String ticketResponse = ApiVietJet.callApiPassenger(jwtResponse, request);
+        if (StringUtils.isEmpty(ticketResponse)) {
+            return ResponseService.errorResponse(ApiResponseStatus.INVALID_TICKET, requestId);
         }
 
         /*------------------- Validate database -------------------*/
@@ -66,16 +68,12 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
             return ResponseService.errorResponse(apiResponseStatusDb, requestId);
         }
 
-        String jwtResponse = ApiHttpClient.getToken(ApiUrls.AUTHENTICATION_URL, userAuthVietJet.getUserName(), userAuthVietJet.getPassWord());
-        String ticketResponse = ApiVietJet.callApiPassenger(jwtResponse, request);
         TicKet ticKet = JsonUtils.fromJsonString(ticketResponse, TicKet.class);
-
         if(ticKet != null){
             /* Handle ticKet response and save */
             TicketVietJetInformation ticketVietjetInformation = handleTicketResponse(
                     ticKet, flightCode, reservationCode, seats);
-            return ResponseService.successResponse(ApiResponseStatus.SUCCESS,
-                    ticketVietjetInformation, requestId);
+            return ResponseService.successResponse(ApiResponseStatus.SUCCESS,ticketVietjetInformation, requestId);
         }
 
         return ResponseService.errorResponse(ApiResponseStatus.RESPONSE_API_ERROR, requestId);
@@ -96,12 +94,15 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
             return ResponseService.validateResponse(errors, request.getRequestId());
 
         /*------------------- Validate Api -------------------*/
-        ApiResponseStatus apiResponseStatus = ApiVietJetValidation.validateApiTickKetScan(request,
+        String jwtResponse = ApiHttpClient.getToken(ApiUrls.AUTHENTICATION_URL,
                 userAuthVietJet.getUserName(), userAuthVietJet.getPassWord());
+        if (StringUtils.isEmpty(jwtResponse)) {
+            return ResponseService.errorResponse(ApiResponseStatus.VIET_JET_API_ERROR, requestId);
+        }
 
-        if(!ApiResponseStatus.SUCCESS.equals(apiResponseStatus)){
-            LOGGER.info(Constant.FORMAT_LOG, apiResponseStatus.getStatusCode(), apiResponseStatus.getStatusMessage());
-            return ResponseService.errorResponse(apiResponseStatus, requestId);
+        String ticketResponse = ApiVietJet.callApiScanPassenger(jwtResponse, request);
+        if (StringUtils.isEmpty(ticketResponse)) {
+            return ResponseService.errorResponse(ApiResponseStatus.INVALID_TICKET, requestId);
         }
 
         /*-------------------  Validate database -------------------*/
@@ -112,11 +113,7 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
             return ResponseService.errorResponse(apiResponseStatusDb, requestId);
         }
 
-        String jwtResponse = ApiHttpClient.getToken(ApiUrls.AUTHENTICATION_URL,
-                userAuthVietJet.getUserName(), userAuthVietJet.getPassWord());
-        String ticketResponse = ApiVietJet.callApiScanPassenger(jwtResponse, request);
         TicKet ticKet = JsonUtils.fromJsonString(ticketResponse, TicKet.class);
-
         if(ticKet != null){
            /* Handle ticKet response and save */
             TicketVietJetInformation ticketVietjetInformation = handleTicketResponse(
@@ -141,7 +138,8 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
                                     .sum();
 
         /* Save database */
-        if (!ticketVietjetRepository.checkExistsByFlightCode(reservationCode)) {
+        boolean exists = ticketVietjetRepository.checkExistsByFlightCode(reservationCode);
+        if (!exists) {
             TicketVietJet saveTicket = new TicketVietJet(firstPassenger.getFirstName(),
                     firstPassenger.getLastName(), flightCode, reservationCode, seats);
             ticketVietjetRepository.create(saveTicket);

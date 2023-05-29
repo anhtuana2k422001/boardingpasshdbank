@@ -1,4 +1,4 @@
-package vn.com.hdbank.boardingpasshdbank.model.entity;
+package vn.com.hdbank.boardingpasshdbank.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,6 +1,5 @@
 package vn.com.hdbank.boardingpasshdbank.service;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import vn.com.hdbank.boardingpasshdbank.model.response.ConfirmCustomerVietJet;
 import vn.com.hdbank.boardingpasshdbank.model.response.CustomerPrizeStatus;

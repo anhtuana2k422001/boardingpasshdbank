@@ -1,11 +1,9 @@
-package vn.com.hdbank.boardingpasshdbank.model.entity;
+package vn.com.hdbank.boardingpasshdbank.entity;
 
 import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Data

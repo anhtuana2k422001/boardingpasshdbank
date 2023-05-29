@@ -16,12 +16,12 @@ public class ResponseController {
 
     public static <T> org.springframework.http.ResponseEntity<ResponseInfo<T>> responseEntity(ApiResponseStatus apiResponseStatus,
                                                                                               String requestId) {
-        ResponseInfo<T> response = ResponseInfo.<T>builder()
+        MDC.clear();
+        return new org.springframework.http.ResponseEntity<>(ResponseInfo.<T>builder()
                 .responseId(requestId)
                 .code(apiResponseStatus.getStatusCode())
                 .message(apiResponseStatus.getStatusMessage())
-                .build();
-        MDC.clear();
-        return new org.springframework.http.ResponseEntity<>(response, HttpStatus.OK);
+                .build(), HttpStatus.OK);
     }
+
 }
