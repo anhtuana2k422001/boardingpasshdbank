@@ -4,13 +4,10 @@ package vn.com.hdbank.boardingpasshdbank.security;
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import vn.com.hdbank.boardingpasshdbank.service.impl.CustomerServiceImpl;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -21,12 +18,14 @@ import java.util.function.Function;
 @Slf4j
 @Component
 public class JwtUtilities {
-    private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtilities.class);
+
+
     @Value("${jwt.secret}")
     private String secret;
 
     @Value("${jwt.expiration}")
     private Long jwtExpiration;
+
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -67,14 +66,19 @@ public class JwtUtilities {
             return true;
         } catch (SignatureException e) {
             LOGGER.info("Invalid JWT signature.");
+            LOGGER.trace("Invalid JWT signature trace: {}", e);
         } catch (MalformedJwtException e) {
             LOGGER.info("Invalid JWT token.");
+            LOGGER.trace("Invalid JWT token trace: {}", e);
         } catch (ExpiredJwtException e) {
             LOGGER.info("Expired JWT token.");
+            LOGGER.trace("Expired JWT token trace: {}", e);
         } catch (UnsupportedJwtException e) {
             LOGGER.info("Unsupported JWT token.");
+            LOGGER.trace("Unsupported JWT token trace: {}", e);
         } catch (IllegalArgumentException e) {
             LOGGER.info("JWT token compact of handler are invalid.");
+            LOGGER.trace("JWT token compact of handler are invalid trace: {}", e);
         }
         return false;
     }
@@ -83,7 +87,7 @@ public class JwtUtilities {
         final String bearerToken = httpServletRequest.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7, bearerToken.length());
-        } // The part after "Bearer "
+        }
         return null;
     }
 
