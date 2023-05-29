@@ -2,6 +2,7 @@ package vn.com.hdbank.boardingpasshdbank.controller;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import vn.com.hdbank.boardingpasshdbank.common.Constant;
 import vn.com.hdbank.boardingpasshdbank.common.ResponseController;
@@ -26,7 +27,7 @@ public class TicketVietJetController {
     /* API 1: check-flight-ticketVietJet */
     /* Case 1: Self-entering information */
     @PostMapping("/check-flight-ticket")
-    public org.springframework.http.ResponseEntity<ResponseInfo<TicketVietJetInformation>>
+    public ResponseEntity<ResponseInfo<TicketVietJetInformation>>
     checkInformationTicket(@Valid @RequestBody TicketRequest request, BindingResult bindingResult) {
         try{
             MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
@@ -42,7 +43,7 @@ public class TicketVietJetController {
 
     /* Case 2: Scan Boarding pass */
     @PostMapping("/check-flight-ticket-scan")
-    public org.springframework.http.ResponseEntity<ResponseInfo<TicketVietJetInformation>>
+    public ResponseEntity<ResponseInfo<TicketVietJetInformation>>
     checkScanInformationTicket(@Valid @RequestBody TicketScanRequest request, BindingResult bindingResult) {
         try{
             MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */

@@ -12,16 +12,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import vn.com.hdbank.boardingpasshdbank.security.CustomerUserDetailsService;
 import vn.com.hdbank.boardingpasshdbank.security.JwtAuthenticationFilter;
 import vn.com.hdbank.boardingpasshdbank.service.impl.CustomerServiceImpl;
+
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class SpringSecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter ;
-    private final CustomerServiceImpl customerService ;
+    private final CustomerUserDetailsService customerUserDetailsService ;
 
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity http) throws Exception
@@ -30,10 +32,10 @@ public class SecurityConfig {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeHttpRequests()
-            .requestMatchers("/api/**").permitAll();
-            //.requestMatchers("/admin/**").hasAuthority("ADMIN")
-            //.requestMatchers("/superadmin/**").hasAuthority("SUPERADMIN") ;
+            .requestMatchers("/api/flight-ticket/**","/api/get-token").permitAll()
+            .anyRequest().hasAuthority("User");
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         return  http.build();
     }
 

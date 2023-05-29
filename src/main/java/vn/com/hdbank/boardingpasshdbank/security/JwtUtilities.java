@@ -4,13 +4,10 @@ package vn.com.hdbank.boardingpasshdbank.security;
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import vn.com.hdbank.boardingpasshdbank.service.impl.CustomerServiceImpl;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -21,12 +18,14 @@ import java.util.function.Function;
 @Slf4j
 @Component
 public class JwtUtilities {
-    private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtilities.class);
+
+
     @Value("${jwt.secret}")
     private String secret;
 
     @Value("${jwt.expiration}")
     private Long jwtExpiration;
+
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -83,7 +82,7 @@ public class JwtUtilities {
         final String bearerToken = httpServletRequest.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7, bearerToken.length());
-        } // The part after "Bearer "
+        }
         return null;
     }
 
