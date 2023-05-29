@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.common.Constant;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
-import vn.com.hdbank.boardingpasshdbank.model.entity.Prize;
+import vn.com.hdbank.boardingpasshdbank.entity.Prize;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.InfoPrizeRequest;
 import vn.com.hdbank.boardingpasshdbank.repository.PrizeRepository;
 

@@ -13,7 +13,7 @@ import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketScanRequest;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.response.*;
 import vn.com.hdbank.boardingpasshdbank.model.response.TicketVietJetInformation;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketRequest;
-import vn.com.hdbank.boardingpasshdbank.model.entity.TicketVietJet;
+import vn.com.hdbank.boardingpasshdbank.entity.TicketVietJet;
 import vn.com.hdbank.boardingpasshdbank.repository.TicketVietJetRepository;
 import org.springframework.stereotype.Service;
 import vn.com.hdbank.boardingpasshdbank.service.TicketVietJetService;
