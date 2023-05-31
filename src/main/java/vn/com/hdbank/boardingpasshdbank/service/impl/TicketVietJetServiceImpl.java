@@ -46,7 +46,7 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
         /*------------------- Validate ticket request ------------------- */
         Map<String, String> errors = ValidationUtils.validationHandler(bindingResult);
         if (errors.size() > 0)
-            return ResponseService.validateResponse(errors, request.getRequestId());
+            return ResponseService.validateResponse(errors, requestId);
 
         /*------------------- Validate Api -------------------*/
         String jwtResponse = ApiHttpClient.getToken(ApiUrls.AUTHENTICATION_URL,
@@ -91,7 +91,7 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
         /*------------------- Validate ticket request -------------------*/
         Map<String, String> errors = ValidationUtils.validationHandler(bindingResult);
         if (errors.size() > 0)
-            return ResponseService.validateResponse(errors, request.getRequestId());
+            return ResponseService.validateResponse(errors, requestId);
 
         /*------------------- Validate Api -------------------*/
         String jwtResponse = ApiHttpClient.getToken(ApiUrls.AUTHENTICATION_URL,

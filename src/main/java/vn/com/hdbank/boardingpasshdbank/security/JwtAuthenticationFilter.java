@@ -33,13 +33,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = jwtUtilities.getToken(request) ;
         if (token!=null && jwtUtilities.validateToken(token))
         {
-            String email = jwtUtilities.extractUsername(token);
+            String phoneNumber = jwtUtilities.extractUsername(token);
 
-            UserDetails userDetails = customerUserDetailsService.loadUserByUsername(email);//mock data sang find by id
+            UserDetails userDetails = customerUserDetailsService.loadUserByUsername(phoneNumber);//mock data sang find by id
             if (userDetails != null) {
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails.getUsername() ,null , userDetails.getAuthorities());
-                LOGGER.info(Constant.AUTHENTICATED_EMAIL, email);
+                LOGGER.info(Constant.AUTHENTICATED_PHONE_NUMBER, phoneNumber);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }

@@ -45,6 +45,18 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
+    public Customer findByPhoneNumber(String phoneNumber) {
+        String sql = "SELECT * FROM customer WHERE phone_number = ?";
+        try{
+            List<Customer> customers = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Customer.class), phoneNumber);
+            return customers.isEmpty() ? null : customers.get(0);
+        }catch (Exception e) {
+            LOGGER.error(Constant.ERROR, e);
+            throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
+        }
+    }
+
+    @Override
     public boolean usedTicket(TicketConfirmRequest request) {
         String sql = "SELECT COUNT(*) FROM ticket_vietjet WHERE reservation_code = ? AND customer_id = ?";
         try {

@@ -54,7 +54,7 @@ public class PrizeRepositoryImpl implements PrizeRepository {
             boolean isCodeUnique = false;
             while (!isCodeUnique) {
                 int randomNumber = rand.nextInt(1000000);
-                prizeCode = "VJ" + String.format("%06d", randomNumber);
+                prizeCode = Constant.TYPE_VJ + String.format("%06d", randomNumber);
                 String sql = "SELECT COUNT(*) FROM prize WHERE prize_code = ?";
                 int count = Optional.ofNullable(jdbcTemplate.queryForObject(sql, Integer.class, prizeCode)).orElse(0);
                 if (count == 0) {

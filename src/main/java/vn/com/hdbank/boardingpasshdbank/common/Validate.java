@@ -17,5 +17,9 @@ public class Validate {
     public static final String MESSAGE_TOTAL_AMOUNT = "Tổng số tiền phải lớn hơn 0"; /*Total amount must be greater than zero*/
     public static final String MESSAGE_PRIZE_CODE = "Định dạng mã dự thưởng không hợp lệ";
     public static final String REGEX_PRIZE_CODE = "^VJ\\d{6}$";
+    public static final String MESSAGE_PHONE_NUMBER = "Số điện thoại không hợp lệ";
+    public static final String REGEX_PHONE_NUMBER = "^(\\+?84|0)\\d{9,10}$";
+    public static final String MESSAGE_PASSWORD = "Mật khẩu phải có ít nhất 6 ký tự";
+    public static final String REGEX_PASSWORD = "^.{6,}$";
 }
 

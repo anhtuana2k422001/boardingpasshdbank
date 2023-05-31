@@ -44,7 +44,7 @@ public class CustomerServiceImpl implements CustomerService {
         /*------------------- Validate ticket request -------------------*/
         Map<String, String> errors = ValidationUtils.validationHandler(bindingResult);
         if (errors.size() > 0)
-            return ResponseService.validateResponse(errors, request.getRequestId());
+            return ResponseService.validateResponse(errors, requestId);
 
         /*------------------- Validate database -------------------*/
         ApiResponseStatus apiResponseStatus =  DatabaseValidation.validateConfirmCustomer(request,
@@ -99,14 +99,15 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         Prize prizeInfo = prizeRepository.findByCustomerId(customerId).get(0);
+        Customer customer = customerRepository.findById(customerId);
         if (Boolean.TRUE.equals(prizeInfo.isUsed())) {
             return ResponseService.successResponse(ApiResponseStatus.CUSTOMER_PRIZE_SUCCESS,
                     CustomerPrizeStatus.builder()
                             .prizeResult(
                                     PrizeResult.builder()
                                             .statusInformation(Constant.VIET_JET_LUCKY_CONTENT)
-                                            .bankAccount(Constant.BANK_ACCOUNT)
-                                            .balanceAfterTransaction(Constant.BALANCE_AFTER_TRANSACTION)
+                                            .bankAccount(customer.getAccountNumber())
+                                            .balanceAfterTransaction(customer.getBalance().toString())
                                             .totalAmount(prizeInfo.getPrizeAmount().doubleValue()).build())
                             .linkWebViewPrizes(null).build()
                     , requestId);

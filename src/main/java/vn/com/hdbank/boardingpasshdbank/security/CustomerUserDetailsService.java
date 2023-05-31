@@ -16,9 +16,9 @@ public class CustomerUserDetailsService implements UserDetailsService {
     private final CustomerRepository customerRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String phoneNumber) throws UsernameNotFoundException {
         try {
-            return customerRepository.findById(1);
+            return customerRepository.findByPhoneNumber(phoneNumber);
         } catch (Exception ex) {
             LOGGER.info("Error: User not found security");
             return null;

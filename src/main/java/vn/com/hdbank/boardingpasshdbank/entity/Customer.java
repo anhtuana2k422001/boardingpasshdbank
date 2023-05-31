@@ -35,7 +35,6 @@ public class Customer implements Serializable, UserDetails {
     private List <String> listRole = new ArrayList<>() ;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        //mock data
         listRole.add("User");
         List<GrantedAuthority> authorities = new ArrayList<>();
         this.listRole.forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
@@ -44,13 +43,12 @@ public class Customer implements Serializable, UserDetails {
 
     @Override
     public String getPassword() {
-        // "thanhcong" format Bcrypt
-        return "$2a$12$v6itJZtxbG5c4egalbWycOEz8cZ26BrsMGSfq3ZofvVsJLVLKHJA6";
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return "thanhcong";
+        return username;
     }
 
     @Override

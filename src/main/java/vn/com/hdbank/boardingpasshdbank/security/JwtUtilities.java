@@ -7,10 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.common.Constant;
-import vn.com.hdbank.boardingpasshdbank.common.ResponseService;
-import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -52,18 +49,14 @@ public class JwtUtilities {
         return extractExpiration(token).before(new Date());
     }
 
-    public ResponseInfo<TokenResponse> generateToken(String email, List<String> roles) {
+    public TokenResponse generateToken(String phoneNumber, List<String> roles) {
         Date expiration = Date.from(Instant.now().plus(jwtConfig.getJwtExpiration(), ChronoUnit.MILLIS));
-        String token = Jwts.builder().setSubject(email).claim("role", roles)
+        String token = Jwts.builder().setSubject(phoneNumber).claim("role", roles)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(expiration)
                 .signWith(SignatureAlgorithm.HS256, jwtConfig.getSecret()).compact();
         SimpleDateFormat dateFormat = new SimpleDateFormat(Constant.FORMAT_DATE);
-        return ResponseService.successResponse(ApiResponseStatus.SUCCESS, TokenResponse.builder()
-                        .token(token)
-                        .expiration(dateFormat.format(expiration))
-                        .build(),
-                null);
+        return new TokenResponse(token, dateFormat.format(expiration));
     }
 
     public boolean validateToken(String token) {

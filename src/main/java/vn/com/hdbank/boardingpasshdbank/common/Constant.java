@@ -15,7 +15,7 @@ public class Constant {
     public static final String ERROR_JSON_TO_STRING = "Error Json to String: ";
     public static final String ERROR_FROM_JSON_STRING = "Error Json to object:  ";
     public static final String ERROR_VALIDATE = "Validation errors: {}";
-    public static final String AUTHENTICATED_EMAIL = "Authenticated user with email :{}";
+    public static final String AUTHENTICATED_PHONE_NUMBER = "Authenticated user with phone number :{}";
     public static final String REQUEST_ID = "requestId";
     public static final String URL = "URL:";
     public static final String METHOD = "Method:";
@@ -33,9 +33,8 @@ public class Constant {
     public static final String PASSENGER_FIRST_NAME = "passengerFirstName";
     public static final String PASSENGER_LAST_NAME = "passengerLastName";
     public static final String AMOUNT_FA = "FA";
+    public static final String TYPE_VJ = "VJ";
     public static final String VIET_JET_LUCKY_CONTENT = "Hoàn tiền chương trình Vietjet Daily Lucky";
-    public static final String  BANK_ACCOUNT  = "067804070161483";
-    public static final String BALANCE_AFTER_TRANSACTION = "101200000";
     public static final String LINK_WEB_PRIZES = "https://link-webview-prizes.com";
 
 }
