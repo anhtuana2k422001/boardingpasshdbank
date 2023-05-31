@@ -22,7 +22,8 @@ public enum ApiResponseStatus {
     USED_PRIZE_CODE("018", "Khách hàng đã được cập phần thưởng trước đó"), /*The customer has already received the reward before*/
     USED_TICKET_ERROR("019", "Khách hàng không hợp lệ, vé đã được sử dụng cho khách hàng khác"), /*Invalid customer, ticket already used*/
     RESPONSE_API_ERROR("020", "Dữ liệu từ Api trả về không đúng"), /*Data from Api returned incorrect*/
-
+    FORBIDDEN_ACCESS("021", "Quyền truy cập bị từ chối"), /*Forbidden*/
+    UNAUTHORIZED_ACCESS("022", "Xác thực không hợp lệ") /*Unauthorized access*/
     ;
 
     private final String statusCode;

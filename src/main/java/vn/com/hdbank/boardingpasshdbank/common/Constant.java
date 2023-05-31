@@ -15,11 +15,14 @@ public class Constant {
     public static final String ERROR_JSON_TO_STRING = "Error Json to String: ";
     public static final String ERROR_FROM_JSON_STRING = "Error Json to object:  ";
     public static final String ERROR_VALIDATE = "Validation errors: {}";
+    public static final String AUTHENTICATED_EMAIL = "Authenticated user with email :{}";
     public static final String REQUEST_ID = "requestId";
     public static final String URL = "URL:";
     public static final String METHOD = "Method:";
     public static final String HEADER = "Header:";
     public static final String COMMA_SPACE = ", ";
+    public static final String UTF_8 = "UTF-8";
+    public static final String FORMAT_DATE = "HH:mm:ss dd-MM-yyyy";
     public static final LocalDateTime VJ_E_SKY_ONE_START_DATE = LocalDateTime.parse("2023-01-01T00:00:00");
     public static final LocalDateTime VJ_E_SKY_ONE_END_DATE = LocalDateTime.parse("2025-01-01T00:00:00");
     public static final String RESERVATION_LOCATOR = "reservationLocator";

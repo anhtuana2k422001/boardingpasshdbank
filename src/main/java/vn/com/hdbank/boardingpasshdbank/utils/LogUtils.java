@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.util.EntityUtils;
 import vn.com.hdbank.boardingpasshdbank.common.Constant;
 
 import java.util.Arrays;
@@ -20,16 +19,10 @@ public class LogUtils {
     }
 
     public static String logHttpPost(HttpPost request) {
-        try {
-            String url = StringUtils.join(Constant.URL, request.getURI().toString());
-            String method = StringUtils.join(Constant.METHOD, request.getMethod());
-            String headers = StringUtils.join(Constant.HEADER, Arrays.toString(request.getAllHeaders()));
-            String entity = EntityUtils.toString(request.getEntity());
-            return StringUtils.join(url, Constant.COMMA_SPACE, method,
-                    Constant.COMMA_SPACE, headers, Constant.COMMA_SPACE, entity);
-        }catch (Exception e){
-            return StringUtils.EMPTY;
-        }
+        String url = StringUtils.join(Constant.URL, request.getURI().toString());
+        String method = StringUtils.join(Constant.METHOD, request.getMethod());
+        String headers = StringUtils.join(Constant.HEADER, Arrays.toString(request.getAllHeaders()));
+        return StringUtils.join(url, Constant.COMMA_SPACE, method, Constant.COMMA_SPACE, headers);
     }
 
 }

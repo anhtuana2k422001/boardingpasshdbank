@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import vn.com.hdbank.boardingpasshdbank.utils.JsonUtils;
 
-
 @RestController
 @RequestMapping(path = "/api/flight-ticket")
 @Slf4j
@@ -27,8 +26,8 @@ public class TicketVietJetController {
     /* API 1: check-flight-ticketVietJet */
     /* Case 1: Self-entering information */
     @PostMapping("/check-flight-ticket")
-    public ResponseEntity<ResponseInfo<TicketVietJetInformation>>
-    checkInformationTicket(@Valid @RequestBody TicketRequest request, BindingResult bindingResult) {
+    public ResponseEntity<ResponseInfo<TicketVietJetInformation>> checkInformationTicket
+    (@Valid @RequestBody TicketRequest request, BindingResult bindingResult) {
         try{
             MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
             LOGGER.info(Constant.REQUEST, JsonUtils.toJsonString(request)); /* Log request */
@@ -43,8 +42,8 @@ public class TicketVietJetController {
 
     /* Case 2: Scan Boarding pass */
     @PostMapping("/check-flight-ticket-scan")
-    public ResponseEntity<ResponseInfo<TicketVietJetInformation>>
-    checkScanInformationTicket(@Valid @RequestBody TicketScanRequest request, BindingResult bindingResult) {
+    public ResponseEntity<ResponseInfo<TicketVietJetInformation>> checkScanInformationTicket
+    (@Valid @RequestBody TicketScanRequest request, BindingResult bindingResult) {
         try{
             MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
             LOGGER.info(Constant.REQUEST, JsonUtils.toJsonString(request)); /* Log request */

@@ -61,7 +61,7 @@ public class CustomerController {
 
     /* API 4 : Update customer prize  */
     @PostMapping("/update-customer-prize")
-    public org.springframework.http.ResponseEntity<ResponseInfo<String>> updateCustomerPrize
+    public ResponseEntity<ResponseInfo<String>> updateCustomerPrize
     (@Valid @RequestBody InfoPrizeRequest request, BindingResult bindingResult) {
         try{
             MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */

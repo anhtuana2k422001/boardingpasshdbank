@@ -12,31 +12,39 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import vn.com.hdbank.boardingpasshdbank.security.CustomerUserDetailsService;
+import vn.com.hdbank.boardingpasshdbank.security.CustomAccessDeniedHandler;
+import vn.com.hdbank.boardingpasshdbank.security.CustomAuthenticationEntryPoint;
 import vn.com.hdbank.boardingpasshdbank.security.JwtAuthenticationFilter;
-import vn.com.hdbank.boardingpasshdbank.service.impl.CustomerServiceImpl;
 
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SpringSecurityConfig {
-
     private final JwtAuthenticationFilter jwtAuthenticationFilter ;
-    private final CustomerUserDetailsService customerUserDetailsService ;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
+
+    private final String [] publicUrls  = new String[]{
+            "/api/flight-ticket/**",
+            "/api/get-token"
+    };
 
     @Bean
-    public SecurityFilterChain filterChain (HttpSecurity http) throws Exception
-    { http
-            .csrf().disable()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            .authorizeHttpRequests()
-            .requestMatchers("/api/flight-ticket/**","/api/get-token").permitAll()
-            .anyRequest().hasAuthority("User");
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-        return  http.build();
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers(publicUrls).permitAll()
+                .anyRequest().hasAuthority("User")
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint)
+                .accessDeniedHandler(accessDeniedHandler)
+                .and().addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
     }
 
     @Bean

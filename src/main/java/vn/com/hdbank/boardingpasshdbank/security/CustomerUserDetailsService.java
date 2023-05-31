@@ -5,12 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
-import vn.com.hdbank.boardingpasshdbank.common.Constant;
-import vn.com.hdbank.boardingpasshdbank.entity.Customer;
+import org.springframework.stereotype.Service;
 import vn.com.hdbank.boardingpasshdbank.repository.CustomerRepository;
 
-@Component
+@Service
 @RequiredArgsConstructor
 @Slf4j
 public class CustomerUserDetailsService implements UserDetailsService {
@@ -19,16 +17,12 @@ public class CustomerUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Customer user = null;
         try {
-            user = customerRepository.findById(1);
-
+            return customerRepository.findById(1);
         } catch (Exception ex) {
-            LOGGER.info(Constant.ERROR, "User not found security");
+            LOGGER.info("Error: User not found security");
+            return null;
         }
-
-        return user;
-
     }
 
 

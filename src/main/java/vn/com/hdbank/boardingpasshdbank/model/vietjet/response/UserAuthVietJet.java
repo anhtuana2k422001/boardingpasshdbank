@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @Component
-public final class UserAuthVietJet {
+public class UserAuthVietJet {
     @Value("${auth.username}")
-    public String userName;
+    private String userName;
     @Value("${auth.password}")
-    public String passWord;
+    private String passWord;
 }

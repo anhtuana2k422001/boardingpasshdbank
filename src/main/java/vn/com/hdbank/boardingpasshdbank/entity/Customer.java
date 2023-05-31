@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -22,21 +23,28 @@ public class Customer implements Serializable, UserDetails {
     private String birthDate;
     private String customerType;
     private LocalDateTime createdAt;
-    //mock data
-    List <String> roles = new ArrayList<>() ;
+    private String accountNumber;
+    private String username;
+    private String password;
+    private String email;
+    private String phoneNumber;
+    private String address;
+    private BigDecimal balance;
+
+    /* Mock data */
+    private List <String> listRole = new ArrayList<>() ;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         //mock data
-       // roles.add("Admin");
-        roles.add("User");
+        listRole.add("User");
         List<GrantedAuthority> authorities = new ArrayList<>();
-        this.roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
+        this.listRole.forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
         return authorities;
     }
 
     @Override
     public String getPassword() {
-        //"thanhcong" format Bcrypt
+        // "thanhcong" format Bcrypt
         return "$2a$12$v6itJZtxbG5c4egalbWycOEz8cZ26BrsMGSfq3ZofvVsJLVLKHJA6";
     }
 

@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import vn.com.hdbank.boardingpasshdbank.common.Constant;
 
 import java.io.IOException;
 
@@ -21,17 +22,15 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private  final JwtUtilities jwtUtilities ;
+    private final JwtUtilities jwtUtilities ;
     private final CustomerUserDetailsService customerUserDetailsService ;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
-                                    @NonNull FilterChain filterChain)
-            throws ServletException, IOException {
+                                    @NonNull FilterChain filterChain) throws IOException, ServletException{
 
         String token = jwtUtilities.getToken(request) ;
-
         if (token!=null && jwtUtilities.validateToken(token))
         {
             String email = jwtUtilities.extractUsername(token);
@@ -40,11 +39,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (userDetails != null) {
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails.getUsername() ,null , userDetails.getAuthorities());
-                LOGGER.info("authenticated user with email :{}", email);
+                LOGGER.info(Constant.AUTHENTICATED_EMAIL, email);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-
             }
         }
+
         filterChain.doFilter(request,response);
     }
 
