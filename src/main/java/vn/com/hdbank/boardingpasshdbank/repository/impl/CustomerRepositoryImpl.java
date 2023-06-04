@@ -9,9 +9,9 @@ import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.common.Constant;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 import vn.com.hdbank.boardingpasshdbank.entity.Customer;
-import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketConfirmRequest;
 import vn.com.hdbank.boardingpasshdbank.repository.CustomerRepository;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -22,10 +22,10 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    public void updateCustomerTypeById(String customerType, int id) {
+    public void updateCustomerVJ(String customerType, int customerId) {
         String sql = "UPDATE customer SET customer_type=? WHERE id=?";
         try {
-            jdbcTemplate.update(sql, customerType, id);
+            jdbcTemplate.update(sql, customerType, customerId);
         } catch (Exception e) {
             LOGGER.error(Constant.ERROR, e);
             throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
@@ -33,10 +33,10 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public Customer findById(int id) {
+    public Customer findById(int customerId) {
         String sql = "SELECT * FROM customer WHERE id = ?";
         try{
-            List<Customer> customers = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Customer.class), id);
+            List<Customer> customers = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Customer.class), customerId);
             return customers.isEmpty() ? null : customers.get(0);
         }catch (Exception e) {
             LOGGER.error(Constant.ERROR, e);
@@ -57,15 +57,49 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public boolean usedTicket(TicketConfirmRequest request) {
-        String sql = "SELECT COUNT(*) FROM ticket_vietjet WHERE reservation_code = ? AND customer_id = ?";
+    public boolean checkInfoCustomer(String ticketId,  String fistNameCustomer, String lastNameCustomer, Date birthDateCustomer) {
+        String sql = "SELECT COUNT(*) FROM ticket_vietjet WHERE id = ? AND first_name = ? AND last_name = ? AND birth_date = ?";
         try {
-            Integer count = jdbcTemplate.queryForObject(sql, Integer.class, request.getReservationCode(), request.getCustomerId());
+            Integer count = jdbcTemplate.queryForObject(sql, Integer.class, ticketId, fistNameCustomer, lastNameCustomer, birthDateCustomer);
             return count != null && count > 0;
         } catch (Exception e) {
             LOGGER.error(Constant.ERROR, e);
             throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
         }
     }
+
+    @Override
+    public boolean checkInfoCustomer(String ticketId, int customerId) {
+        String sql = "SELECT COUNT(*) > 0 FROM ticket_vietjet WHERE id = ? AND customer_id = ? ";
+        try {
+            return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, Boolean.class, ticketId, customerId));
+        } catch (Exception e) {
+            LOGGER.error(Constant.ERROR, e);
+            throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
+        }
+    }
+
+    @Override
+    public boolean checkTicketExist(String ticketId) {
+        String sql = "SELECT COUNT(*) > 0 FROM ticket_vietjet WHERE id = ? AND customer_id IS NOT NULL";
+        try {
+            return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, Boolean.class, ticketId));
+        } catch (Exception e) {
+            LOGGER.error(Constant.ERROR, e);
+            throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
+        }
+    }
+
+    @Override
+    public boolean checkCustomerUsedTicket(int customerId) {
+        String sql = "SELECT EXISTS (SELECT * FROM ticket_vietjet WHERE customer_id = ?) AS customer_exists";
+        try {
+            return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, Boolean.class, customerId));
+        } catch (Exception e) {
+            LOGGER.error(Constant.ERROR, e);
+            throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
+        }
+    }
+
 
 }

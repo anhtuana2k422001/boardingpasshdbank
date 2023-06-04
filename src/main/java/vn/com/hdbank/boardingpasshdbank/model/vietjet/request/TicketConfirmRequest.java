@@ -2,10 +2,8 @@ package vn.com.hdbank.boardingpasshdbank.model.vietjet.request;
 
 
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 import vn.com.hdbank.boardingpasshdbank.common.Validate;
 
 @Getter
@@ -13,22 +11,30 @@ import vn.com.hdbank.boardingpasshdbank.common.Validate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TicketConfirmRequest extends BaseRequest {
-    @NotNull (message = Validate.MESSAGE_NOT_NULL)
-    @Pattern(regexp = Validate.REGEXP_FLIGHT_CODE, message = Validate.MESSAGE_FLIGHT_CODE)
-    private String flightCode;
-
-    @NotNull (message = Validate.MESSAGE_NOT_NULL)
-    @Pattern(regexp = Validate.REGEXP_RESERVATION_CODE, message = Validate.MESSAGE_RESERVATION_CODE)
-    private String reservationCode;
-
-    @NotNull (message = Validate.MESSAGE_NOT_NULL)
-    @Pattern(regexp = Validate.REGEXP_SEATS, message = Validate.MESSAGE_SEATS)
-    private String seats;
+    private String ticketId;
 
     @NotNull (message = Validate.MESSAGE_NOT_NULL)
     @Min(value = 1, message = Validate.MESSAGE_REQUIRED_ID)
     private Integer customerId;
 
     @NotNull (message = Validate.MESSAGE_NOT_NULL)
+    @NotEmpty (message = Validate.MESSAGE_NOT_EMPTY)
+    private String fullNameCustomer;
+
+    @NotNull (message = Validate.MESSAGE_NOT_NULL)
+    @NotEmpty (message = Validate.MESSAGE_NOT_EMPTY)
+    private String birthDateCustomer;
+
+    @NotNull (message = Validate.MESSAGE_NOT_NULL)
     private Boolean isCustomerVietJet;
+
+    public String getFistNameCustomer(){
+        String firstName = StringUtils.substringAfter(fullNameCustomer, StringUtils.SPACE);
+        return StringUtils.trim(firstName);
+    }
+
+    public String getLastNameCustomer(){
+        String lastName = StringUtils.substringBefore(fullNameCustomer,  StringUtils.SPACE);
+        return StringUtils.trim(lastName);
+    }
 }

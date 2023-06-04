@@ -1,11 +1,15 @@
 package vn.com.hdbank.boardingpasshdbank.repository;
 
 import vn.com.hdbank.boardingpasshdbank.entity.Customer;
-import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketConfirmRequest;
+
+import java.util.Date;
 
 public interface CustomerRepository {
-    void updateCustomerTypeById(String customerType,int id);
-    Customer findById(int id);
+    void updateCustomerVJ(String customerType, int customerId);
+    Customer findById(int customerId);
     Customer findByPhoneNumber(String phoneNumber);
-    boolean usedTicket(TicketConfirmRequest request);
+    boolean checkInfoCustomer(String ticketId, String fistNameCustomer, String lastNameCustomer, Date birthDateCustomer);
+    boolean checkInfoCustomer(String ticketId, int customerId);
+    boolean checkTicketExist(String ticketId);
+    boolean checkCustomerUsedTicket(int customerId);
 }

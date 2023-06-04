@@ -2,11 +2,11 @@ package vn.com.hdbank.boardingpasshdbank.repository;
 
 import vn.com.hdbank.boardingpasshdbank.entity.TicketVietJet;
 
-import java.util.List;
 
 public interface TicketVietJetRepository {
-    void create(TicketVietJet ticketVietjet);
-    List<TicketVietJet> findCustomerIdNotNull(String reservationCode);
-    boolean checkExistsByFlightCode(String reservationCode);
-    void updateCustomerIdByFlightCode(int customerId,String reservationCode);
+    void createTicket(TicketVietJet ticketVietjet);
+    String getTicketId(String reservationCode, String flightCode, String seats);
+    boolean checkExistTicket(String reservationCode, String flightCode, String seats);
+    boolean checkSaveTicket(String reservationCode, String flightCode, String seats);
+    void updateConfirmCustomer(String ticketId, int customerId);
 }

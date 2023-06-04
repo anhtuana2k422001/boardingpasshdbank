@@ -21,9 +21,12 @@ import vn.com.hdbank.boardingpasshdbank.service.utils.ApiVietJet;
 import vn.com.hdbank.boardingpasshdbank.service.validate.DatabaseValidation;
 import vn.com.hdbank.boardingpasshdbank.utils.ApiHttpClient;
 import vn.com.hdbank.boardingpasshdbank.utils.JsonUtils;
+import vn.com.hdbank.boardingpasshdbank.utils.DateUtils;
 import vn.com.hdbank.boardingpasshdbank.utils.ValidationUtils;
 
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +51,15 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
         if (errors.size() > 0)
             return ResponseService.validateResponse(errors, requestId);
 
+        /*------------------- Validate database -------------------*/
+        ApiResponseStatus apiResponseStatusDb = DatabaseValidation.validateTicket(reservationCode,
+                flightCode, seats, ticketVietjetRepository);
+
+        if(!ApiResponseStatus.SUCCESS.equals(apiResponseStatusDb)){
+            LOGGER.info(Constant.FORMAT_LOG, apiResponseStatusDb.getStatusCode(), apiResponseStatusDb.getStatusMessage());
+            return ResponseService.errorResponse(apiResponseStatusDb, requestId);
+        }
+
         /*------------------- Validate Api -------------------*/
         String jwtResponse = ApiHttpClient.getToken(ApiUrls.AUTHENTICATION_URL,
                 userAuthVietJet.getUserName(), userAuthVietJet.getPassWord());
@@ -60,13 +72,6 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
             return ResponseService.errorResponse(ApiResponseStatus.INVALID_TICKET, requestId);
         }
 
-        /*------------------- Validate database -------------------*/
-        ApiResponseStatus apiResponseStatusDb = DatabaseValidation.validateTicket(reservationCode, ticketVietjetRepository);
-
-        if(!ApiResponseStatus.SUCCESS.equals(apiResponseStatusDb)){
-            LOGGER.info(Constant.FORMAT_LOG, apiResponseStatusDb.getStatusCode(), apiResponseStatusDb.getStatusMessage());
-            return ResponseService.errorResponse(apiResponseStatusDb, requestId);
-        }
 
         TicKet ticKet = JsonUtils.fromJsonString(ticketResponse, TicKet.class);
         if(ticKet != null){
@@ -106,7 +111,8 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
         }
 
         /*-------------------  Validate database -------------------*/
-        ApiResponseStatus apiResponseStatusDb = DatabaseValidation.validateTicket(reservationCode, ticketVietjetRepository);
+        ApiResponseStatus apiResponseStatusDb = DatabaseValidation.validateTicket(reservationCode,
+                flightCode, seats, ticketVietjetRepository);
 
         if(!ApiResponseStatus.SUCCESS.equals(apiResponseStatusDb)){
             LOGGER.info(Constant.FORMAT_LOG, apiResponseStatusDb.getStatusCode(), apiResponseStatusDb.getStatusMessage());
@@ -132,24 +138,43 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
         Journey firstJourney = ticKet.getJourneys().get(0);
         List<Charge> charges = ticKet.getCharges();
 
+        String birthDate =   firstPassenger.getBirthDate();
+        Date date = DateUtils.parseDate(birthDate);
+
+        String flightTime =  String.valueOf(firstJourney.getFlightSegments().get(0).getScheduledDepartureLocalDatetime());
+        Timestamp sqlFlightTime = DateUtils.parseTimestamp(flightTime);
+
+        String firstName = firstPassenger.getFirstName();
+        String lastName = firstPassenger.getLastName();
+
         Double totalAmount = charges.stream()
                                     .filter(c -> Constant.AMOUNT_FA.equals(c.getChargeCode()))
                                     .mapToDouble(c -> c.getCurrencyAmounts().get(0).getTotalAmount())
                                     .sum();
 
         /* Save database */
-        boolean exists = ticketVietjetRepository.checkExistsByFlightCode(reservationCode);
+        boolean exists = ticketVietjetRepository.checkSaveTicket(reservationCode, flightCode, seats);
         if (!exists) {
-            TicketVietJet saveTicket = new TicketVietJet(firstPassenger.getFirstName(),
-                    firstPassenger.getLastName(), flightCode, reservationCode, seats);
-            ticketVietjetRepository.create(saveTicket);
+            TicketVietJet ticketVietJet = TicketVietJet.builder()
+                    .firstName(firstName)
+                    .lastName(lastName)
+                    .birthDate(date)
+                    .flightTime(sqlFlightTime)
+                    .flightCode(flightCode)
+                    .reservationCode(reservationCode)
+                    .seats(seats)
+                    .totalAmount(totalAmount)
+                    .build();
+            ticketVietjetRepository.createTicket(ticketVietJet);
         }
 
+        String ticketId = ticketVietjetRepository.getTicketId(reservationCode, flightCode, seats);
+
         return new TicketVietJetInformation(
-                StringUtils.join(firstPassenger.getLastName(), StringUtils.SPACE, firstPassenger.getFirstName()),
-                firstPassenger.getBirthDate(),
-                String.valueOf(firstJourney.getFlightSegments().get(0).getScheduledDepartureLocalDatetime()),
-                totalAmount
+                ticketId,
+                StringUtils.join(lastName, StringUtils.SPACE, firstName),
+                birthDate, flightTime, totalAmount
         );
     }
+
 }

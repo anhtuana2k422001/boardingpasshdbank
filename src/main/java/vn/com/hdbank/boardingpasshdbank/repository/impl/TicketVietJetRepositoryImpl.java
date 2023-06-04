@@ -20,10 +20,15 @@ public class TicketVietJetRepositoryImpl implements TicketVietJetRepository {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    public void create(TicketVietJet ticketVietjet) {
-        String sql = "INSERT INTO ticket_vietjet (last_name, first_name, flight_code, reservation_code, seats, customer_id) VALUES (?, ?, ?, ?, ?, ?)";
+    public void createTicket(TicketVietJet ticketVietjet) {
+        String sql = "INSERT INTO ticket_vietjet (last_name, first_name, birth_date, flight_time, flight_code, " +
+                "reservation_code, seats, total_amount, customer_id) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
-             jdbcTemplate.update(sql, ticketVietjet.getLastName(), ticketVietjet.getFirstName(), ticketVietjet.getFlightCode(), ticketVietjet.getReservationCode(), ticketVietjet.getSeats(), null);
+             jdbcTemplate.update(sql, ticketVietjet.getLastName(), ticketVietjet.getFirstName(),
+                     ticketVietjet.getBirthDate(), ticketVietjet.getFlightTime(),
+                     ticketVietjet.getFlightCode(), ticketVietjet.getReservationCode(),
+                     ticketVietjet.getSeats(), ticketVietjet.getTotalAmount(), null);
         } catch (Exception e) {
             LOGGER.error(Constant.ERROR, e);
             throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
@@ -31,10 +36,12 @@ public class TicketVietJetRepositoryImpl implements TicketVietJetRepository {
     }
 
     @Override
-    public void updateCustomerIdByFlightCode(int customerId, String reservationCode) {
-        String sql = "UPDATE ticket_vietjet SET customer_id = ? WHERE reservation_code = ?";
+    public String getTicketId(String reservationCode, String flightCode, String seats) {
+        String sql = "SELECT id FROM ticket_vietjet WHERE reservation_code = ? AND flight_code = ? AND  seats = ?";
         try {
-            jdbcTemplate.update(sql, customerId, reservationCode);
+            List<TicketVietJet> ticketVietJet = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(TicketVietJet.class),
+                    reservationCode, flightCode, seats);
+            return ticketVietJet.isEmpty() ? null : String.valueOf(ticketVietJet.get(0).getId());
         } catch (Exception e) {
             LOGGER.error(Constant.ERROR, e);
             throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
@@ -42,10 +49,10 @@ public class TicketVietJetRepositoryImpl implements TicketVietJetRepository {
     }
 
     @Override
-    public List<TicketVietJet> findCustomerIdNotNull(String reservationCode) {
-        String sql = "SELECT * FROM ticket_vietjet WHERE reservation_code = ? AND customer_id IS NOT NULL";
+    public void updateConfirmCustomer(String ticketId, int customerId) {
+        String sql = "UPDATE ticket_vietjet SET customer_id = ? WHERE id = ?";
         try {
-            return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(TicketVietJet.class), reservationCode);
+            jdbcTemplate.update(sql, customerId, ticketId);
         } catch (Exception e) {
             LOGGER.error(Constant.ERROR, e);
             throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
@@ -53,15 +60,29 @@ public class TicketVietJetRepositoryImpl implements TicketVietJetRepository {
     }
 
     @Override
-    public boolean checkExistsByFlightCode(String reservationCode) {
-        String sql = "SELECT COUNT(*) FROM ticket_vietjet WHERE reservation_code = ?";
+    public boolean checkExistTicket(String reservationCode, String flightCode, String seats) {
+        String sql = "SELECT COUNT(*) > 0 FROM ticket_vietjet WHERE reservation_code = ? AND flight_code = ? AND " +
+                "seats = ? AND customer_id IS NOT NULL";
         try {
-            Integer count = jdbcTemplate.queryForObject(sql, Integer.class, reservationCode);
+            return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, Boolean.class, reservationCode, flightCode, seats));
+        } catch (Exception e) {
+            LOGGER.error(Constant.ERROR, e);
+            throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
+        }
+    }
+
+    @Override
+    public boolean checkSaveTicket(String reservationCode, String flightCode, String seats) {
+        String sql = "SELECT COUNT(*) FROM ticket_vietjet WHERE reservation_code = ? " +
+                "AND flight_code = ? AND seats = ?";
+        try {
+            Integer count = jdbcTemplate.queryForObject(sql, Integer.class, reservationCode, flightCode, seats);
             return count != null && count > 0;
         } catch (Exception e) {
             LOGGER.error(Constant.ERROR, e);
             throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
         }
     }
+
 
 }

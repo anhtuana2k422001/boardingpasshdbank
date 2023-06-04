@@ -18,7 +18,7 @@ public class JsonUtils {
         try {
             return objectMapper.writeValueAsString(object);
         } catch (Exception e){
-            LOGGER.error(Constant.ERROR_JSON_TO_STRING, e);
+            LOGGER.info(Constant.ERROR_JSON_TO_STRING, e);
             return StringUtils.EMPTY;
         }
     }
@@ -27,7 +27,7 @@ public class JsonUtils {
         try {
             return objectMapper.readValue(jsonString, valueType);
         } catch (Exception e){
-            LOGGER.error(Constant.ERROR_FROM_JSON_STRING, e);
+            LOGGER.info(Constant.ERROR_FROM_JSON_STRING, e);
             return null;
         }
     }

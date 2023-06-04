@@ -34,7 +34,7 @@ public class Constant {
     public static final String PASSENGER_LAST_NAME = "passengerLastName";
     public static final String AMOUNT_FA = "FA";
     public static final String TYPE_VJ = "VJ";
-    public static final String VIET_JET_LUCKY_CONTENT = "Hoàn tiền chương trình Vietjet Daily Lucky";
+    public static final String VIET_JET_LUCKY_CONTENT = "Kết quả quay số chương trình Hoàn tiền vé máy bay VietJet Air";
     public static final String LINK_WEB_PRIZES = "https://link-webview-prizes.com";
 
 }

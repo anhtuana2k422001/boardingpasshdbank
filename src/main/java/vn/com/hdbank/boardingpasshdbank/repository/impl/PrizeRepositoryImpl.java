@@ -25,10 +25,11 @@ public class PrizeRepositoryImpl implements PrizeRepository {
     private final Random rand = new Random();
 
     @Override
-    public List<Prize> findByCustomerId(int customerId) {
+    public Prize getPrizeCustomer(int customerId) {
         String sql = "SELECT * FROM prize WHERE customer_id = ?";
         try {
-            return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Prize.class), customerId);
+            List<Prize> prizeList =  jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Prize.class), customerId);
+            return prizeList.get(0);
         } catch (Exception e) {
             LOGGER.error(Constant.ERROR, e);
             throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
@@ -36,7 +37,7 @@ public class PrizeRepositoryImpl implements PrizeRepository {
     }
 
     @Override
-    public void save(Prize prize) {
+    public void savePrize(Prize prize) {
         String sql = "INSERT INTO prize (prize_code, prize_amount, customer_id, used) VALUES (?, ?, ?, ?)";
         try {
             jdbcTemplate.update(sql, prize.getPrizeCode(), prize.getPrizeAmount(), prize.getCustomerId(), prize.isUsed());
@@ -69,7 +70,7 @@ public class PrizeRepositoryImpl implements PrizeRepository {
     }
 
     @Override
-    public boolean checkExistsPrizeCodeForVietJet(int customerId) {
+    public boolean checkExistPrize(int customerId) {
         String sql = "SELECT COUNT(*) FROM prize WHERE customer_id = ? AND prize_code LIKE 'VJ%'";
         try {
             Integer count = jdbcTemplate.queryForObject(sql, Integer.class, customerId);

@@ -1,5 +1,6 @@
 package vn.com.hdbank.boardingpasshdbank.common.anotation;
 
+import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -8,13 +9,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@AllArgsConstructor
 public class MyModelRowMapper<T> implements RowMapper<T> {
     private final Class<T> clazz;
-
-    public MyModelRowMapper(Class<T> clazz) {
-        this.clazz = clazz;
-    }
-
     @Override
     public T mapRow(ResultSet rs, int rowNum) throws SQLException {
         T model;

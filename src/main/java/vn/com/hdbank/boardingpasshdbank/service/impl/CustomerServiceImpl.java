@@ -23,7 +23,6 @@ import vn.com.hdbank.boardingpasshdbank.service.CustomerService;
 import vn.com.hdbank.boardingpasshdbank.service.validate.DatabaseValidation;
 import vn.com.hdbank.boardingpasshdbank.utils.ValidationUtils;
 
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -36,10 +35,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public ResponseInfo<ConfirmCustomerVietJet> confirmCustomerVietJet(TicketConfirmRequest request,
-                                                                                       BindingResult bindingResult) {
+                                                                       BindingResult bindingResult) {
         String requestId = request.getRequestId();
         int customerId = request.getCustomerId();
-        String reservationCode = request.getReservationCode();
+        String ticketId = request.getTicketId();
 
         /*------------------- Validate ticket request -------------------*/
         Map<String, String> errors = ValidationUtils.validationHandler(bindingResult);
@@ -47,8 +46,8 @@ public class CustomerServiceImpl implements CustomerService {
             return ResponseService.validateResponse(errors, requestId);
 
         /*------------------- Validate database -------------------*/
-        ApiResponseStatus apiResponseStatus =  DatabaseValidation.validateConfirmCustomer(request,
-                customerRepository, ticketVietjetRepository);
+        ApiResponseStatus apiResponseStatus =  DatabaseValidation.validateConfirmCustomer(
+                request, customerRepository);
 
         if(!ApiResponseStatus.SUCCESS.equals(apiResponseStatus)){
             LOGGER.info(Constant.FORMAT_LOG, apiResponseStatus.getStatusCode(), apiResponseStatus.getStatusMessage());
@@ -56,21 +55,21 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         /* Ticket set customerId reference to table Customer */
-        ticketVietjetRepository.updateCustomerIdByFlightCode(customerId, reservationCode);
+        ticketVietjetRepository.updateConfirmCustomer(ticketId, customerId);
 
         /* Update Customer Type */
-        customerRepository.updateCustomerTypeById("VJ", customerId);
+        customerRepository.updateCustomerVJ("VJ", customerId);
 
         /* generate bonus code and save it in db for customer */
-        if (!prizeRepository.checkExistsPrizeCodeForVietJet(customerId)) {
+        if (!prizeRepository.checkExistPrize(customerId)) {
             String prizeCodeGenerate = prizeRepository.generatePrizeCode();
             Prize savePrize = new Prize();
             savePrize.setCustomerId(customerId);
             savePrize.setPrizeCode(prizeCodeGenerate);
-            prizeRepository.save(savePrize);
+            prizeRepository.savePrize(savePrize);
         }
 
-        List<Prize> prizeInfo = prizeRepository.findByCustomerId(customerId);
+        Prize prizeInfo = prizeRepository.getPrizeCustomer(customerId);
         Customer customerInfo = customerRepository.findById(customerId);
         ConfirmCustomerVietJet confirmCustomerVietjet = new ConfirmCustomerVietJet(customerInfo, prizeInfo, Constant.LINK_WEB_PRIZES);
 
@@ -80,7 +79,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public ResponseInfo<CustomerPrizeStatus> checkCustomerPrize(CustomerPrizeRequest request,
-                                                                                BindingResult bindingResult) {
+                                                                BindingResult bindingResult) {
         int customerId = request.getCustomerId();
         String requestId = request.getRequestId();
 
@@ -98,7 +97,7 @@ public class CustomerServiceImpl implements CustomerService {
             return ResponseService.errorResponse(apiResponseStatus, requestId);
         }
 
-        Prize prizeInfo = prizeRepository.findByCustomerId(customerId).get(0);
+        Prize prizeInfo = prizeRepository.getPrizeCustomer(customerId);
         Customer customer = customerRepository.findById(customerId);
         if (Boolean.TRUE.equals(prizeInfo.isUsed())) {
             return ResponseService.successResponse(ApiResponseStatus.CUSTOMER_PRIZE_SUCCESS,

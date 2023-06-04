@@ -5,42 +5,38 @@ import lombok.NoArgsConstructor;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.common.Constant;
 import vn.com.hdbank.boardingpasshdbank.entity.Customer;
-import vn.com.hdbank.boardingpasshdbank.entity.TicketVietJet;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.*;
 import vn.com.hdbank.boardingpasshdbank.repository.CustomerRepository;
 import vn.com.hdbank.boardingpasshdbank.repository.PrizeRepository;
 import vn.com.hdbank.boardingpasshdbank.repository.TicketVietJetRepository;
+import vn.com.hdbank.boardingpasshdbank.utils.DateUtils;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Date;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DatabaseValidation {
 
-    public static ApiResponseStatus validateTicket(String reservationCode,
+    public static ApiResponseStatus validateTicket(String reservationCode, String flightCode, String seats,
                                                    TicketVietJetRepository ticketVietjetRepository) {
-
-        List<TicketVietJet> ticketVietjetList = ticketVietjetRepository.findCustomerIdNotNull(reservationCode);
-        if (!ticketVietjetList.isEmpty()) {
-            return ApiResponseStatus.VIET_JET_EXISTED_AND_ASSIGNED;
+        if (ticketVietjetRepository.checkExistTicket(reservationCode, flightCode, seats)) {
+            return ApiResponseStatus.TICKET_EXIST;
         }
 
         return ApiResponseStatus.SUCCESS;
     }
 
     public static ApiResponseStatus validateConfirmCustomer(TicketConfirmRequest request,
-                                                            CustomerRepository customerRepository,
-                                                            TicketVietJetRepository ticketVietjetRepository) {
+                                                            CustomerRepository customerRepository) {
         int customerId = request.getCustomerId();
-        String reservationCode = request.getReservationCode();
+        String ticketId = request.getTicketId();
+        String fistNameCustomer = request.getFistNameCustomer();
+        String lastNameCustomer = request.getLastNameCustomer();
+        String birthDate = request.getBirthDateCustomer();
+        Date birthDateCustomer = DateUtils.parseDate(birthDate);
 
         if (Boolean.FALSE.equals(request.getIsCustomerVietJet())) {
             return ApiResponseStatus.CUSTOMER_NOT_VIET_JET;
-        }
-
-        boolean exists = ticketVietjetRepository.checkExistsByFlightCode(reservationCode);
-        if (!exists) {
-            return ApiResponseStatus.INVALID_TICKET;
         }
 
         Customer customerInfo = customerRepository.findById(customerId);
@@ -48,9 +44,22 @@ public class DatabaseValidation {
             return ApiResponseStatus.NOT_FOUND_CUSTOMER;
         }
 
-        boolean usedTicket = customerRepository.usedTicket(request);
-        if (!usedTicket) {
+        if (customerRepository.checkInfoCustomer(ticketId, customerId)) {
+            return ApiResponseStatus.SUCCESS;
+        }
+
+        boolean exists = customerRepository.checkInfoCustomer(ticketId, fistNameCustomer,
+                lastNameCustomer, birthDateCustomer);
+        if (!exists) {
+            return ApiResponseStatus.INVALID_CUSTOMER;
+        }
+
+        if (customerRepository.checkCustomerUsedTicket(customerId)) {
             return ApiResponseStatus.USED_TICKET_ERROR;
+        }
+
+        if (customerRepository.checkTicketExist(ticketId)) {
+            return ApiResponseStatus.TICKET_EXIST;
         }
 
         return ApiResponseStatus.SUCCESS;
@@ -74,7 +83,7 @@ public class DatabaseValidation {
             return ApiResponseStatus.NOT_ENOUGH_CONDITION_FOR_PRIZE;
         }
 
-        if (Boolean.FALSE.equals(prizeRepository.checkExistsPrizeCodeForVietJet(customerId))) {
+        if (Boolean.FALSE.equals(prizeRepository.checkExistPrize(customerId))) {
             return ApiResponseStatus.NO_PRIZE_CODE;
         }
 
@@ -98,7 +107,7 @@ public class DatabaseValidation {
 
         boolean checkUsed = prizeRepository.checkUsedPrize(request);
         if (checkUsed) {
-            return ApiResponseStatus.USED_PRIZE_CODE;
+            return ApiResponseStatus.USED_PRIZE;
         }
 
         boolean updated = prizeRepository.updateResultPrize(request);
