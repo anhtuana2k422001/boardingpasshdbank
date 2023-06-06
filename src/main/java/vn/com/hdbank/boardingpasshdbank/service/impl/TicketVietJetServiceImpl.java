@@ -61,19 +61,13 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
             return ResponseService.errorResponse(apiResponseStatusDb, requestId);
         }
 
-        TicketVietJet ticketVietJet = ticketVietjetRepository.getTicketCustomer(reservationCode, flightCode, seats);
-        if (ticketVietJet != null) {
-            TicketVietJetInformation ticketVietJetInformation = new TicketVietJetInformation(
-                    ticketVietJet.getId(),
-                    StringUtils.join(ticketVietJet.getLastName(), StringUtils.SPACE, ticketVietJet.getFirstName()),
-                    ticketVietJet.getBirthDate().toString(),
-                    ticketVietJet.getFlightTime().toString(),
-                    ticketVietJet.getTotalAmount()
-            );
-            return ResponseService.successResponse(ApiResponseStatus.SUCCESS, ticketVietJetInformation, requestId);
+        /* ------------------- Ticket exists and has been attached to the customer------------------- */
+        TicketVietJetInformation response = responseInfoTicKet(reservationCode, flightCode, seats);
+        if (response != null) {
+            return ResponseService.successResponse(ApiResponseStatus.SUCCESS, response, requestId);
         }
 
-        /*------------------- Validate Api -------------------*/
+        /*------------------- Validate Api ---------------------------------------------------------*/
         String jwtResponse = ApiHttpClient.getToken(ApiUrls.AUTHENTICATION_URL,
                 userAuthVietJet.getUserName(), userAuthVietJet.getPassWord());
         if (StringUtils.isEmpty(jwtResponse)) {
@@ -85,13 +79,13 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
             return ResponseService.errorResponse(ApiResponseStatus.INVALID_TICKET, requestId);
         }
 
-
         TicKet ticKet = JsonUtils.fromJsonString(ticketResponse, TicKet.class);
-        if(ticKet != null){
+        if (ticKet != null) {
             /* Handle ticKet response and save */
-            TicketVietJetInformation ticketVietjetInformation = handleTicketResponse(
-                    ticKet, flightCode, reservationCode, seats);
-            return ResponseService.successResponse(ApiResponseStatus.SUCCESS, ticketVietjetInformation, requestId);
+            handleTicketResponse(ticKet, flightCode, reservationCode, seats);
+            TicketVietJetInformation responseApi = responseInfoTicKet(reservationCode, flightCode, seats);
+            if(responseApi != null)
+                return ResponseService.successResponse(ApiResponseStatus.SUCCESS, responseApi, requestId);
         }
 
         return ResponseService.errorResponse(ApiResponseStatus.RESPONSE_API_ERROR, requestId);
@@ -111,6 +105,21 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
         if (errors.size() > 0)
             return ResponseService.validateResponse(errors, requestId);
 
+        /*-------------------  Validate database -------------------*/
+        ApiResponseStatus apiResponseStatusDb = DatabaseValidation.validateTicket(reservationCode,
+                flightCode, seats, ticketVietjetRepository);
+
+        if(!ApiResponseStatus.SUCCESS.equals(apiResponseStatusDb)){
+            LOGGER.info(Constant.FORMAT_LOG, apiResponseStatusDb.getStatusCode(), apiResponseStatusDb.getStatusMessage());
+            return ResponseService.errorResponse(apiResponseStatusDb, requestId);
+        }
+
+        /* ------------------- Ticket exists and has been attached to the customer------------------- */
+        TicketVietJetInformation response = responseInfoTicKet(reservationCode, flightCode, seats);
+        if (response != null) {
+            return ResponseService.successResponse(ApiResponseStatus.SUCCESS, response, requestId);
+        }
+
         /*------------------- Validate Api -------------------*/
         String jwtResponse = ApiHttpClient.getToken(ApiUrls.AUTHENTICATION_URL,
                 userAuthVietJet.getUserName(), userAuthVietJet.getPassWord());
@@ -123,30 +132,33 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
             return ResponseService.errorResponse(ApiResponseStatus.INVALID_TICKET, requestId);
         }
 
-        /*-------------------  Validate database -------------------*/
-        ApiResponseStatus apiResponseStatusDb = DatabaseValidation.validateTicket(reservationCode,
-                flightCode, seats, ticketVietjetRepository);
-
-        if(!ApiResponseStatus.SUCCESS.equals(apiResponseStatusDb)){
-            LOGGER.info(Constant.FORMAT_LOG, apiResponseStatusDb.getStatusCode(), apiResponseStatusDb.getStatusMessage());
-            return ResponseService.errorResponse(apiResponseStatusDb, requestId);
-        }
-
         TicKet ticKet = JsonUtils.fromJsonString(ticketResponse, TicKet.class);
-        if(ticKet != null){
-           /* Handle ticKet response and save */
-            TicketVietJetInformation ticketVietjetInformation = handleTicketResponse(
-                    ticKet, flightCode, reservationCode, seats);
-           return ResponseService.successResponse(ApiResponseStatus.SUCCESS,
-                   ticketVietjetInformation, requestId);
+        if (ticKet != null) {
+            /* Handle ticKet response and save */
+            handleTicketResponse(ticKet, flightCode, reservationCode, seats);
+            TicketVietJetInformation responseApi = responseInfoTicKet(reservationCode, flightCode, seats);
+            if(responseApi != null)
+                return ResponseService.successResponse(ApiResponseStatus.SUCCESS, responseApi, requestId);
         }
 
         return ResponseService.errorResponse(ApiResponseStatus.RESPONSE_API_ERROR, requestId);
     }
 
+    public TicketVietJetInformation responseInfoTicKet(String reservationCode, String flightCode, String seats) {
+        TicketVietJet ticketVietJet = ticketVietjetRepository.getTicketCustomer(reservationCode, flightCode, seats);
+        if (ticketVietJet == null) return null;
+        String fullName = StringUtils.join(ticketVietJet.getLastName(), StringUtils.SPACE, ticketVietJet.getFirstName());
+        return TicketVietJetInformation.builder()
+                .ticketId(ticketVietJet.getId())
+                .fullName(fullName)
+                .birthDate(ticketVietJet.getBirthDate().toString())
+                .flightTime(ticketVietJet.getFlightTime().toString())
+                .totalAmount(ticketVietJet.getTotalAmount())
+                .build();
+    }
+
     /* Return ticket information and save database */
-    private TicketVietJetInformation handleTicketResponse(TicKet ticKet, String flightCode,
-                                                          String reservationCode, String seats){
+    private void handleTicketResponse(TicKet ticKet, String flightCode, String reservationCode, String seats){
         Passenger firstPassenger = ticKet.getPassengers().get(0);
         Journey firstJourney = ticKet.getJourneys().get(0);
         List<Charge> charges = ticKet.getCharges();
@@ -155,7 +167,7 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
         LocalDate date = LocalDate.parse(birthDate, DateTimeFormatter.ISO_LOCAL_DATE);
 
         String flightTime =  String.valueOf(firstJourney.getFlightSegments().get(0).getScheduledDepartureLocalDatetime());
-        Timestamp sqlFlightTime = DateUtils.parseTimestamp(flightTime);
+        Timestamp sqlFlightTime = DateUtils.parseTimestampSave(flightTime);
 
         String firstName = firstPassenger.getFirstName();
         String lastName = firstPassenger.getLastName();
@@ -168,7 +180,7 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
         /* Save database */
         boolean exists = ticketVietjetRepository.checkSaveTicket(reservationCode, flightCode, seats);
         if (!exists) {
-            TicketVietJet ticketVietJet = TicketVietJet.builder()
+            ticketVietjetRepository.createTicket(TicketVietJet.builder()
                     .firstName(firstName)
                     .lastName(lastName)
                     .birthDate(date)
@@ -177,17 +189,10 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
                     .reservationCode(reservationCode)
                     .seats(seats)
                     .totalAmount(totalAmount)
-                    .build();
-            ticketVietjetRepository.createTicket(ticketVietJet);
+                    .build()
+            );
         }
-
-        String ticketId = ticketVietjetRepository.getTicketId(reservationCode, flightCode, seats);
-
-        return new TicketVietJetInformation(
-                ticketId,
-                StringUtils.join(lastName, StringUtils.SPACE, firstName),
-                birthDate, flightTime, totalAmount
-        );
     }
+
 
 }

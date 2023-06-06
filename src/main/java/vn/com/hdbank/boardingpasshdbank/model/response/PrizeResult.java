@@ -13,4 +13,6 @@ public class PrizeResult {
     private String bankAccount;
     private String balanceAfterTransaction;
     private double totalAmount;
+    private String referenceCode;
+    private String prizeDrawDay;
 }

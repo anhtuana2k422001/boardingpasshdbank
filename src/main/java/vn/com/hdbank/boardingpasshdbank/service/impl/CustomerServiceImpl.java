@@ -65,7 +65,7 @@ public class CustomerServiceImpl implements CustomerService {
             String prizeCodeGenerate = prizeRepository.generatePrizeCode();
             Prize savePrize = new Prize();
             savePrize.setCustomerId(customerId);
-            savePrize.setReferenceCode(prizeCodeGenerate);
+            savePrize.setPrizeCode(prizeCodeGenerate);
             prizeRepository.savePrize(savePrize);
         }
 
@@ -107,7 +107,10 @@ public class CustomerServiceImpl implements CustomerService {
                                             .statusInformation(Constant.VIET_JET_LUCKY_CONTENT)
                                             .bankAccount(customer.getAccountNumber())
                                             .balanceAfterTransaction(customer.getBalance().toString())
-                                            .totalAmount(prizeInfo.getPrizeAmount().doubleValue()).build())
+                                            .totalAmount(prizeInfo.getPrizeAmount().doubleValue())
+                                            .referenceCode(prizeInfo.getReferenceCode())
+                                            .prizeDrawDay(prizeInfo.getPrizeDrawDay().toString())
+                                            .build())
                             .linkWebViewPrizes(null).build()
                     , requestId);
         }

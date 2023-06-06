@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.common.Constant;
 import vn.com.hdbank.boardingpasshdbank.entity.Customer;
+import vn.com.hdbank.boardingpasshdbank.entity.TicketVietJet;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.*;
 import vn.com.hdbank.boardingpasshdbank.repository.CustomerRepository;
 import vn.com.hdbank.boardingpasshdbank.repository.PrizeRepository;
@@ -26,7 +27,6 @@ public class DatabaseValidation {
         if (ticketVietjetRepository.checkExistCustomer(reservationCode, flightCode, seats)) {
             return ApiResponseStatus.TICKET_EXIST;
         }
-
         return ApiResponseStatus.SUCCESS;
     }
 

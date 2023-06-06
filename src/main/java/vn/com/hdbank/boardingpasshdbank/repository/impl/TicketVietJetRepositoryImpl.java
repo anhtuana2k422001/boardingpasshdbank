@@ -2,14 +2,13 @@ package vn.com.hdbank.boardingpasshdbank.repository.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.common.Constant;
-import vn.com.hdbank.boardingpasshdbank.common.anotation.MyModelRowMapper;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 import vn.com.hdbank.boardingpasshdbank.entity.TicketVietJet;
-import vn.com.hdbank.boardingpasshdbank.model.response.TicketVietJetInformation;
 import vn.com.hdbank.boardingpasshdbank.repository.TicketVietJetRepository;
 
 import java.util.List;
@@ -30,19 +29,6 @@ public class TicketVietJetRepositoryImpl implements TicketVietJetRepository {
                      ticketVietjet.getBirthDate(), ticketVietjet.getFlightTime(),
                      ticketVietjet.getFlightCode(), ticketVietjet.getReservationCode(),
                      ticketVietjet.getSeats(), ticketVietjet.getTotalAmount(), null);
-        } catch (Exception e) {
-            LOGGER.error(Constant.ERROR, e);
-            throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
-        }
-    }
-
-    @Override
-    public String getTicketId(String reservationCode, String flightCode, String seats) {
-        String sql = "SELECT * FROM ticket_vietjet WHERE reservation_code = ? AND flight_code = ? AND  seats = ?";
-        try {
-            List<TicketVietJet> ticketVietJet = jdbcTemplate.query(sql, new MyModelRowMapper<>(TicketVietJet.class),
-                    reservationCode, flightCode, seats);
-            return ticketVietJet.isEmpty() ? null : String.valueOf(ticketVietJet.get(0).getId());
         } catch (Exception e) {
             LOGGER.error(Constant.ERROR, e);
             throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
@@ -74,7 +60,16 @@ public class TicketVietJetRepositoryImpl implements TicketVietJetRepository {
 
     @Override
     public TicketVietJet getTicketCustomer(String reservationCode, String flightCode, String seats) {
-        return null;
+        String sql = "SELECT * FROM ticket_vietjet WHERE reservation_code = ? AND flight_code = ? " +
+                "AND  seats = ? AND customer_id IS NULL";
+        try {
+            List<TicketVietJet> ticketVietJet = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(TicketVietJet.class),
+                    reservationCode, flightCode, seats);
+            return ticketVietJet.isEmpty() ? null : ticketVietJet.get(0);
+        } catch (Exception e) {
+            LOGGER.error(Constant.ERROR, e);
+            throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
+        }
     }
 
     @Override
