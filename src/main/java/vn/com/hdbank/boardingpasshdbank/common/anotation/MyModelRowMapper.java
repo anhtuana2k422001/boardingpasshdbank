@@ -42,10 +42,11 @@ public class MyModelRowMapper<T> implements RowMapper<T> {
             MyColumn myColumn = field.getAnnotation(MyColumn.class);
             String columnName = (myColumn != null) ? StringUtils.defaultIfBlank(myColumn.name(), field.getName()) : field.getName();
             String columnValue = rs.getString(columnName);
-            if (columnValue == null && (myColumn == null || !myColumn.nullable())) {
+
+            if (StringUtils.isEmpty(columnValue) && (myColumn == null || !myColumn.nullable())) {
                 throw new SQLException(StringUtils.join("Column ", columnName, " cannot be null."));
             }
-            if (columnValue != null && myColumn != null && columnValue.length() > myColumn.length()) {
+            if (StringUtils.isNotEmpty(columnValue) && myColumn != null && columnValue.length() > myColumn.length()) {
                 throw new SQLException(StringUtils.join("Column ", columnName, " exceeded maximum length."));
             }
             try {
