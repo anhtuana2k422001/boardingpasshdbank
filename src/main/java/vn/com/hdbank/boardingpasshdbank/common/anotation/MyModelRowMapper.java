@@ -22,13 +22,15 @@ import java.time.format.DateTimeFormatter;
 public class MyModelRowMapper<T> implements RowMapper<T> {
     private final Class<T> clazz;
     private final DateTimeFormatter formatterTimestamp = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
-    private final  DateTimeFormatter formatterTimesTampTz  = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSXXX");
+    private final DateTimeFormatter formatterTimesTampTz = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSXXX");
+
     @Override
     public T mapRow(@NonNull ResultSet rs, int rowNum) throws SQLException {
         T model;
         try {
             model = clazz.getDeclaredConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
+                 InvocationTargetException e) {
             throw new SQLException("Failed to instantiate model class.", e);
         }
         setModelFields(rs, model);
@@ -38,20 +40,18 @@ public class MyModelRowMapper<T> implements RowMapper<T> {
     private void setModelFields(ResultSet rs, T model) throws SQLException {
         for (Field field : clazz.getDeclaredFields()) {
             MyColumn myColumn = field.getAnnotation(MyColumn.class);
-            if (myColumn != null) {
-                String columnName = StringUtils.defaultIfBlank(myColumn.name(), field.getName());
-                String columnValue = rs.getString(columnName);
-                if (columnValue == null && !myColumn.nullable()) {
-                    throw new SQLException(StringUtils.join("Column ", columnName, " cannot be null."));
-                }
-                if (columnValue != null && columnValue.length() > myColumn.length()) {
-                    throw new SQLException(StringUtils.join("Column ", columnName, " exceeded maximum length."));
-                }
-                try {
-                    FieldUtils.writeField(model, field.getName(), parseColumnValue(columnValue, field.getType()), true);
-                } catch (IllegalAccessException e) {
-                    throw new SQLException("Failed to set column value.", e);
-                }
+            String columnName = (myColumn != null) ? StringUtils.defaultIfBlank(myColumn.name(), field.getName()) : field.getName();
+            String columnValue = rs.getString(columnName);
+            if (columnValue == null && (myColumn == null || !myColumn.nullable())) {
+                throw new SQLException(StringUtils.join("Column ", columnName, " cannot be null."));
+            }
+            if (columnValue != null && myColumn != null && columnValue.length() > myColumn.length()) {
+                throw new SQLException(StringUtils.join("Column ", columnName, " exceeded maximum length."));
+            }
+            try {
+                FieldUtils.writeField(model, field.getName(), parseColumnValue(columnValue, field.getType()), true);
+            } catch (IllegalAccessException e) {
+                throw new SQLException("Failed to set column value.", e);
             }
         }
     }
