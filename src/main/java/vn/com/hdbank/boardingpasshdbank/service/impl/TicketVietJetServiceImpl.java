@@ -28,7 +28,6 @@ import vn.com.hdbank.boardingpasshdbank.utils.ValidationUtils;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -62,6 +61,18 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
             return ResponseService.errorResponse(apiResponseStatusDb, requestId);
         }
 
+        TicketVietJet ticketVietJet = ticketVietjetRepository.getTicketCustomer(reservationCode, flightCode, seats);
+        if (ticketVietJet != null) {
+            TicketVietJetInformation ticketVietJetInformation = new TicketVietJetInformation(
+                    ticketVietJet.getId(),
+                    StringUtils.join(ticketVietJet.getLastName(), StringUtils.SPACE, ticketVietJet.getFirstName()),
+                    ticketVietJet.getBirthDate().toString(),
+                    ticketVietJet.getFlightTime().toString(),
+                    ticketVietJet.getTotalAmount()
+            );
+            return ResponseService.successResponse(ApiResponseStatus.SUCCESS, ticketVietJetInformation, requestId);
+        }
+
         /*------------------- Validate Api -------------------*/
         String jwtResponse = ApiHttpClient.getToken(ApiUrls.AUTHENTICATION_URL,
                 userAuthVietJet.getUserName(), userAuthVietJet.getPassWord());
@@ -80,7 +91,7 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
             /* Handle ticKet response and save */
             TicketVietJetInformation ticketVietjetInformation = handleTicketResponse(
                     ticKet, flightCode, reservationCode, seats);
-            return ResponseService.successResponse(ApiResponseStatus.SUCCESS,ticketVietjetInformation, requestId);
+            return ResponseService.successResponse(ApiResponseStatus.SUCCESS, ticketVietjetInformation, requestId);
         }
 
         return ResponseService.errorResponse(ApiResponseStatus.RESPONSE_API_ERROR, requestId);

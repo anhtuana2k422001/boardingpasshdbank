@@ -23,7 +23,7 @@ public class DatabaseValidation {
 
     public static ApiResponseStatus validateTicket(String reservationCode, String flightCode, String seats,
                                                    TicketVietJetRepository ticketVietjetRepository) {
-        if (ticketVietjetRepository.checkExistTicket(reservationCode, flightCode, seats)) {
+        if (ticketVietjetRepository.checkExistCustomer(reservationCode, flightCode, seats)) {
             return ApiResponseStatus.TICKET_EXIST;
         }
 

@@ -8,6 +8,7 @@ import vn.com.hdbank.boardingpasshdbank.common.anotation.MyColumn;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -36,6 +37,7 @@ public class Customer implements Serializable, UserDetails {
 
     @MyColumn (name = "first_name")
     private String firstName;
+
     @MyColumn (name = "last_name")
     private String lastName;
 
@@ -46,7 +48,7 @@ public class Customer implements Serializable, UserDetails {
     private String phoneNumber;
 
     @MyColumn (name = "birth_date")
-    private String birthDate;
+    private LocalDate birthDate;
 
     @MyColumn (name = "address")
     private String address;
@@ -60,13 +62,13 @@ public class Customer implements Serializable, UserDetails {
     @MyColumn (name = "role_id")
     private String roleId;
 
-    /* Mock data */
-    private List <String> listRole = new ArrayList<>() ;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        listRole.add("User");
+        /* Mock data */
+        List <String> listRole = new ArrayList<>() ;
+        listRole.add(roleId);
         List<GrantedAuthority> authorities = new ArrayList<>();
-        this.listRole.forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
+        listRole.forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
         return authorities;
     }
 

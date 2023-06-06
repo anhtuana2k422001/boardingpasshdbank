@@ -65,7 +65,7 @@ public class CustomerServiceImpl implements CustomerService {
             String prizeCodeGenerate = prizeRepository.generatePrizeCode();
             Prize savePrize = new Prize();
             savePrize.setCustomerId(customerId);
-            savePrize.setPrizeCode(prizeCodeGenerate);
+            savePrize.setReferenceCode(prizeCodeGenerate);
             prizeRepository.savePrize(savePrize);
         }
 

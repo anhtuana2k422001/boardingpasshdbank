@@ -9,6 +9,7 @@ import vn.com.hdbank.boardingpasshdbank.common.Constant;
 import vn.com.hdbank.boardingpasshdbank.common.anotation.MyModelRowMapper;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 import vn.com.hdbank.boardingpasshdbank.entity.TicketVietJet;
+import vn.com.hdbank.boardingpasshdbank.model.response.TicketVietJetInformation;
 import vn.com.hdbank.boardingpasshdbank.repository.TicketVietJetRepository;
 
 import java.util.List;
@@ -60,7 +61,7 @@ public class TicketVietJetRepositoryImpl implements TicketVietJetRepository {
     }
 
     @Override
-    public boolean checkExistTicket(String reservationCode, String flightCode, String seats) {
+    public boolean checkExistCustomer(String reservationCode, String flightCode, String seats) {
         String sql = "SELECT COUNT(*) > 0 FROM ticket_vietjet WHERE reservation_code = ? AND flight_code = ? AND " +
                 "seats = ? AND customer_id IS NOT NULL";
         try {
@@ -69,6 +70,11 @@ public class TicketVietJetRepositoryImpl implements TicketVietJetRepository {
             LOGGER.error(Constant.ERROR, e);
             throw new CustomException(ApiResponseStatus.DATABASE_ERROR);
         }
+    }
+
+    @Override
+    public TicketVietJet getTicketCustomer(String reservationCode, String flightCode, String seats) {
+        return null;
     }
 
     @Override

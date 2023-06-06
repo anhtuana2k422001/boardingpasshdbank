@@ -38,7 +38,7 @@ public class SpringSecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers(publicUrls).permitAll()
-                .anyRequest().hasAuthority("User")
+                .anyRequest().hasAuthority("USER")
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint)
