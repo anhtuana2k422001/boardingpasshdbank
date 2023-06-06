@@ -1,9 +1,11 @@
 package vn.com.hdbank.boardingpasshdbank.common.anotation;
+
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.jdbc.core.RowMapper;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
@@ -19,13 +21,15 @@ import java.time.format.DateTimeFormatter;
 public class MyModelRowMapper<T> implements RowMapper<T> {
     private final Class<T> clazz;
     private final DateTimeFormatter formatterTimestamp = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
-    private final  DateTimeFormatter formatterTimesTampTz  = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSXXX");
+    private final DateTimeFormatter formatterTimesTampTz = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSXXX");
+
     @Override
     public T mapRow(@NonNull ResultSet rs, int rowNum) throws SQLException {
         T model;
         try {
             model = clazz.getDeclaredConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
+                 InvocationTargetException e) {
             throw new SQLException("Failed to instantiate model class.", e);
         }
         setModelFields(rs, model);
@@ -35,15 +39,25 @@ public class MyModelRowMapper<T> implements RowMapper<T> {
     private void setModelFields(ResultSet rs, T model) throws SQLException {
         for (Field field : clazz.getDeclaredFields()) {
             MyColumn myColumn = field.getAnnotation(MyColumn.class);
+            String columnName;
+            String columnValue;
             if (myColumn != null) {
-                String columnName = StringUtils.defaultIfBlank(myColumn.name(), field.getName());
-                String columnValue = rs.getString(columnName);
+                columnName = StringUtils.defaultIfBlank(myColumn.name(), field.getName());
+                columnValue = rs.getString(columnName);
                 if (columnValue == null && !myColumn.nullable()) {
                     throw new SQLException(StringUtils.join("Column ", columnName, " cannot be null."));
                 }
                 if (columnValue != null && columnValue.length() > myColumn.length()) {
                     throw new SQLException(StringUtils.join("Column ", columnName, " exceeded maximum length."));
                 }
+                try {
+                    FieldUtils.writeField(model, field.getName(), parseColumnValue(columnValue, field.getType()), true);
+                } catch (IllegalAccessException e) {
+                    throw new SQLException("Failed to set column value.", e);
+                }
+            } else {
+                columnName = field.getName();
+                columnValue = rs.getString(columnName);
                 try {
                     FieldUtils.writeField(model, field.getName(), parseColumnValue(columnValue, field.getType()), true);
                 } catch (IllegalAccessException e) {
