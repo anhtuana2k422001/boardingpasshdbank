@@ -4,11 +4,14 @@ import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.jdbc.core.RowMapper;
+import vn.com.hdbank.boardingpasshdbank.utils.DateUtils;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -69,10 +72,12 @@ public class MyModelRowMapper<T> implements RowMapper<T> {
             return new BigDecimal(columnValue);
         } else if (fieldType == Boolean.class) {
             return Boolean.parseBoolean(columnValue);
-        } else if (fieldType == LocalDate.class) {
+        }else if (fieldType == LocalDate.class) {
             return LocalDate.parse(columnValue, DateTimeFormatter.ISO_LOCAL_DATE);
         } else if (fieldType == LocalTime.class) {
             return LocalTime.parse(columnValue, DateTimeFormatter.ISO_LOCAL_TIME);
+        } else if (fieldType == Timestamp.class) {
+            return DateUtils.parseTimestamp(columnValue);
         } else if (fieldType == LocalDateTime.class) {
             return LocalDateTime.parse(columnValue, formatterTimestamp);
         } else if (fieldType == ZonedDateTime.class) {

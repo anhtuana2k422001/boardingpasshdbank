@@ -20,4 +20,12 @@ public class InfoPrizeRequest extends BaseRequest{
     @NotNull (message = Validate.MESSAGE_NOT_NULL)
     @DecimalMin(value = "0", inclusive = false, message = Validate.MESSAGE_TOTAL_AMOUNT)
     private Double totalAmount;
+
+    @NotNull (message = Validate.MESSAGE_NOT_NULL)
+    @NotEmpty (message = Validate.MESSAGE_NOT_EMPTY)
+    private String referenceCode;
+
+    @NotNull (message = Validate.MESSAGE_NOT_NULL)
+    @NotEmpty (message = Validate.MESSAGE_NOT_EMPTY)
+    private String prizeDrawDay;
 }

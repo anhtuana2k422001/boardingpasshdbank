@@ -99,7 +99,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         Prize prizeInfo = prizeRepository.getPrizeCustomer(customerId);
         Customer customer = customerRepository.findById(customerId);
-        if (Boolean.TRUE.equals(prizeInfo.isUsed())) {
+        if (Boolean.TRUE.equals(prizeInfo.getUsed())) {
             return ResponseService.successResponse(ApiResponseStatus.CUSTOMER_PRIZE_SUCCESS,
                     CustomerPrizeStatus.builder()
                             .prizeResult(
@@ -123,7 +123,7 @@ public class CustomerServiceImpl implements CustomerService {
     /* Update results prize for customer */
     @Override
     public ResponseInfo<String> updateCustomerPrize(InfoPrizeRequest request,
-                                                                    BindingResult bindingResult){
+                                                    BindingResult bindingResult){
         String requestId = request.getRequestId();
 
         /*------------------- Validate ticket request -------------------*/

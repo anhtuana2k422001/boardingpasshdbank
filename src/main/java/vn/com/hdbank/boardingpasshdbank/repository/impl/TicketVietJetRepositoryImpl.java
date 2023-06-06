@@ -37,7 +37,7 @@ public class TicketVietJetRepositoryImpl implements TicketVietJetRepository {
 
     @Override
     public String getTicketId(String reservationCode, String flightCode, String seats) {
-        String sql = "SELECT id FROM ticket_vietjet WHERE reservation_code = ? AND flight_code = ? AND  seats = ?";
+        String sql = "SELECT * FROM ticket_vietjet WHERE reservation_code = ? AND flight_code = ? AND  seats = ?";
         try {
             List<TicketVietJet> ticketVietJet = jdbcTemplate.query(sql, new MyModelRowMapper<>(TicketVietJet.class),
                     reservationCode, flightCode, seats);

@@ -12,7 +12,9 @@ import vn.com.hdbank.boardingpasshdbank.repository.PrizeRepository;
 import vn.com.hdbank.boardingpasshdbank.repository.TicketVietJetRepository;
 import vn.com.hdbank.boardingpasshdbank.utils.DateUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -113,8 +115,8 @@ public class DatabaseValidation {
         if (checkUsed) {
             return ApiResponseStatus.USED_PRIZE;
         }
-
-        boolean updated = prizeRepository.updateResultPrize(request);
+        LocalDate prizeDrawDay = LocalDate.parse(request.getPrizeDrawDay(), DateTimeFormatter.ISO_LOCAL_DATE);
+        boolean updated = prizeRepository.updateResultPrize(request, prizeDrawDay);
         if (!updated)
             return ApiResponseStatus.UPDATE_PRIZE_ERROR;
 

@@ -26,6 +26,8 @@ import vn.com.hdbank.boardingpasshdbank.utils.ValidationUtils;
 
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -139,7 +141,7 @@ public class TicketVietJetServiceImpl implements TicketVietJetService {
         List<Charge> charges = ticKet.getCharges();
 
         String birthDate =   firstPassenger.getBirthDate();
-        Date date = DateUtils.parseDate(birthDate);
+        LocalDate date = LocalDate.parse(birthDate, DateTimeFormatter.ISO_LOCAL_DATE);
 
         String flightTime =  String.valueOf(firstJourney.getFlightSegments().get(0).getScheduledDepartureLocalDatetime());
         Timestamp sqlFlightTime = DateUtils.parseTimestamp(flightTime);

@@ -12,6 +12,7 @@ import vn.com.hdbank.boardingpasshdbank.entity.Prize;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.InfoPrizeRequest;
 import vn.com.hdbank.boardingpasshdbank.repository.PrizeRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -38,9 +39,9 @@ public class PrizeRepositoryImpl implements PrizeRepository {
 
     @Override
     public void savePrize(Prize prize) {
-        String sql = "INSERT INTO prize (prize_code, prize_amount, customer_id, used) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO prize (prize_code, prize_amount, customer_id) VALUES (?, ?, ?)";
         try {
-            jdbcTemplate.update(sql, prize.getPrizeCode(), prize.getPrizeAmount(), prize.getCustomerId(), prize.isUsed());
+            jdbcTemplate.update(sql, prize.getPrizeCode(), prize.getPrizeAmount(), prize.getCustomerId());
         }
         catch (Exception e) {
             LOGGER.error(Constant.ERROR, e);
@@ -82,10 +83,11 @@ public class PrizeRepositoryImpl implements PrizeRepository {
     }
 
     @Override
-    public boolean updateResultPrize(InfoPrizeRequest request) {
+    public boolean updateResultPrize(InfoPrizeRequest request, LocalDate prizeDrawDay) {
         try {
-            String sql = "UPDATE prize SET prize_amount = ?, used = ? WHERE prize_code = ? AND customer_id = ?";
-            int count = jdbcTemplate.update(sql, request.getTotalAmount(), Boolean.TRUE, request.getPrizeCode(), request.getCustomerId());
+            String sql = "UPDATE prize SET prize_amount = ?, used = ?, reference_code = ?, prizedrawday = ? WHERE prize_code = ? AND customer_id = ?";
+            int count = jdbcTemplate.update(sql, request.getTotalAmount(), Boolean.TRUE, request.getReferenceCode(), prizeDrawDay,
+                    request.getPrizeCode(), request.getCustomerId());
             return count > 0;
         } catch (Exception e) {
             LOGGER.error(Constant.ERROR, e);
