@@ -1,11 +1,9 @@
 package vn.com.hdbank.boardingpasshdbank.common.anotation;
-
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.jdbc.core.RowMapper;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
@@ -39,30 +37,18 @@ public class MyModelRowMapper<T> implements RowMapper<T> {
     private void setModelFields(ResultSet rs, T model) throws SQLException {
         for (Field field : clazz.getDeclaredFields()) {
             MyColumn myColumn = field.getAnnotation(MyColumn.class);
-            String columnName;
-            String columnValue;
-            if (myColumn != null) {
-                columnName = StringUtils.defaultIfBlank(myColumn.name(), field.getName());
-                columnValue = rs.getString(columnName);
-                if (columnValue == null && !myColumn.nullable()) {
-                    throw new SQLException(StringUtils.join("Column ", columnName, " cannot be null."));
-                }
-                if (columnValue != null && columnValue.length() > myColumn.length()) {
-                    throw new SQLException(StringUtils.join("Column ", columnName, " exceeded maximum length."));
-                }
-                try {
-                    FieldUtils.writeField(model, field.getName(), parseColumnValue(columnValue, field.getType()), true);
-                } catch (IllegalAccessException e) {
-                    throw new SQLException("Failed to set column value.", e);
-                }
-            } else {
-                columnName = field.getName();
-                columnValue = rs.getString(columnName);
-                try {
-                    FieldUtils.writeField(model, field.getName(), parseColumnValue(columnValue, field.getType()), true);
-                } catch (IllegalAccessException e) {
-                    throw new SQLException("Failed to set column value.", e);
-                }
+            String columnName = (myColumn != null) ? StringUtils.defaultIfBlank(myColumn.name(), field.getName()) : field.getName();
+            String columnValue = rs.getString(columnName);
+            if (columnValue == null && (myColumn == null || !myColumn.nullable())) {
+                throw new SQLException(StringUtils.join("Column ", columnName, " cannot be null."));
+            }
+            if (columnValue != null && myColumn != null && columnValue.length() > myColumn.length()) {
+                throw new SQLException(StringUtils.join("Column ", columnName, " exceeded maximum length."));
+            }
+            try {
+                FieldUtils.writeField(model, field.getName(), parseColumnValue(columnValue, field.getType()), true);
+            } catch (IllegalAccessException e) {
+                throw new SQLException("Failed to set column value.", e);
             }
         }
     }
