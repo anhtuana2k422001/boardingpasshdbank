@@ -10,8 +10,8 @@ import vn.com.hdbank.boardingpasshdbank.common.Validate;
 @AllArgsConstructor
 public class InfoPrizeRequest extends BaseRequest{
     @NotNull (message = Validate.MESSAGE_NOT_NULL)
-    @Min(value = 1, message = Validate.MESSAGE_REQUIRED_ID)
-    private Integer customerId;
+    @NotEmpty (message = Validate.MESSAGE_NOT_EMPTY)
+    private String customerId;
 
     @NotNull (message = Validate.MESSAGE_NOT_NULL)
     @Pattern(regexp = Validate.REGEX_PRIZE_CODE, message = Validate.MESSAGE_PRIZE_CODE)

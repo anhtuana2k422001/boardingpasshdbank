@@ -37,7 +37,7 @@ public class CustomerServiceImpl implements CustomerService {
     public ResponseInfo<ConfirmCustomerVietJet> confirmCustomerVietJet(TicketConfirmRequest request,
                                                                        BindingResult bindingResult) {
         String requestId = request.getRequestId();
-        int customerId = request.getCustomerId();
+        String customerId = request.getCustomerId();
         String ticketId = request.getTicketId();
 
         /*------------------- Validate ticket request -------------------*/
@@ -80,7 +80,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public ResponseInfo<CustomerPrizeStatus> checkCustomerPrize(CustomerPrizeRequest request,
                                                                 BindingResult bindingResult) {
-        int customerId = request.getCustomerId();
+        String customerId = request.getCustomerId();
         String requestId = request.getRequestId();
 
         /*------------------- Validate ticket request -------------------*/

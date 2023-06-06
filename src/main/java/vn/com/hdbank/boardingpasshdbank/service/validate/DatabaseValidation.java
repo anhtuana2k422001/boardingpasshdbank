@@ -2,6 +2,7 @@ package vn.com.hdbank.boardingpasshdbank.service.validate;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.common.Constant;
 import vn.com.hdbank.boardingpasshdbank.entity.Customer;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Slf4j
 public class DatabaseValidation {
 
     public static ApiResponseStatus validateTicket(String reservationCode, String flightCode, String seats,
@@ -28,7 +30,7 @@ public class DatabaseValidation {
 
     public static ApiResponseStatus validateConfirmCustomer(TicketConfirmRequest request,
                                                             CustomerRepository customerRepository) {
-        int customerId = request.getCustomerId();
+        String customerId = request.getCustomerId();
         String ticketId = request.getTicketId();
         String fistNameCustomer = request.getFistNameCustomer();
         String lastNameCustomer = request.getLastNameCustomer();
@@ -40,6 +42,7 @@ public class DatabaseValidation {
         }
 
         Customer customerInfo = customerRepository.findById(customerId);
+        LOGGER.info("customerInfo: {}", customerInfo);
         if (customerInfo == null) {
             return ApiResponseStatus.NOT_FOUND_CUSTOMER;
         }
@@ -68,8 +71,9 @@ public class DatabaseValidation {
     public static ApiResponseStatus validateCheckPrize(CustomerPrizeRequest request,
                                                        CustomerRepository customerRepository,
                                                        PrizeRepository prizeRepository) {
-        int customerId = request.getCustomerId();
+        String customerId = request.getCustomerId();
         Customer customer = customerRepository.findById(customerId);
+        LOGGER.info("Customer {}" , customer);
         if (customer == null) {
             return ApiResponseStatus.NOT_FOUND_CUSTOMER;
         }
@@ -93,7 +97,7 @@ public class DatabaseValidation {
     public static ApiResponseStatus validateUpdatePrize(InfoPrizeRequest request,
                                                         CustomerRepository customerRepository,
                                                         PrizeRepository prizeRepository) {
-        int customerId = request.getCustomerId();
+        String customerId = request.getCustomerId();
         Customer customer = customerRepository.findById(customerId);
 
         if (customer == null) {

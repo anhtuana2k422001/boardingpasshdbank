@@ -8,5 +8,5 @@ public interface TicketVietJetRepository {
     String getTicketId(String reservationCode, String flightCode, String seats);
     boolean checkExistTicket(String reservationCode, String flightCode, String seats);
     boolean checkSaveTicket(String reservationCode, String flightCode, String seats);
-    void updateConfirmCustomer(String ticketId, int customerId);
+    void updateConfirmCustomer(String ticketId, String customerId);
 }

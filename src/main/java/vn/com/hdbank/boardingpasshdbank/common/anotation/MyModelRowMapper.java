@@ -6,17 +6,20 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.jdbc.core.RowMapper;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 @AllArgsConstructor
 public class MyModelRowMapper<T> implements RowMapper<T> {
     private final Class<T> clazz;
-
+    private final DateTimeFormatter formatterTimestamp = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
+    private final  DateTimeFormatter formatterTimesTampTz  = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSXXX");
     @Override
     public T mapRow(@NonNull ResultSet rs, int rowNum) throws SQLException {
         T model;
@@ -62,6 +65,8 @@ public class MyModelRowMapper<T> implements RowMapper<T> {
             return Integer.parseInt(columnValue);
         } else if (fieldType == Double.class) {
             return Double.parseDouble(columnValue);
+        } else if (fieldType == BigDecimal.class) {
+            return new BigDecimal(columnValue);
         } else if (fieldType == Boolean.class) {
             return Boolean.parseBoolean(columnValue);
         } else if (fieldType == LocalDate.class) {
@@ -69,7 +74,9 @@ public class MyModelRowMapper<T> implements RowMapper<T> {
         } else if (fieldType == LocalTime.class) {
             return LocalTime.parse(columnValue, DateTimeFormatter.ISO_LOCAL_TIME);
         } else if (fieldType == LocalDateTime.class) {
-            return LocalDateTime.parse(columnValue, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            return LocalDateTime.parse(columnValue, formatterTimestamp);
+        } else if (fieldType == ZonedDateTime.class) {
+            return ZonedDateTime.parse(columnValue, formatterTimesTampTz);
         } else {
             throw new SQLException("Unsupported column type.");
         }

@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import vn.com.hdbank.boardingpasshdbank.common.anotation.MyColumn;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -18,19 +19,46 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class Customer implements Serializable, UserDetails {
-    private int id;
-    private String firstName;
-    private String lastName;
-    private String birthDate;
-    private String customerType;
-    private LocalDateTime createdAt;
-    private String accountNumber;
+    @MyColumn (name = "id")
+    private String id;
+
+    @MyColumn (name = "username")
     private String username;
+
+    @MyColumn (name = "password")
     private String password;
-    private String email;
-    private String phoneNumber;
-    private String address;
+
+    @MyColumn (name = "account_number")
+    private String accountNumber;
+
+    @MyColumn (name = "balance")
     private BigDecimal balance;
+
+    @MyColumn (name = "first_name")
+    private String firstName;
+    @MyColumn (name = "last_name")
+    private String lastName;
+
+    @MyColumn (name = "email")
+    private String email;
+
+    @MyColumn (name = "phone_number")
+    private String phoneNumber;
+
+    @MyColumn (name = "birth_date")
+    private String birthDate;
+
+    @MyColumn (name = "address")
+    private String address;
+
+    @MyColumn (name = "customer_type")
+    private String customerType;
+
+    @MyColumn (name = "created_at")
+    private LocalDateTime createdAt;
+
+    @MyColumn (name = "role_id")
+    private String roleId;
 
     /* Mock data */
     private List <String> listRole = new ArrayList<>() ;

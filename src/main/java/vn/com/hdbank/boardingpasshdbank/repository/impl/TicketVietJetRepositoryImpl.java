@@ -2,11 +2,11 @@ package vn.com.hdbank.boardingpasshdbank.repository.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.common.Constant;
+import vn.com.hdbank.boardingpasshdbank.common.anotation.MyModelRowMapper;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 import vn.com.hdbank.boardingpasshdbank.entity.TicketVietJet;
 import vn.com.hdbank.boardingpasshdbank.repository.TicketVietJetRepository;
@@ -39,7 +39,7 @@ public class TicketVietJetRepositoryImpl implements TicketVietJetRepository {
     public String getTicketId(String reservationCode, String flightCode, String seats) {
         String sql = "SELECT id FROM ticket_vietjet WHERE reservation_code = ? AND flight_code = ? AND  seats = ?";
         try {
-            List<TicketVietJet> ticketVietJet = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(TicketVietJet.class),
+            List<TicketVietJet> ticketVietJet = jdbcTemplate.query(sql, new MyModelRowMapper<>(TicketVietJet.class),
                     reservationCode, flightCode, seats);
             return ticketVietJet.isEmpty() ? null : String.valueOf(ticketVietJet.get(0).getId());
         } catch (Exception e) {
@@ -49,7 +49,7 @@ public class TicketVietJetRepositoryImpl implements TicketVietJetRepository {
     }
 
     @Override
-    public void updateConfirmCustomer(String ticketId, int customerId) {
+    public void updateConfirmCustomer(String ticketId, String customerId) {
         String sql = "UPDATE ticket_vietjet SET customer_id = ? WHERE id = ?";
         try {
             jdbcTemplate.update(sql, customerId, ticketId);

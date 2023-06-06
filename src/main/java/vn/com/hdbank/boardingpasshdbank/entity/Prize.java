@@ -13,10 +13,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Prize {
-    private int id;
+    private String id;
+
     private String prizeCode;
+
     private BigDecimal prizeAmount;
-    private int customerId;
+
+    private String customerId;
+
     private boolean used;
+
     private LocalDateTime createdAt;
 }
