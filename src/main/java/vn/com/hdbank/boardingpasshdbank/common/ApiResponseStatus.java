@@ -7,10 +7,10 @@ public enum ApiResponseStatus {
     UNAUTHORIZED_ACCESS("003", "Xác thực không hợp lệ"), /*Unauthorized access*/
     INVALID_CLIENT_REQUEST("004","Yêu cầu ứng dụng khách không hợp lệ"), /*Invalid client request*/
     DATABASE_ERROR("005", "Lỗi cơ sở dữ liệu"), /*Database error*/
-    EXTERNAL_API_ERROR("006", "Lỗi khi gọi API bên ngoài"),  /*Error calling external API*/
-    VIET_JET_API_ERROR("007", "Không gọi được Vietjet API"), /*Unable to call DatabaseValidation API*/
-    VALIDATE_INVALID_INPUT("008", "Đầu vào không hợp lệ"), /*Invalid input*/
-    RESPONSE_API_ERROR("009", "Dữ liệu từ Api trả về không đúng"), /*Data from Api returned incorrect*/
+    VALIDATE_INVALID_INPUT("006", "Đầu vào không hợp lệ"), /*Invalid input*/
+    EXTERNAL_API_ERROR("007", "Lỗi khi gọi API bên ngoài"),  /*Error calling external API*/
+    VIET_JET_API_ERROR("008", "Không gọi được Vietjet API"), /*Unable to call DatabaseValidation API*/
+    RESPONSE_API_ERROR("009", "Dữ liệu từ Api Vietjet trả về không đúng"), /*The data from Vietjet Api returned is incorrect*/
     INVALID_TICKET("010", "Thông tin vé không hợp lệ"), /*Invalid ticket information */
     NOT_FOUND_CUSTOMER("011", "Không tìm thấy khách hàng trong hệ thống"), /*No customers found*/
     CUSTOMER_NOT_VIET_JET("012", "Khách hàng không phải là hành khách của Vietjet"),  /* Customer is not a DatabaseValidation passenger */
@@ -23,8 +23,9 @@ public enum ApiResponseStatus {
     CUSTOMER_PRIZE_SUCCESS("019", "Khách hàng đã quay số dự thưởng và nhận hoàn tiền thành công"), /*Customer has successfully dialed the lucky number and received the refund*/
     PRIZE_SUCCESS_NOT_DIALED("020", "Khách hàng đã được cấp số dự thưởng nhưng chưa tham gia quay số"), /*Customers have been assigned a prize number but have not participated in the lottery yet*/
     PRIZE_CODE_ERROR("021", "Mã dự thưởng của khách hàng không chính xác"), /*Customer's prize code is incorrect*/
-    UPDATE_PRIZE_ERROR ("022","Cập nhật thông tin dự thưởng không thành công"),  /*Update ticket information failed */
-    USED_PRIZE("023", "Khách hàng đã được cập phần thưởng trước đó") /*The customer has already received the reward before*/
+    USED_PRIZE("022", "Khách hàng đã được cập phần thưởng trước đó"), /*The customer has already received the reward before*/
+    UPDATE_PRIZE_ERROR ("023","Cập nhật thông tin dự thưởng không thành công")  /*Update ticket information failed */
+
     ;
 
     private final String statusCode;
