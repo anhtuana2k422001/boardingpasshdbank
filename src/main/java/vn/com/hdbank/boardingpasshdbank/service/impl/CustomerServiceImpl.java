@@ -2,6 +2,7 @@ package vn.com.hdbank.boardingpasshdbank.service.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
@@ -9,10 +10,7 @@ import vn.com.hdbank.boardingpasshdbank.common.Constant;
 import vn.com.hdbank.boardingpasshdbank.common.ResponseService;
 import vn.com.hdbank.boardingpasshdbank.entity.Customer;
 import vn.com.hdbank.boardingpasshdbank.entity.Prize;
-import vn.com.hdbank.boardingpasshdbank.model.response.ConfirmCustomerVietJet;
-import vn.com.hdbank.boardingpasshdbank.model.response.CustomerPrizeStatus;
-import vn.com.hdbank.boardingpasshdbank.model.response.PrizeResult;
-import vn.com.hdbank.boardingpasshdbank.model.response.ResponseInfo;
+import vn.com.hdbank.boardingpasshdbank.model.response.*;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.CustomerPrizeRequest;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.InfoPrizeRequest;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.TicketConfirmRequest;
@@ -32,6 +30,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final PrizeRepository prizeRepository;
     private final TicketVietJetRepository ticketVietjetRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public ResponseInfo<ConfirmCustomerVietJet> confirmCustomerVietJet(TicketConfirmRequest request,
@@ -70,7 +69,8 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         Prize prizeInfo = prizeRepository.getPrizeCustomer(customerId);
-        Customer customerInfo = customerRepository.findById(customerId);
+        Customer customer = customerRepository.findById(customerId);
+        CustomerInfo customerInfo = modelMapper.map(customer, CustomerInfo.class);
         ConfirmCustomerVietJet confirmCustomerVietjet = new ConfirmCustomerVietJet(customerInfo, prizeInfo, Constant.LINK_WEB_PRIZES);
 
         return ResponseService.successResponse(ApiResponseStatus.SUCCESS,

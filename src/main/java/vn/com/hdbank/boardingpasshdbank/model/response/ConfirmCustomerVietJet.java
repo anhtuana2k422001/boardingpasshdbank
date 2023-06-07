@@ -9,7 +9,7 @@ import vn.com.hdbank.boardingpasshdbank.entity.Prize;
 @AllArgsConstructor
 @Data
 public class ConfirmCustomerVietJet {
-    private Customer customer;
+    private CustomerInfo customer;
     private Prize prizes;
     private String linkWebViewPrizes;
 }
