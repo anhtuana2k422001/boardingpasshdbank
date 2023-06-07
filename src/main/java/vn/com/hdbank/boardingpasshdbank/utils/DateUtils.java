@@ -13,8 +13,7 @@ import java.util.Date;
 @Slf4j
 public class DateUtils {
     private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
-    private static final String DEFAULT_TIMESTAMP_FORMAT_1 = "yyyy-MM-dd HH:mm:ss";
-    private static final String DEFAULT_TIMESTAMP_FORMAT_2 = "yyyy-MM-dd'T'HH:mm:ss";
+    private static final String DEFAULT_TIMESTAMP_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 
     public static Date parseDate(String dateString, String dateFormat) {
         try {
@@ -41,11 +40,7 @@ public class DateUtils {
         }
     }
 
-    public static Timestamp parseTimestamp(String timestampString) {
-        return parseTimestamp(timestampString, DEFAULT_TIMESTAMP_FORMAT_1);
-    }
-
     public static Timestamp parseTimestampSave(String timestampString) {
-        return parseTimestamp(timestampString, DEFAULT_TIMESTAMP_FORMAT_2);
+        return parseTimestamp(timestampString, DEFAULT_TIMESTAMP_FORMAT);
     }
 }

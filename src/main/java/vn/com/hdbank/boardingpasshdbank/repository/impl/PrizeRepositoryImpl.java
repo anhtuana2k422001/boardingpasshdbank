@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.common.Constant;
+import vn.com.hdbank.boardingpasshdbank.common.anotation.MyModelRowMapper;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 import vn.com.hdbank.boardingpasshdbank.entity.Prize;
 import vn.com.hdbank.boardingpasshdbank.model.vietjet.request.InfoPrizeRequest;
@@ -29,7 +30,7 @@ public class PrizeRepositoryImpl implements PrizeRepository {
     public Prize getPrizeCustomer(String customerId) {
         String sql = "SELECT * FROM prize WHERE customer_id = ?";
         try {
-            List<Prize> prizeList =  jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Prize.class), customerId);
+            List<Prize> prizeList =  jdbcTemplate.query(sql, new MyModelRowMapper<>(Prize.class), customerId);
             return prizeList.get(0);
         } catch (Exception e) {
             LOGGER.error(Constant.ERROR, e);

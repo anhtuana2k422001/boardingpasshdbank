@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
 import vn.com.hdbank.boardingpasshdbank.common.Constant;
+import vn.com.hdbank.boardingpasshdbank.common.anotation.MyModelRowMapper;
 import vn.com.hdbank.boardingpasshdbank.exception.CustomException;
 import vn.com.hdbank.boardingpasshdbank.entity.Customer;
 import vn.com.hdbank.boardingpasshdbank.repository.CustomerRepository;
@@ -36,7 +37,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     public Customer findById(String customerId) {
         String sql = "SELECT * FROM customer WHERE id = ?";
         try{
-            List<Customer> customers = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Customer.class), customerId);
+            List<Customer> customers = jdbcTemplate.query(sql, new MyModelRowMapper<>(Customer.class), customerId);
             return customers.isEmpty() ? null : customers.get(0);
         }catch (Exception e) {
             LOGGER.error(Constant.ERROR, e);
@@ -48,7 +49,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     public Customer findByPhoneNumber(String phoneNumber) {
         String sql = "SELECT * FROM customer WHERE phone_number = ?";
         try{
-            List<Customer> customers = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Customer.class), phoneNumber);
+            List<Customer> customers = jdbcTemplate.query(sql, new MyModelRowMapper<>(Customer.class), phoneNumber);
             return customers.isEmpty() ? null : customers.get(0);
         }catch (Exception e) {
             LOGGER.error(Constant.ERROR, e);
