@@ -68,9 +68,10 @@ public class CustomerServiceImpl implements CustomerService {
             prizeRepository.savePrize(savePrize);
         }
 
-        Prize prizeInfo = prizeRepository.getPrizeCustomer(customerId);
+        Prize prize = prizeRepository.getPrizeCustomer(customerId);
         Customer customer = customerRepository.findById(customerId);
         CustomerInfo customerInfo = modelMapper.map(customer, CustomerInfo.class);
+        PrizeInfo prizeInfo = modelMapper.map(prize,PrizeInfo.class);
         ConfirmCustomerVietJet confirmCustomerVietjet = new ConfirmCustomerVietJet(customerInfo, prizeInfo, Constant.LINK_WEB_PRIZES);
 
         return ResponseService.successResponse(ApiResponseStatus.SUCCESS,

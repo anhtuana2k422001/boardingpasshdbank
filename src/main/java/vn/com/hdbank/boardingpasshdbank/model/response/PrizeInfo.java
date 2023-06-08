@@ -5,16 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerInfo {
+public class PrizeInfo {
     private String id;
-    private String firstName;
-    private String lastName;
-    private LocalDate birthDate;
-    private String customerType;
-
+    private String prizeCode;
+    private LocalDateTime createdAt;
 }
