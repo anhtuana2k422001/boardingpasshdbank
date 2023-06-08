@@ -1,8 +1,6 @@
 package vn.com.hdbank.boardingpasshdbank.model.response;
 
 import lombok.*;
-import vn.com.hdbank.boardingpasshdbank.entity.Customer;
-import vn.com.hdbank.boardingpasshdbank.entity.Prize;
 
 
 @NoArgsConstructor
@@ -10,6 +8,6 @@ import vn.com.hdbank.boardingpasshdbank.entity.Prize;
 @Data
 public class ConfirmCustomerVietJet {
     private CustomerInfo customer;
-    private Prize prizes;
+    private PrizeInfo prizes;
     private String linkWebViewPrizes;
 }
