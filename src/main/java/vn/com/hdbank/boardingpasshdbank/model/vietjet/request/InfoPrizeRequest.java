@@ -28,4 +28,8 @@ public class InfoPrizeRequest extends BaseRequest{
     @NotNull (message = Validate.MESSAGE_NOT_NULL)
     @NotEmpty (message = Validate.MESSAGE_NOT_EMPTY)
     private String prizeDrawDay;
+
+    @NotNull (message = Validate.MESSAGE_NOT_NULL)
+    @NotEmpty (message = Validate.MESSAGE_NOT_EMPTY)
+    private String content;
 }

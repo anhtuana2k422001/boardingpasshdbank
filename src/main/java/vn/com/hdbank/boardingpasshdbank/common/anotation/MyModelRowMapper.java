@@ -2,6 +2,7 @@ package vn.com.hdbank.boardingpasshdbank.common.anotation;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.jdbc.core.RowMapper;
@@ -22,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @AllArgsConstructor
+@Slf4j
 public class MyModelRowMapper<T> implements RowMapper<T> {
     private final Class<T> clazz;
     private static final List<DateTimeFormatter> timestampFormatters = Arrays.asList(
@@ -96,7 +98,7 @@ public class MyModelRowMapper<T> implements RowMapper<T> {
         } else if (fieldType == BigDecimal.class) {
             return new BigDecimal(columnValue);
         } else if (fieldType == Boolean.class) {
-            return parseBoolean(columnValue);
+            return StringUtils.equalsAnyIgnoreCase(columnValue, "t", "true");
         } else if (fieldType == LocalDate.class) {
             return parseLocalDate(columnValue);
         } else if (fieldType == LocalTime.class) {
@@ -124,10 +126,6 @@ public class MyModelRowMapper<T> implements RowMapper<T> {
         return Double.parseDouble(s);
     }
 
-    private Boolean parseBoolean(String s) {
-        return Boolean.parseBoolean(s);
-    }
-
     private LocalDate parseLocalDate(String s) {
         return LocalDate.parse(s, DateTimeFormatter.ISO_LOCAL_DATE);
     }
@@ -144,6 +142,7 @@ public class MyModelRowMapper<T> implements RowMapper<T> {
                 LocalDateTime localDateTime = parseLocalDateTime(s);
                 return Timestamp.valueOf(localDateTime);
             } catch (DateTimeParseException ignored) {
+                LOGGER.debug("Try timestamp: {}", s);
             }
             throw new SQLException("Unsupported timestamp format: " + s);
         }
@@ -158,6 +157,7 @@ public class MyModelRowMapper<T> implements RowMapper<T> {
                 try {
                     return LocalDateTime.parse(s, formatter);
                 } catch (DateTimeParseException ignored) {
+                    LOGGER.debug("Try format: {}",formatter);
                 }
             }
             throw new SQLException("Unsupported LocalDateTime format: " + s);

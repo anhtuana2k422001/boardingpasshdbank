@@ -2,7 +2,6 @@ package vn.com.hdbank.boardingpasshdbank.repository.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import vn.com.hdbank.boardingpasshdbank.common.ApiResponseStatus;
@@ -86,8 +85,8 @@ public class PrizeRepositoryImpl implements PrizeRepository {
     @Override
     public boolean updateResultPrize(InfoPrizeRequest request, LocalDate prizeDrawDay) {
         try {
-            String sql = "UPDATE prize SET prize_amount = ?, used = ?, reference_code = ?, prizedrawday = ? WHERE prize_code = ? AND customer_id = ?";
-            int count = jdbcTemplate.update(sql, request.getTotalAmount(), Boolean.TRUE, request.getReferenceCode(), prizeDrawDay,
+            String sql = "UPDATE prize SET prize_amount = ?, used = ?, reference_code = ?, prizedrawday = ?, content = ? WHERE prize_code = ? AND customer_id = ?";
+            int count = jdbcTemplate.update(sql, request.getTotalAmount(), Boolean.TRUE, request.getReferenceCode(), prizeDrawDay, request.getContent(),
                     request.getPrizeCode(), request.getCustomerId());
             return count > 0;
         } catch (Exception e) {

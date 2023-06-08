@@ -33,6 +33,9 @@ public class Prize {
     @MyColumn ( name = "reference_code")
     private String referenceCode;
 
+    @MyColumn ( name = "content")
+    private String content;
+
     @MyColumn ( name = "prizedrawday")
     private LocalDate prizeDrawDay;
 

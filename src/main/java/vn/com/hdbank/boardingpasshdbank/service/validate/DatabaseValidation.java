@@ -85,7 +85,7 @@ public class DatabaseValidation {
 
         if (customer.getCreatedAt().isBefore(Constant.VJ_E_SKY_ONE_START_DATE)
                 || customer.getCreatedAt().isAfter(Constant.VJ_E_SKY_ONE_END_DATE)) {
-            return ApiResponseStatus.NOT_ENOUGH_CONDITION_FOR_PRIZE;
+            return ApiResponseStatus.NOT_ENOUGH_PRIZE;
         }
 
         if (Boolean.FALSE.equals(prizeRepository.checkExistPrize(customerId))) {

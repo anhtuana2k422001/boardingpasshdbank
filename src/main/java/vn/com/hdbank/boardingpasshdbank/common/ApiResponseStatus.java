@@ -14,14 +14,14 @@ public enum ApiResponseStatus {
     INVALID_TICKET("010", "Thông tin vé không hợp lệ"), /*Invalid ticket information */
     NOT_FOUND_CUSTOMER("011", "Không tìm thấy khách hàng trong hệ thống"), /*No customers found*/
     CUSTOMER_NOT_VIET_JET("012", "Khách hàng không phải là hành khách của Vietjet"),  /* Customer is not a DatabaseValidation passenger */
-    NOT_ENOUGH_CONDITION_FOR_PRIZE("013", "Khách hàng không đủ điều kiện tham gia quay thưởng"), /*Customers are not eligible to participate in the drawing*/
+    NOT_ENOUGH_PRIZE("013", "Khách hàng không đủ điều kiện tham gia quay thưởng"), /*Customers are not eligible to participate in the drawing*/
     TICKET_EXIST("014", "Vé đã tồn tại và được gắn với 1 khách hàng"), /* Ticket already exists and is tied to 1 customer*/
     PROGRAM_ENDED("015", "Chương trình quay thưởng đã dừng"), /*The prize draw has stopped*/
     USED_TICKET_ERROR("016", "Khách hàng đã sử dụng vé khác và có mã số quay thưởng"), /*Customers who have used other tickets and issued a lucky draw code*/
     INVALID_CUSTOMER("017", "Thông tin khách hàng không chính xác với thông tin vé"), /*Customer information is incorrect with ticket information*/
     NO_PRIZE_CODE("018", "Khách hàng chưa có mã dự thưởng"), /*Customers do not have a coupon code*/
     CUSTOMER_PRIZE_SUCCESS("019", "Khách hàng đã quay số dự thưởng và nhận hoàn tiền thành công"), /*Customer has successfully dialed the lucky number and received the refund*/
-    PRIZE_SUCCESS_NOT_DIALED("020", "Khách hàng đã được cấp số dự thưởng nhưng chưa tham gia quay số"), /*Customers have been assigned a prize number but have not participated in the lottery yet*/
+    PRIZE_SUCCESS_NOT_DIALED("020", "Khách hàng đã được cấp số dự thưởng nhưng chưa quay số"), /*Customers have been assigned a prize number but have not participated in the lottery yet*/
     PRIZE_CODE_ERROR("021", "Mã dự thưởng của khách hàng không chính xác"), /*Customer's prize code is incorrect*/
     USED_PRIZE("022", "Khách hàng đã được cập phần thưởng trước đó"), /*The customer has already received the reward before*/
     UPDATE_PRIZE_ERROR ("023","Cập nhật thông tin dự thưởng không thành công")  /*Update ticket information failed */

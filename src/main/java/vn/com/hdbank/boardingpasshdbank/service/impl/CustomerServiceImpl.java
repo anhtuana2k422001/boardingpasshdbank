@@ -110,6 +110,7 @@ public class CustomerServiceImpl implements CustomerService {
                                             .totalAmount(prizeInfo.getPrizeAmount().doubleValue())
                                             .referenceCode(prizeInfo.getReferenceCode())
                                             .prizeDrawDay(prizeInfo.getPrizeDrawDay().toString())
+                                            .content(prizeInfo.getContent())
                                             .build())
                             .linkWebViewPrizes(null).build()
                     , requestId);

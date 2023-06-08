@@ -15,4 +15,5 @@ public class PrizeResult {
     private double totalAmount;
     private String referenceCode;
     private String prizeDrawDay;
+    private String content;
 }
