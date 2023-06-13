@@ -48,8 +48,12 @@ public class TicketVietJetRepositoryImpl implements TicketVietJetRepository {
 
     @Override
     public boolean checkExistCustomer(String reservationCode, String flightCode, String seats) {
-        String sql = "SELECT COUNT(*) > 0 FROM ticket_vietjet WHERE reservation_code = ? AND flight_code = ? AND " +
-                "seats = ? AND customer_id IS NOT NULL";
+        String sql = "SELECT CASE WHEN COUNT(*) > 0 THEN 'TRUE' ELSE 'FALSE' END AS result " +
+                "FROM ticket_vietjet " +
+                "WHERE reservation_code = ? " +
+                "AND flight_code = ? " +
+                "AND seats = ? " +
+                "AND customer_id IS NOT NULL";
         try {
             return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, Boolean.class, reservationCode, flightCode, seats));
         } catch (Exception e) {
