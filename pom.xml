@@ -14,7 +14,7 @@
     <name>boarding-pass-hdbank</name>
     <description>Boarding Pass HDBank project for Spring Boot</description>
     <properties>
-        <java.version>20</java.version>
+        <java.version>11</java.version>
     </properties>
     <dependencies>
 

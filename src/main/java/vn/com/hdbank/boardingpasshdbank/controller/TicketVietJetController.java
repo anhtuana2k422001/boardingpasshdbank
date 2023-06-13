@@ -31,7 +31,7 @@ public class TicketVietJetController {
         try{
             MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
             LOGGER.info(Constant.REQUEST, JsonUtils.toJsonString(request)); /* Log request */
-            var response = ticketVietJetService.checkTicketVietJet(request, bindingResult);
+            ResponseInfo<TicketVietJetInformation> response = ticketVietJetService.checkTicketVietJet(request, bindingResult);
             LOGGER.info(Constant.RESPONSE, JsonUtils.toJsonString(response));   /* Log response */
             return ResponseController.responseEntity(response);
         }catch (CustomException e){
@@ -47,7 +47,7 @@ public class TicketVietJetController {
         try{
             MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
             LOGGER.info(Constant.REQUEST, JsonUtils.toJsonString(request)); /* Log request */
-            var response = ticketVietJetService.checkScanTicketVietJet(request, bindingResult);
+            ResponseInfo<TicketVietJetInformation> response = ticketVietJetService.checkScanTicketVietJet(request, bindingResult);
             LOGGER.info(Constant.RESPONSE, JsonUtils.toJsonString(response));   /* Log response */
             return ResponseController.responseEntity(response);
         }catch (CustomException e){

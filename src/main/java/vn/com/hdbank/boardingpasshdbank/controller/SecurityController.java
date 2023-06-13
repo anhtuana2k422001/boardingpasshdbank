@@ -30,7 +30,7 @@ public class SecurityController {
         try {
             MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
             LOGGER.info(Constant.REQUEST, JsonUtils.toJsonString(request)); /* Log request */
-            var response = authenticationService.authenticate(request, bindingResult);
+            ResponseInfo<TokenResponse> response = authenticationService.authenticate(request, bindingResult);
             LOGGER.info(Constant.RESPONSE, JsonUtils.toJsonString(response));   /* Log response */
             return ResponseController.responseEntity(response);
         } catch (CustomException e) {

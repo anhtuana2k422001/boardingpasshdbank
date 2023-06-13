@@ -34,7 +34,7 @@ public class CustomerController {
         try{
             MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
             LOGGER.info(Constant.REQUEST, JsonUtils.toJsonString(request)); /* Log request */
-            var response = customerService.confirmCustomerVietJet(request, bindingResult);
+            ResponseInfo<ConfirmCustomerVietJet> response = customerService.confirmCustomerVietJet(request, bindingResult);
             LOGGER.info(Constant.RESPONSE, JsonUtils.toJsonString(response));
             return ResponseController.responseEntity(response);
         }catch (CustomException e){
@@ -50,7 +50,7 @@ public class CustomerController {
         try{
             MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
             LOGGER.info(Constant.REQUEST, JsonUtils.toJsonString(request)); /* Log request */
-            var response =  customerService.checkCustomerPrize(request, bindingResult);
+            ResponseInfo<CustomerPrizeStatus> response =  customerService.checkCustomerPrize(request, bindingResult);
             LOGGER.info(Constant.RESPONSE, JsonUtils.toJsonString(response));
             return ResponseController.responseEntity(response);
         }catch (CustomException e){
@@ -66,7 +66,7 @@ public class CustomerController {
         try{
             MdcUtils.setRequestId(request.getRequestId()); /* Add requestId to log */
             LOGGER.info(Constant.REQUEST, JsonUtils.toJsonString(request)); /* Log request */
-            var response = customerService.updateCustomerPrize(request, bindingResult);
+            ResponseInfo<String> response = customerService.updateCustomerPrize(request, bindingResult);
             LOGGER.info(Constant.RESPONSE, JsonUtils.toJsonString(response));
             return ResponseController.responseEntity(response);
         }catch (CustomException e){
